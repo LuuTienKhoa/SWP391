@@ -1,12 +1,18 @@
 
 import './App.css'
-
+import Login from './Login.jsx';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 function App() {
 
 
   return (
+    
     <>
-      <h1 className='font-bold 4 text-red-700'>Koi cai lon </h1>
+      <Router>
+        <Routes>
+          <Route path="/" element={<Login />} />
+        </Routes>
+      </Router>
     </>
   )
 }
