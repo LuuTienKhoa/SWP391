@@ -3,10 +3,10 @@ import './App.css';
 import {Routes, Route, Navigate} from 'react-router-dom';
 import Header from './component/header/Header';
 import Footer from './component/footer/Footer';
-import HomePage from './page/home/HomePage';
-import AboutPage from './page/home/AboutPage';
-import NotFoundPage from './page/home/NotFoundPage';
-import LoginPage from './page/home/LoginPage';
+import HomePage from './page/HomePage';
+import AboutPage from './page/AboutPage';
+import NotFoundPage from './page/NotFoundPage';
+import LoginPage from './page/LoginPage';
 function App() {
   return (   
     <>
