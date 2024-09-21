@@ -1,10 +1,11 @@
-import React from 'react'
+//import React from 'react'
+//import {Logo} from "./src/assets/favicon.png"
 import {Link} from 'react-router-dom'
 function Header() {
   return (
     <header className="flex justify-between items-center p-4 bg-orange-800"> {/* Flex container */}
       <div className="flex items-center"> {/* Logo container */}
-        <img src="/path/to/logo.png" alt="Logo" className="text-white h-8 w-auto mr-4" /> {/* Adjust path and size */}
+        <img src="" className="text-white h-8 w-auto mr-4" /> {/* Adjust path and size */}
       </div>
       <ul className="flex space-x-12 mx-auto"> {/* Centered links */}
         <li>
