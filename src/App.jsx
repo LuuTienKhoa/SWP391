@@ -7,6 +7,7 @@ import HomePage from './page/HomePage';
 import AboutPage from './page/AboutPage';
 import NotFoundPage from './page/NotFoundPage';
 import LoginPage from './page/LoginPage';
+import RegisterPage from './page/RegisterPage'
 function App() {
   return (   
     <>
@@ -16,7 +17,8 @@ function App() {
           <Route path="/" element={<HomePage />} />  
           <Route path="/home" element={<Navigate to="/" />} />  
           <Route path="/about" element={<AboutPage />} />    
-          <Route path="/login" element={<LoginPage />} />    
+          <Route path="/login" element={<LoginPage />} /> 
+          <Route path="/register" element={<RegisterPage />} />    
           <Route path="*" element={<NotFoundPage />} />    
         </Routes>    
       </main>       
