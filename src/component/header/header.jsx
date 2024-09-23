@@ -20,6 +20,9 @@ function Header() {
         <li>
           <Link to="/question" className="text-orange-200 hover:underline">FAQ</Link>
         </li>
+        <li>
+          <Link to="/admin" className="text-orange-200 hover:underline">Admin</Link>
+        </li>
       </ul>
       <div>
         <Link to="/login" className="text-orange-200 hover:underline">Login</Link> {/* Right-aligned Login */}
