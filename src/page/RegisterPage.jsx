@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import Cover_Image from "../assets/bg.jpg";
 import { Form, Input } from "antd";
 import GOOGLE_ICON from "../assets/google.svg";
-import {Link} from 'react-router-dom'
+import { Link } from "react-router-dom";
 const LoginPage = () => {
   const navigate = useNavigate();
 
@@ -66,6 +66,7 @@ const LoginPage = () => {
                     className="w-full text-black py-2 my-2 bg-transparent border-b border-black outline-none focus:outline-none"
                   />
                 </Form.Item>
+
                 <Form.Item
                   name="password"
                   rules={[
@@ -81,36 +82,37 @@ const LoginPage = () => {
                     className="w-full text-black py-2 my-2 bg-transparent border-b border-black outline-none focus:outline-none"
                   />
                 </Form.Item>
+
                 <Form.Item
-                  name="password"
+                  name="confirmPassword"
+                  dependencies={["password"]}
                   rules={[
                     {
                       required: true,
-                      message: "Please input your password!",
+                      message: "Please confirm your password!",
                     },
+                    ({ getFieldValue }) => ({
+                      validator(_, value) {
+                        if (!value || getFieldValue("password") === value) {
+                          return Promise.resolve();
+                        }
+                        return Promise.reject(
+                          new Error("The two passwords do not match!")
+                        );
+                      },
+                    }),
                   ]}
                 >
                   <Input
                     type="password"
-                    placeholder="Password"
+                    placeholder="Confirm your password"
                     className="w-full text-black py-2 my-2 bg-transparent border-b border-black outline-none focus:outline-none"
                   />
                 </Form.Item>
-                <Form.Item>
-                  <div className="w-full flex item-center justify-between">
-                    <div className="w-ful flex item-center">
-                      <input type="checkbox" className="w-4 h-4 mr-2" />
-                      <p className="text-sm">Remeberme</p>
-                    </div>
-                    <p className="text-sm font-medium whitespace-nowrap cursor-pointer hover:underline">
-                      Forgot Passowrd ?
-                    </p>
-                  </div>
-                </Form.Item>
+
                 <Form.Item>
                   <div className="w-ful flex flex-col">
-                  
-                    <button className="w-ful text-black my-2 font-semibold bg-white rounded-md p-4 border-2 border-black text-center flex items-center justify-center">
+                    <button className="w-ful text-white my-2 font-semibold bg-black rounded-md p-4 border-2 border-black text-center flex items-center justify-center">
                       Register
                     </button>
                   </div>
@@ -127,7 +129,7 @@ const LoginPage = () => {
                       className="h-6 mr-2"
                       alt="Google Icon"
                     />
-                    Sign In With Google
+                    Sign Up With Google
                   </button>
                 </Form.Item>
               </Form>
@@ -136,9 +138,9 @@ const LoginPage = () => {
 
           <div className="w-full flex flex-col items-center p-10">
             <p className="text-sm font-semibold text-black mb-2">
-              You have an acconut!{" "}
+              You alredy have an acconut!{" "}
               <span className=" font-semibold text-blue-500 hover:underline cursor-pointer">
-              <Link to="/register" >Login here</Link>
+                <Link to="/login  ">Login here</Link>
               </span>
             </p>
           </div>
