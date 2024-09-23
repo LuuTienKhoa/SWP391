@@ -9,6 +9,8 @@ function HomePage (){
       style={{
         backgroundImage: `url(${backgroundImage})`,
         maxWidth:'100%',
+        backgroundRepeat:'no-repeat',
+        backgroundSize:'cover',
       }}
       >
     <HeroSection />    
