@@ -3,8 +3,13 @@ import { useNavigate } from "react-router-dom";
 import Cover_Image from "../assets/bg.jpg";
 import { Form, Input } from "antd";
 import GOOGLE_ICON from "../assets/google.svg";
-import {Link} from 'react-router-dom'
+import { Link } from "react-router-dom";
+import { useGoogleLogin } from "@react-oauth/google";
+
 const LoginPage = () => {
+  const login = useGoogleLogin({
+    onSuccess: (tokenResponse) => console.log(tokenResponse),
+  });
   const navigate = useNavigate();
 
   // vùng của javascript
@@ -97,7 +102,6 @@ const LoginPage = () => {
                     <button className="w-ful text-white my-2 font-semibold bg-black rounded-md p-4 text-center flex items-center justify-center">
                       Login
                     </button>
-                    
                   </div>
                 </Form.Item>
 
@@ -106,7 +110,8 @@ const LoginPage = () => {
                   <p className="text-lg absolute text-black/80 bg-white">or</p>
                 </div>
                 <Form.Item>
-                  <button className="w-full text-black my-2 bg-white border-2 border-black rounded-md p-4 text-center flex items-center justify-center">
+                  <button className="w-full text-black my-2 bg-white border-2 border-black rounded-md p-4 text-center flex items-center justify-center"
+                  onClick={() => login()}>
                     <img
                       src={GOOGLE_ICON}
                       className="h-6 mr-2"
@@ -114,6 +119,8 @@ const LoginPage = () => {
                     />
                     Sign In With Google
                   </button>
+                  
+                  
                 </Form.Item>
               </Form>
             </div>
@@ -123,7 +130,7 @@ const LoginPage = () => {
             <p className="text-sm font-semibold text-black mb-2">
               Don&apos;t have an account?{" "}
               <span className=" font-semibold text-blue-500 hover:underline cursor-pointer">
-              <Link to="/register" >Sign up for free</Link>
+                <Link to="/register">Sign up for free</Link>
               </span>
             </p>
           </div>
