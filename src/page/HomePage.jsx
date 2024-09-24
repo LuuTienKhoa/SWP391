@@ -5,11 +5,10 @@ function HomePage (){
   return (
     <>
     <div className="bg-orange-200 min-h-screen">
-      <div className="max-w-5xl mx-auto pt-20 px-6"
+      <div className="max-w-2xl mx-auto pt-20 px-6"
       style={{
         backgroundImage: `url(${backgroundImage})`,
         maxWidth:'100%',
-        backgroundRepeat:'no-repeat',
         backgroundSize:'cover',
       }}
       >
@@ -17,7 +16,6 @@ function HomePage (){
     </div>
     <div>HomePage</div>
     </div>
-    
     </>    
   )
 }

@@ -5,7 +5,7 @@ function Header() {
   return (
     <header className="flex justify-between items-center p-4 bg-gradient-to-r from-orange-400 to-amber-900"> 
       <div className="flex items-center">
-        <img src={logo} alt="Logo" className="h-20" /> 
+        <img src={logo} alt="Logo" className="h-10" /> 
       </div>
       <ul className="hidden md:flex space-x-8 text-lg"> 
         <li>
