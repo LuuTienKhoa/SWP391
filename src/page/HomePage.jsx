@@ -1,7 +1,8 @@
 import React from 'react'
 import HeroSection from '../component/HeroSection'
-import backgroundImage from '../assets/bg.jpg'
+import backgroundImage from '../assets/herosection.jpg'
 import Testinominals from './Testinominals'
+import OurAdvantage from '../component/OurAdvantage'
 function HomePage (){
   return (
     <>
@@ -16,6 +17,7 @@ function HomePage (){
     <HeroSection />    
     </div>
     <div>HomePage</div>
+    <OurAdvantage />
     <Testinominals />
     </div>
     </>    

@@ -1,40 +1,29 @@
-  import React from 'react'
-  // import video1 from '../assets/video1.mp4'
-  // import video2 from '../assets/video2.mp4'
+import React from 'react';
 
-
-  function HeroSection() {
-    return (
-      <div className="flex flex-col items-center justify-center"
-      >
-        <style>
-          {`
-            @import url('https://fonts.googleapis.com/css2?family=Georgia&display=swap');
-            .font-georgia {
-              font-family: 'Georgia', serif; /* Apply Georgia font */
-            }
-          `}
-        </style>
-        <h1 className="text-white text-3xl sm:text-5xl lg:text-6xl text-center my-10 lg:my-20 font-bold whitespace-nowrap tracking-wide font-georgia">
-          Dive into Perfection - Discover the Beauty of Koi
+function HeroSection() {
+  return (
+    <section className="relative bg-cover bg-center h-screen ">
+      <div className="relative z-10 flex flex-col items-center justify-center h-full">
+        <h1 className="text-white text-4xl sm:text-5xl lg:text-6xl text-center font-bold  tracking-wide pt-3">
+          Kodama Koi Farm & Auction
         </h1>
-        <h2 className="text-white md:text-2xl py-5 whitespace-nowrap font-georgia">
-          The best Japanese Koi shop in Vietnam
+        <h2 className="text-white text-2xl sm:text-3xl lg:text-4xl text-center mt-4 tracking-wide ">
+          The best Japanese koi for sale online and by phone!
         </h2>
-        <p className="mt-10 text-lg text-center text-neutral-600 max-w-4xl">
-          Please call us at (012)-3445-789 or email us at fkoi@gmail.com
-        </p>
-        <div className="flex justify-center my-10 space-x-3">
-          <a href="#" className="border-2 border-orange-500 text-orange-500 hover:bg-orange-500 hover:text-white transition-colors py-3 px-6 mx-3 rounded-md">
-            Create Account
-          </a>
-          <a href="#" className="border-2 border-orange-500 text-orange-500 hover:bg-orange-500 hover:text-white transition-colors py-3 px-6 mx-3 rounded-md">
+        <div className="flex mt-8 space-x-4">
+          <a href="#koi" className="bg-white text-orange-600 font-semibold py-2 px-6 rounded-full hover:bg-orange-500 hover:text-white transition-all">
             View Koi for Sale
           </a>
+          <a href="#account" className="bg-white text-orange-600 font-semibold py-2 px-6 rounded-full hover:bg-orange-500 hover:text-white transition-all">
+            Create Account
+          </a>
         </div>
-
+        <p className="mt-10 text-lg text-center text-neutral-200 max-w-4xl">
+          Please call us at (012)-3445-789 or email us at fkoi@gmail.com
+        </p>
       </div>
-    )
-  }
+    </section>
+  );
+};
 
-  export default HeroSection
+export default HeroSection

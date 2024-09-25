@@ -36,3 +36,4 @@ export const testimonials = [
     text: "A wonderful experience from start to finish! The quality of the fish is outstanding."
   }
 ];
+
