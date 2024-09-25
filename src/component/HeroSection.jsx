@@ -15,7 +15,7 @@
             }
           `}
         </style>
-        <h1 className="text-white md:text-5xl font-bold whitespace-nowrap tracking-wide font-georgia">
+        <h1 className="text-white text-3xl sm:text-5xl lg:text-6xl text-center my-10 lg:my-20 font-bold whitespace-nowrap tracking-wide font-georgia">
           Dive into Perfection - Discover the Beauty of Koi
         </h1>
         <h2 className="text-white md:text-2xl py-5 whitespace-nowrap font-georgia">
