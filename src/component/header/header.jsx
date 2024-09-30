@@ -16,7 +16,7 @@ function Header() {
           <Link to="/about" className="text-white hover:underline">About</Link>
         </li>
         <li>
-          <Link to="/products" className="text-white hover:underline">Shop</Link>
+          <Link to="/shop" className="text-white hover:underline">Shop</Link>
         </li>
         <li>
           <Link to="/question" className="text-white hover:underline">FAQ</Link>
