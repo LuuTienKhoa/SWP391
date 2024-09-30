@@ -9,6 +9,7 @@ import NotFoundPage from './page/NotFoundPage';
 import LoginPage from './page/LoginPage';
 import RegisterPage from './page/RegisterPage'
 import AdminPage from './page/AdminPage'
+import ShopPage from './page/ShopPage';
 function App() {
   return (   
     <>
@@ -17,10 +18,12 @@ function App() {
       <Routes>
           <Route path="/" element={<HomePage />} />  
           <Route path="/home" element={<Navigate to="/" />} />  
-          <Route path="/about" element={<AboutPage />} />    
+          <Route path="/about" element={<AboutPage />} />   
+          <Route path="/shop" element={<ShopPage />} />    
           <Route path="/login" element={<LoginPage />} /> 
           <Route path="/register" element={<RegisterPage />} />    
-          <Route path="/admin" element={<AdminPage />} />    
+          <Route path="/admin" element={<AdminPage />} />
+
           <Route path="*" element={<NotFoundPage />} />    
         </Routes>    
       </main>       
