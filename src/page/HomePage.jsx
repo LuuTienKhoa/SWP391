@@ -1,8 +1,9 @@
 import React from 'react'
 import HeroSection from '../component/HeroSection'
 import backgroundImage from '../assets/herosection.jpg'
-import Testinominals from './Testinominals'
+import Testinominals from '../component/Testinominals'
 import OurAdvantage from '../component/OurAdvantage'
+import KoiInfo from '../component/KoiInfo'
 function HomePage (){
   return (
     <>
@@ -16,6 +17,7 @@ function HomePage (){
       >
     <HeroSection />    
     </div>
+    <KoiInfo />
     <div>HomePage</div>
     <OurAdvantage />
     <Testinominals />

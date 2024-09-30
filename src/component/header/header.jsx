@@ -1,6 +1,7 @@
 import React from 'react'
 import {Link} from 'react-router-dom'
 import logo from '../../assets/logo.png'
+import { IoLogInOutline } from "react-icons/io5";
 function Header() {
   return (
     <header className="flex justify-between items-center p-4 bg-gradient-to-r from-orange-400 to-amber-900"> 
@@ -22,7 +23,12 @@ function Header() {
         </li>
       </ul>
       <div className="flex items-center space-x-6">
-        <Link to="/login" className="text-white hover:underline">Login</Link>
+      <div className="flex items-center space-x-6">
+        <Link to="/login" className="text-white hover:underline flex items-center">
+          Login 
+          <IoLogInOutline className="ml-1 " /> 
+        </Link>
+      </div>
       </div>
     </header>
   )
