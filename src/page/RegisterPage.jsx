@@ -4,7 +4,11 @@ import Cover_Image from "../assets/bg.jpg";
 import { Form, Input } from "antd";
 import GOOGLE_ICON from "../assets/google.svg";
 import { Link } from "react-router-dom";
+import { useGoogleLogin } from "@react-oauth/google";
 const LoginPage = () => {
+  const login = useGoogleLogin({
+    onSuccess: (tokenResponse) => console.log(tokenResponse),
+  });
   const navigate = useNavigate();
 
   // vùng của javascript
@@ -122,17 +126,20 @@ const LoginPage = () => {
                   <div className="w-full h-[1px] bg-black"></div>
                   <p className="text-lg absolute text-black/80 bg-white">or</p>
                 </div>
-                <Form.Item>
-                  <button className="w-full text-black my-2 bg-white border-2 border-black rounded-md p-4 text-center flex items-center justify-center">
-                    <img
-                      src={GOOGLE_ICON}
-                      className="h-6 mr-2"
-                      alt="Google Icon"
-                    />
-                    Sign Up With Google
-                  </button>
-                </Form.Item>
               </Form>
+              <div>
+              <button
+                  className="w-full text-black my-2 bg-white border-2 border-black rounded-md p-4 text-center flex items-center justify-center"
+                  onClick={() => login()}
+                >
+                  <img
+                    src={GOOGLE_ICON}
+                    className="h-6 mr-2"
+                    alt="Google Icon"
+                  />
+                  Sign In With Google
+                </button>
+              </div>
             </div>
           </div>
 
