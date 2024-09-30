@@ -7,7 +7,7 @@ function OurAdvantage() {
   return (
     <div>
       <h2 className="text-gray-700 text-3xl sm:text-5xl lg:text-6xl text-center my-10 tracking-wide font-thin">
-        Why people choosing us
+        Why People Choosing Us
       </h2>
       <div className="flex flex-wrap justify-center">
         <div className="p-2 w-full lg:w-1/2">

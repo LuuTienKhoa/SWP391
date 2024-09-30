@@ -100,11 +100,4 @@ export const checkListItem = [
       We offer rare and exclusive Koi varieties that you won't find at typical pet stores, giving enthusiasts the opportunity to add extraordinary fish to their collection.
     `,
   },
-  {
-    title: "Rare and Unique Koi Fish Breeds", 
-    description: `
-      We offer rare and exclusive Koi varieties that you won't find at typical pet stores, giving enthusiasts the opportunity to add extraordinary fish to their collection.
-    `,
-  },
-
 ];
