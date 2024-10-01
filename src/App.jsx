@@ -9,7 +9,7 @@ import NotFoundPage from './page/NotFoundPage';
 import LoginPage from './page/LoginPage';
 import RegisterPage from './page/RegisterPage'
 import AdminPage from './page/AdminPage'
-import ShopPage from './page/ShopPage';
+import ProductsPage from './page/ShopPage/ProductsPage';
 import UserProfilePage from './page/UserProfilePage'
 import ScrollToTop from './component/ScrollToTop';
 function App() {
@@ -22,7 +22,7 @@ function App() {
           <Route path="/" element={<HomePage />} />  
           <Route path="/home" element={<Navigate to="/" />} />  
           <Route path="/about" element={<AboutPage />} />   
-          <Route path="/shop" element={<ShopPage />} />    
+          <Route path="/products" element={<ProductsPage />} />    
           <Route path="/login" element={<LoginPage />} /> 
           <Route path="/register" element={<RegisterPage />} />    
           <Route path="/admin" element={<AdminPage />} />
