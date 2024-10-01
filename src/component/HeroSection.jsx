@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom'; 
 
 function HeroSection() {
   return (
@@ -11,12 +12,12 @@ function HeroSection() {
           The best Japanese koi for sale online and by phone!
         </h2>
         <div className="flex mt-8 space-x-4">
-          <a href="#koi" className="bg-white text-orange-600 font-semibold py-2 px-6 rounded-full hover:bg-orange-500 hover:text-white transition-all">
+          <Link to="/shop" className="bg-white text-orange-600 font-semibold py-2 px-6 rounded-full hover:bg-orange-500 hover:text-white transition-all">
             View Koi for Sale
-          </a>
-          <a href="#account" className="bg-white text-orange-600 font-semibold py-2 px-6 rounded-full hover:bg-orange-500 hover:text-white transition-all">
+          </Link>
+          <Link to="/login" className="bg-white text-orange-600 font-semibold py-2 px-6 rounded-full hover:bg-orange-500 hover:text-white transition-all">
             Create Account
-          </a>
+          </Link>
         </div>
         <p className="mt-10 text-lg text-center text-neutral-200 max-w-4xl">
           Please call us at (012)-3445-789 or email us at fkoi@gmail.com

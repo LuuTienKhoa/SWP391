@@ -11,9 +11,11 @@ import RegisterPage from './page/RegisterPage'
 import AdminPage from './page/AdminPage'
 import ShopPage from './page/ShopPage';
 import UserProfilePage from './page/UserProfilePage'
+import ScrollToTop from './component/ScrollToTop';
 function App() {
   return (   
     <>
+      <ScrollToTop />
       <Header />
       <main>
       <Routes>
