@@ -17,7 +17,7 @@ function Testinominals() {
                   src={testimonials.image}
                   alt={testimonials.user}
                 />
-                <div className="ml-4 bo">
+                <div className="ml-4 ">
                   <h6>{testimonials.name}</h6>
                   <span className="text-sm  italic text-neutral-600">
                     {testimonials.company}

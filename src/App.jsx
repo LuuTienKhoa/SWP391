@@ -10,6 +10,7 @@ import LoginPage from './page/LoginPage';
 import RegisterPage from './page/RegisterPage'
 import AdminPage from './page/AdminPage'
 import ShopPage from './page/ShopPage';
+import UserProfilePage from './page/UserProfilePage'
 function App() {
   return (   
     <>
@@ -23,7 +24,7 @@ function App() {
           <Route path="/login" element={<LoginPage />} /> 
           <Route path="/register" element={<RegisterPage />} />    
           <Route path="/admin" element={<AdminPage />} />
-
+          <Route path="/profile" element={<UserProfilePage />} />
           <Route path="*" element={<NotFoundPage />} />    
         </Routes>    
       </main>       
