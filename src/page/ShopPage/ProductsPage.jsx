@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { FaSearch, FaShoppingCart, FaFilter, FaSortAmountDown } from "react-icons/fa";
 import { IoMdClose } from "react-icons/io";
+import { Link } from "react-router-dom"; // Add this import
 
 const KoiFishProducts = () => {
   const [products, setProducts] = useState([]);
@@ -232,9 +233,11 @@ const KoiFishProducts = () => {
               <p className="text-gray-600 mb-4">{product.description}</p>
               <div className="flex justify-between items-center">
                 <span className="text-2xl font-bold text-blue-600">${product.price.toFixed(2)}</span>
-                <button className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition duration-300">
-                  View Details
-                </button>
+                <Link to={`/view-details/${product.id}`}>
+                  <button className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition duration-300">
+                    View Details
+                  </button>
+                </Link>
               </div>
             </div>
           </div>
