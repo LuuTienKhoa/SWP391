@@ -56,7 +56,7 @@ const KoiInfo = () => {
             <FaSearchPlus className="text-6xl text-orange-500 mb-2" /> 
             <Link 
               className="py-2.5 px-5 text-lg font-semibold bg-gradient-to-r from-orange-400 to-orange-800 text-transparent bg-clip-text"
-              to="/shop"
+              to="/products"
             >
               View All Koi
             </Link>
