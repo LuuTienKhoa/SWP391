@@ -10,6 +10,7 @@ import LoginPage from './page/LoginPage';
 import RegisterPage from './page/RegisterPage'
 import AdminPage from './page/AdminPage'
 import ProductsPage from './page/ShopPage/ProductsPage';
+import ViewDetailsPage from "./page/ShopPage/ViewDetailsPage";
 import UserProfilePage from './page/UserProfilePage'
 import ScrollToTop from './component/ScrollToTop';
 function App() {
@@ -27,8 +28,10 @@ function App() {
           <Route path="/register" element={<RegisterPage />} />    
           <Route path="/admin" element={<AdminPage />} />
           <Route path="/profile" element={<UserProfilePage />} />
-          <Route path="*" element={<NotFoundPage />} />    
-        </Routes>    
+          <Route path="/view-details/:id" element={<ViewDetailsPage />} /> {/* Add this line */}
+
+          <Route path="*" element={<NotFoundPage />} />             
+      </Routes>    
       </main>       
       <Footer />
     </>
