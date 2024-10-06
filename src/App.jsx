@@ -11,6 +11,7 @@ import RegisterPage from './page/RegisterPage'
 import AdminPage from './page/AdminPage'
 import ProductsPage from './page/ShopPage/ProductsPage';
 import ViewDetailsPage from "./page/ShopPage/ViewDetailsPage";
+import PaymentPage from "./page/ShopPage/PaymentPage";
 import UserProfilePage from './page/UserProfilePage'
 import ScrollToTop from './component/ScrollToTop';
 function App() {
@@ -28,7 +29,9 @@ function App() {
           <Route path="/register" element={<RegisterPage />} />    
           <Route path="/admin" element={<AdminPage />} />
           <Route path="/profile" element={<UserProfilePage />} />
-          <Route path="/view-details/:id" element={<ViewDetailsPage />} /> {/* Add this line */}
+          <Route path="/view-details/:id" element={<ViewDetailsPage />} />
+          <Route path="/payment/:id" element={<PaymentPage />} />
+           {/* Add this line */}
 
           <Route path="*" element={<NotFoundPage />} />             
       </Routes>    
