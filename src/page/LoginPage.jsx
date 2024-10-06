@@ -18,7 +18,7 @@ const LoginPage = () => {
 
     try {
       // gửi request đến server
-      const response = await api.post("login", values);
+      const response = await api.post("http://localhost:5213/api/User/login", values);
       const { token } = response.data;
       localStorage.setItem("token", token);
       localStorage.setItem("user", JSON.stringify(response.data));
@@ -28,6 +28,9 @@ const LoginPage = () => {
       alert(err.response.data);
     }
   };
+  const handleLoginGoogle = async (values) =>{
+    console.log(values);
+  }
 
   return (
     <>
@@ -109,8 +112,7 @@ const LoginPage = () => {
                   <div className="w-full h-[1px] bg-black"></div>
                   <p className="text-lg absolute text-black/80 bg-white">or</p>
                 </div>
-              </Form>
-              <div>
+                <div>
                 <button
                   className="w-full text-black my-2 bg-white border-2 border-black rounded-md p-4 text-center flex items-center justify-center"
                   onClick={() => login()}
@@ -123,6 +125,8 @@ const LoginPage = () => {
                   Sign In With Google
                 </button>
               </div>
+              </Form>
+              
             </div>
           </div>
 
