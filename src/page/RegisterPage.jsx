@@ -2,22 +2,17 @@ import api from "../config/axios";
 import { useNavigate } from "react-router-dom";
 import Cover_Image from "../assets/bg.jpg";
 import { Form, Input } from "antd";
-import GOOGLE_ICON from "../assets/google.svg";
 import { Link } from "react-router-dom";
-import { useGoogleLogin } from "@react-oauth/google";
-const LoginPage = () => {
-  const login = useGoogleLogin({
-    onSuccess: (tokenResponse) => console.log(tokenResponse),
-  });
-  const navigate = useNavigate();
+const RegisterPage = () => {
+   const navigate = useNavigate();
 
   // vùng của javascript
-  const handleLogin = async (values) => {
+  const handleRegister = async (values) => { // Renamed from handleLogin to handleRegister
     console.log(values);
 
     try {
       // gửi request đến server
-      const response = await api.post("login", values);
+      const response = await api.post("register", values); // Changed endpoint from "login" to "register"
       const { token } = response.data;
       localStorage.setItem("token", token);
       localStorage.setItem("user", JSON.stringify(response.data));
@@ -52,8 +47,24 @@ const LoginPage = () => {
               <Form
                 className="w-full"
                 labelCol={{ span: 24 }}
-                onFinish={handleLogin}
+                onFinish={handleRegister} // Updated to use handleRegister
               >
+                <Form.Item
+                  name="Username"
+                  rules={[
+                    {
+                      required: true,
+                      message: "Please input your Username!",
+                      type: "", // Ensure the input is a valid Username
+                    },
+                  ]}
+                >
+                  <Input
+                    type="text"
+                    placeholder="Username"
+                    className="w-full text-black py-2 my-2 bg-transparent border-b border-black outline-none focus:outline-none"
+                  />
+                </Form.Item>
                 <Form.Item
                   name="email"
                   rules={[
@@ -127,27 +138,15 @@ const LoginPage = () => {
                   <p className="text-lg absolute text-black/80 bg-white">or</p>
                 </div>
               </Form>
-              <div>
-              <button
-                  className="w-full text-black my-2 bg-white border-2 border-black rounded-md p-4 text-center flex items-center justify-center"
-                  onClick={() => login()}
-                >
-                  <img
-                    src={GOOGLE_ICON}
-                    className="h-6 mr-2"
-                    alt="Google Icon"
-                  />
-                  Sign In With Google
-                </button>
-              </div>
+              
             </div>
           </div>
 
-          <div className="w-full flex flex-col items-center p-10">
+          <div className="w-full flex flex-col items-center p-10 mb-10"> {/* Add mb-10 for margin-bottom */}
             <p className="text-sm font-semibold text-black mb-2">
-              You alredy have an acconut!{" "}
-              <span className=" font-semibold text-blue-500 hover:underline cursor-pointer">
-                <Link to="/login  ">Login here</Link>
+              You already have an account!{" "}
+              <span className="font-semibold text-blue-500 hover:underline cursor-pointer">
+                <Link to="/login">Login here</Link>
               </span>
             </p>
           </div>
@@ -157,4 +156,4 @@ const LoginPage = () => {
   );
 };
 
-export default LoginPage;
+export default RegisterPage;
