@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import {
   FaSearch,
   FaShoppingCart,
@@ -6,10 +6,10 @@ import {
   FaSortAmountDown,
 } from "react-icons/fa";
 import { IoMdClose } from "react-icons/io";
-import { Link } from "react-router-dom"; // Add this import
+import { Link } from "react-router-dom";
+import { products } from "../../constants"; // Importing products
 
 const KoiFishProducts = () => {
-  const [products, setProducts] = useState([]);
   const [filteredProducts, setFilteredProducts] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [priceRange, setPriceRange] = useState({ min: 0, max: 1000 });
@@ -18,84 +18,21 @@ const KoiFishProducts = () => {
   const [selectedCategory, setSelectedCategory] = useState("");
   const [sortBy, setSortBy] = useState("popularity");
   const [isFilterMenuOpen, setIsFilterMenuOpen] = useState(false);
-  const [cart, setCart] = useState([]); // Cart state
-  const [isCartOpen, setIsCartOpen] = useState(false); // Cart modal state
+  const [cart, setCart] = useState([]);
+  const [isCartOpen, setIsCartOpen] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
+  const productsPerPage = 12;
 
   useEffect(() => {
-    // Load cart items from localStorage when the component mounts
     const savedCart = JSON.parse(localStorage.getItem("cartItems")) || [];
     setCart(savedCart);
-    
-    // Simulating API call to fetch products
-    const fetchProducts = async () => {
-      // In a real scenario, this would be an API call
-      const dummyProducts = [
-        {
-          id: '1',
-          title: "Black and White Koi",
-          price: 249.99,
-          description: "Elegant black and white patterned Koi",
-          image:"https://www.kodamakoifarm.com/wp-content/uploads/2024/08/w0812s001-260x421.jpg",
-          color: "black",
-          size: "large",
-          category: "premium",
-          popularity: 4.8,
-        },//1
-        {
-          id: '2',
-          title: "Orange Koi Fish",
-          price: 199.99,
-          description: "Vibrant orange Koi fish with white spots",
-          image:"https://www.kodamakoifarm.com/wp-content/uploads/2024/05/w0508s002.jpg",
-          color: "orange",
-          size: "medium",
-          category: "ornamental",
-          popularity: 4.5,
-        },//2
-        
-        {
-          id: '3',
-          title: "Red and White Koi",
-          price: 179.99,
-          description: "Beautiful red and white Koi fish fron VietNam",
-          image: "https://www.kodamakoifarm.com/wp-content/uploads/2024/08/w0826s001-re-260x421.jpg",
-          color: "red",
-          size: "small",
-          category: "standard",
-          popularity: 4.2,
-        },//3
-        {
-          id: '4',
-          title: "Red Koi",
-          price: 179.99,
-          description: "Beautiful red and white Koi fish from japan",
-          image:"https://www.kodamakoifarm.com/wp-content/uploads/2024/08/w0826s005-re-260x421.jpg",
-          color: "red",
-          size: "small",
-          category: "standard",
-          popularity: 4.2,
-        },//4
-        {
-          id: '5',
-          title: "Brown Koi",
-          price: 179.99,
-          description: "Beautiful red and white Koi fish from japan",
-          image:"https://www.kodamakoifarm.com/wp-content/uploads/2024/05/w0506s089-260x421.jpg",
-          color: "brown",
-          size: "small",
-          category: "standard",
-          popularity: 4.2,
-        },//5
-
-      ];
-      setProducts(dummyProducts);
-      setFilteredProducts(dummyProducts);
-    };
-
-    fetchProducts();
   }, []);
 
   useEffect(() => {
+    localStorage.setItem("cartItems", JSON.stringify(cart));
+  }, [cart]);
+
+  const filteredAndSortedProducts = useMemo(() => {
     const filtered = products.filter((product) => {
       const matchesSearch = product.title
         .toLowerCase()
@@ -117,71 +54,46 @@ const KoiFishProducts = () => {
       );
     });
 
-    const sorted = [...filtered].sort((a, b) => {
+    return filtered.sort((a, b) => {
       if (sortBy === "price") return a.price - b.price;
       if (sortBy === "popularity") return b.popularity - a.popularity;
-      return 0; // Default: no sorting
+      return 0;
     });
-    // Save cart items to localStorage whenever the cart changes
-    localStorage.setItem("cartItems", JSON.stringify(cart));
-
-    setFilteredProducts(sorted);
   }, [
-    products,
     searchTerm,
     priceRange,
     selectedColor,
     selectedSize,
     selectedCategory,
     sortBy,
-    cart,
   ]);
 
-  const handleSearchChange = (e) => {
-    setSearchTerm(e.target.value);
-  };
+  useEffect(() => {
+    setFilteredProducts(filteredAndSortedProducts);
+  }, [filteredAndSortedProducts]);
 
+  const handleSearchChange = (e) => setSearchTerm(e.target.value);
   const handlePriceRangeChange = (e) => {
     const { name, value } = e.target;
     setPriceRange((prev) => ({ ...prev, [name]: parseFloat(value) }));
   };
+  const handleColorChange = (e) => setSelectedColor(e.target.value);
+  const handleSizeChange = (e) => setSelectedSize(e.target.value);
+  const handleCategoryChange = (e) => setSelectedCategory(e.target.value);
+  const handleSortChange = (e) => setSortBy(e.target.value);
+  const toggleFilterMenu = () => setIsFilterMenuOpen(!isFilterMenuOpen);
 
-  const handleColorChange = (e) => {
-    setSelectedColor(e.target.value);
-  };
-
-  const handleSizeChange = (e) => {
-    setSelectedSize(e.target.value);
-  };
-
-  const handleCategoryChange = (e) => {
-    setSelectedCategory(e.target.value);
-  };
-
-  const handleSortChange = (e) => {
-    setSortBy(e.target.value);
-  };
-
-  const toggleFilterMenu = () => {
-    setIsFilterMenuOpen(!isFilterMenuOpen);
-  };
   const addToCart = (product) => {
     setCart((prev) => {
       const existingProduct = prev.find((item) => item.id === product.id);
-      if (existingProduct) {
-        // Item already exists in the cart, do not add again
-        return prev; // Return the existing cart without changes
-      }
-      return [...prev, { ...product, quantity: 1 }]; // Add new item with quantity 1
+      if (existingProduct) return prev;
+      return [...prev, { ...product, quantity: 1 }];
     });
   };
 
-  // Function to calculate total price of items in the cart
-  const calculateTotalPrice = (cartItems) => {
-    return cartItems.reduce((acc, item) => acc + item.price * item.quantity, 0);
-  };
+  const calculateTotalPrice = (cartItems) =>
+    cartItems.reduce((acc, item) => acc + item.price * item.quantity, 0);
 
-  // Function to remove item from the cart
   const removeFromCart = (id) => {
     setCart((prev) => prev.filter((item) => item.id !== id));
   };
@@ -232,7 +144,6 @@ const KoiFishProducts = () => {
             Close
           </button>
         </div>
-        {/* Show Payment All button if total price is greater than 0 */}
         {totalPrice > 0 && (
           <Link to={{ pathname: "/payment", state: { cartItems } }}>
             <button className="mt-4 bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 transition duration-300">
@@ -244,6 +155,20 @@ const KoiFishProducts = () => {
     </div>
   );
 
+  // Calculate the products to display based on the current page
+  const indexOfLastProduct = currentPage * productsPerPage;
+  const indexOfFirstProduct = indexOfLastProduct - productsPerPage;
+  const currentProducts = filteredProducts.slice(
+    indexOfFirstProduct,
+    indexOfLastProduct
+  );
+
+  // Calculate total pages
+  const totalPages = Math.ceil(filteredProducts.length / productsPerPage);
+
+  const handlePageChange = (pageNumber) => {
+    setCurrentPage(pageNumber);
+  };
 
   return (
     <div className="container mx-auto px-4 py-8">
@@ -357,7 +282,7 @@ const KoiFishProducts = () => {
       )}
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
-        {filteredProducts.map((product) => (
+        {currentProducts.map((product) => (
           <div
             key={product.id}
             className="bg-white rounded-lg shadow-md overflow-hidden transform hover:scale-105 transition duration-300"
@@ -400,6 +325,22 @@ const KoiFishProducts = () => {
         </div>
       )}
 
+      <div className="flex justify-center mt-8">
+        {Array.from({ length: totalPages }, (_, index) => (
+          <button
+            key={index}
+            onClick={() => handlePageChange(index + 1)}
+            className={`mx-1 px-4 py-2 rounded ${
+              currentPage === index + 1
+                ? "bg-blue-500 text-white"
+                : "bg-gray-200 text-gray-700"
+            } hover:bg-blue-600 transition duration-300`}
+          >
+            {index + 1}
+          </button>
+        ))}
+      </div>
+
       <div className="fixed bottom-4 right-4">
         <button
           onClick={() => setIsCartOpen(true)}
@@ -419,7 +360,7 @@ const KoiFishProducts = () => {
           cartItems={cart}
           onClose={() => setIsCartOpen(false)}
           removeFromCart={removeFromCart}
-          totalPrice={calculateTotalPrice(cart)} // Pass total price to CartModal
+          totalPrice={calculateTotalPrice(cart)}
         />
       )}
     </div>
