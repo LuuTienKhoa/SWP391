@@ -1,9 +1,4 @@
-import { BotMessageSquare } from "lucide-react";
-import { BatteryCharging } from "lucide-react";
-import { Fingerprint } from "lucide-react";
-import { ShieldHalf } from "lucide-react";
-import { PlugZap } from "lucide-react";
-import { GlobeLock } from "lucide-react";
+
 
 export const testimonials = [
   {
@@ -85,5 +80,260 @@ export const checkListItem = [
 
 ];
 
-
+export const products = [
+  {
+    id: '1',
+    title: "Black and White Koi",
+    price: 249.99,
+    description: "Elegant black and white patterned Koi",
+    image:"https://www.kodamakoifarm.com/wp-content/uploads/2024/08/w0812s001-260x421.jpg",
+    color: "black",
+    size: "large",
+    category: "premium",
+    popularity: 4.8,
+  },//1
+  {
+    id: '2',
+    title: "Orange Koi Fish",
+    price: 199.99,
+    description: "Vibrant orange Koi fish with white spots",
+    image:"https://www.kodamakoifarm.com/wp-content/uploads/2024/05/w0508s002.jpg",
+    color: "orange",
+    size: "medium",
+    category: "ornamental",
+    popularity: 4.5,
+  },//2
+  
+  {
+    id: '3',
+    title: "Red and White Koi",
+    price: 179.99,
+    description: "Beautiful red and white Koi fish fron VietNam",
+    image: "https://www.kodamakoifarm.com/wp-content/uploads/2024/08/w0826s001-re-260x421.jpg",
+    color: "red",
+    size: "small",
+    category: "standard",
+    popularity: 4.2,
+  },//3
+  {
+    id: '4',
+    title: "Red Koi",
+    price: 179.99,
+    description: "Beautiful red and white Koi fish from japan",
+    image:"https://www.kodamakoifarm.com/wp-content/uploads/2024/08/w0826s005-re-260x421.jpg",
+    color: "red",
+    size: "small",
+    category: "standard",
+    popularity: 4.2,
+  },//4
+  {
+    id: '5',
+    title: "Brown Koi",
+    price: 179.99,
+    description: "Beautiful red and white Koi fish from japan",
+    image:"https://www.kodamakoifarm.com/wp-content/uploads/2024/05/w0506s089-260x421.jpg",
+    color: "brown",
+    size: "small",
+    category: "standard",
+    popularity: 4.2,
+  },//5
+  {
+    id: '6',
+    title: "Brown Koi",
+    price: 179.99,
+    description: "Beautiful red and white Koi fish from japan",
+    image:"https://www.kodamakoifarm.com/wp-content/uploads/2024/05/w0506s089-260x421.jpg",
+    color: "brown",
+    size: "small",
+    category: "standard",
+    popularity: 4.2,
+  },//5
+  {
+    id: '7',
+    title: "Brown Koi",
+    price: 179.99,
+    description: "Beautiful red and white Koi fish from japan",
+    image:"https://www.kodamakoifarm.com/wp-content/uploads/2024/05/w0506s089-260x421.jpg",
+    color: "brown",
+    size: "small",
+    category: "standard",
+    popularity: 4.2,
+  },//5
+  {
+    id: '8',
+    title: "Brown Koi",
+    price: 179.99,
+    description: "Beautiful red and white Koi fish from japan",
+    image:"https://www.kodamakoifarm.com/wp-content/uploads/2024/05/w0506s089-260x421.jpg",
+    color: "brown",
+    size: "small",
+    category: "standard",
+    popularity: 4.2,
+  },//5
+  {
+    id: '9',
+    title: "Brown Koi",
+    price: 179.99,
+    description: "Beautiful red and white Koi fish from japan",
+    image:"https://www.kodamakoifarm.com/wp-content/uploads/2024/05/w0506s089-260x421.jpg",
+    color: "brown",
+    size: "small",
+    category: "standard",
+    popularity: 4.2,
+  },//5
+  {
+    id: '10',
+    title: "Brown Koi",
+    price: 179.99,
+    description: "Beautiful red and white Koi fish from japan",
+    image:"https://www.kodamakoifarm.com/wp-content/uploads/2024/05/w0506s089-260x421.jpg",
+    color: "brown",
+    size: "small",
+    category: "standard",
+    popularity: 4.2,
+  },//5
+  {
+    id: '11',
+    title: "Brown Koi",
+    price: 179.99,
+    description: "Beautiful red and white Koi fish from japan",
+    image:"https://www.kodamakoifarm.com/wp-content/uploads/2024/05/w0506s089-260x421.jpg",
+    color: "brown",
+    size: "small",
+    category: "standard",
+    popularity: 4.2,
+  },//5
+  {
+    id: '12',
+    title: "Brown Koi",
+    price: 179.99,
+    description: "Beautiful red and white Koi fish from japan",
+    image:"https://www.kodamakoifarm.com/wp-content/uploads/2024/05/w0506s089-260x421.jpg",
+    color: "brown",
+    size: "small",
+    category: "standard",
+    popularity: 4.2,
+  },//5
+  {
+    id: '13',
+    title: "Brown Koi",
+    price: 179.99,
+    description: "Beautiful red and white Koi fish from japan",
+    image:"https://www.kodamakoifarm.com/wp-content/uploads/2024/05/w0506s089-260x421.jpg",
+    color: "brown",
+    size: "small",
+    category: "standard",
+    popularity: 4.2,
+  },//5
+  {
+    id: '14',
+    title: "Brown Koi",
+    price: 179.99,
+    description: "Beautiful red and white Koi fish from japan",
+    image:"https://www.kodamakoifarm.com/wp-content/uploads/2024/05/w0506s089-260x421.jpg",
+    color: "brown",
+    size: "small",
+    category: "standard",
+    popularity: 4.2,
+  },//5
+  {
+    id: '15',
+    title: "Brown Koi",
+    price: 179.99,
+    description: "Beautiful red and white Koi fish from japan",
+    image:"https://www.kodamakoifarm.com/wp-content/uploads/2024/05/w0506s089-260x421.jpg",
+    color: "brown",
+    size: "small",
+    category: "standard",
+    popularity: 4.2,
+  },//5
+  {
+    id: '16',
+    title: "Brown Koi",
+    price: 179.99,
+    description: "Beautiful red and white Koi fish from japan",
+    image:"https://www.kodamakoifarm.com/wp-content/uploads/2024/05/w0506s089-260x421.jpg",
+    color: "brown",
+    size: "small",
+    category: "standard",
+    popularity: 4.2,
+  },//5
+  {
+  id: '16',
+    title: "Brown Koi",
+    price: 179.99,
+    description: "Beautiful red and white Koi fish from japan",
+    image:"https://www.kodamakoifarm.com/wp-content/uploads/2024/05/w0506s089-260x421.jpg",
+    color: "brown",
+    size: "small",
+    category: "standard",
+    popularity: 4.2,
+  },//5
+  {
+    id: '17',
+    title: "Brown Koi",
+    price: 179.99,
+    description: "Beautiful red and white Koi fish from japan",
+    image:"https://www.kodamakoifarm.com/wp-content/uploads/2024/05/w0506s089-260x421.jpg",
+    color: "brown",
+    size: "small",
+    category: "standard",
+    popularity: 4.2,
+  },//5
+  {
+    id: '18',
+    title: "Brown Koi",
+    price: 179.99,
+    description: "Beautiful red and white Koi fish from japan",
+    image:"https://www.kodamakoifarm.com/wp-content/uploads/2024/05/w0506s089-260x421.jpg",
+    color: "brown",
+    size: "small",
+    category: "standard",
+    popularity: 4.2,
+  },//5
+  {
+    id: '19',
+    title: "Brown Koi",
+    price: 179.99,
+    description: "Beautiful red and white Koi fish from japan",
+    image:"https://www.kodamakoifarm.com/wp-content/uploads/2024/05/w0506s089-260x421.jpg",
+    color: "brown",
+    size: "small",
+    category: "standard",
+    popularity: 4.2,
+  },//5
+  {
+    id: '20',
+    title: "Brown Koi",
+    price: 179.99,
+    description: "Beautiful red and white Koi fish from japan",
+    image:"https://www.kodamakoifarm.com/wp-content/uploads/2024/05/w0506s089-260x421.jpg",
+    color: "brown",
+    size: "small",
+    category: "standard",
+    popularity: 4.2,
+  },//5           
+  {
+    id: '21',
+    title: "Brown Koi",
+    price: 179.99,
+    description: "Beautiful red and white Koi fish from japan",
+    image:"https://www.kodamakoifarm.com/wp-content/uploads/2024/05/w0506s089-260x421.jpg",
+    color: "brown",
+    size: "small",
+    category: "standard",
+    popularity: 4.2,
+  },//5                                                                        
+  {
+    id: '22',
+    title: "Brown Koi",
+    price: 179.99,
+    description: "Beautiful red and white Koi fish from japan",
+    image:"https://www.kodamakoifarm.com/wp-content/uploads/2024/05/w0506s089-260x421.jpg",
+    color: "brown",
+    size: "small",
+    category: "standard",
+    popularity: 4.2,
+  },//5
+];
 
