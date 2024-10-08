@@ -18,7 +18,7 @@ const LoginPage = () => {
 
     try {
       // gửi request đến server
-      const response = await api.post("http://localhost:5213/api/User/login", values);
+      const response = await api.post("User/login", values);
       const { token } = response.data;
       localStorage.setItem("token", token);
       localStorage.setItem("user", JSON.stringify(response.data));
@@ -64,12 +64,12 @@ const LoginPage = () => {
                     {
                       required: true,
                       message: "Please input your email!",
-                      type: "email", // Ensure the input is a valid email
+                      type: "", // Ensure the input is a valid email
                     },
                   ]}
                 >
                   <Input
-                    type="email"
+                    type=""
                     placeholder="Email"
                     className="w-full text-black py-2 my-2 bg-transparent border-b border-black outline-none focus:outline-none"
                   />
