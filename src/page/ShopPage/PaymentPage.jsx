@@ -60,10 +60,12 @@ const PaymentPage = () => {
               Please scan the QR code to pay.
             </p>
           </div>
-
+          
+          {/* QR code */}
           <div>
             <img src={paymentMethods.qrCode} alt="QR Code" />
           </div>
+
           {/* Discount Code */}
           <div className="mb-6">
             <label className="block text-lg font-medium mb-2">Discount Code (Optional)</label>
@@ -77,15 +79,7 @@ const PaymentPage = () => {
             <button className="bg-blue-600 w-full mt-4 py-2 rounded-lg hover:bg-blue-700 transition">
               Apply
             </button>
-          </div>
-
-          {/* Payment Button */}
-          <button
-            className="bg-blue-600 w-full py-4 rounded-lg hover:bg-blue-700 transition"
-            onClick={handlePayment}
-          >
-            Pay Now
-          </button>
+          </div>         
         </div>
       </div>
     </div>
