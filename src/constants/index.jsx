@@ -81,28 +81,28 @@ export const checkListItem = [
 ];
 
 export const products = [
-  {
-    id: '1',
-    title: "Black and White Koi",
-    price: 249.99,
-    description: "Elegant black and white patterned Koi",
-    image:"https://www.kodamakoifarm.com/wp-content/uploads/2024/08/w0812s001-260x421.jpg",
-    color: "black",
-    size: "large",
-    category: "premium",
-    popularity: 4.8,
-  },//1
-  {
-    id: '2',
-    title: "Orange Koi Fish",
-    price: 199.99,
-    description: "Vibrant orange Koi fish with white spots",
-    image:"https://www.kodamakoifarm.com/wp-content/uploads/2024/05/w0508s002.jpg",
-    color: "orange",
-    size: "medium",
-    category: "ornamental",
-    popularity: 4.5,
-  },//2
+  // {
+  //   id: '1',
+  //   title: "Black and White Koi",
+  //   price: 249.99,
+  //   description: "Elegant black and white patterned Koi",
+  //   image:"https://www.kodamakoifarm.com/wp-content/uploads/2024/08/w0812s001-260x421.jpg",
+  //   color: "black",
+  //   size: "large",
+  //   category: "premium",
+  //   popularity: 4.8,
+  // },//1
+  // {
+  //   id: '2',
+  //   title: "Orange Koi Fish",
+  //   price: 199.99,
+  //   description: "Vibrant orange Koi fish with white spots",
+  //   image:"https://www.kodamakoifarm.com/wp-content/uploads/2024/05/w0508s002.jpg",
+  //   color: "orange",
+  //   size: "medium",
+  //   category: "ornamental",
+  //   popularity: 4.5,
+  // },//2
   
   {
     id: '3',
