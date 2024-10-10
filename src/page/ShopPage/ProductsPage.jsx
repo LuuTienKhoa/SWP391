@@ -8,6 +8,7 @@ import {
 import { IoMdClose } from "react-icons/io";
 import { Link } from "react-router-dom";
 import { products } from "../../constants"; // Importing products
+import api from "../../config/axios";
 
 const KoiFishProducts = () => {
   const [filteredProducts, setFilteredProducts] = useState([]);
@@ -22,6 +23,21 @@ const KoiFishProducts = () => {
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const productsPerPage = 12;
+  const [koiFishs, setKoiFishs] = useState([]);
+
+
+  const fetchKoiFish = async () => {
+    // hàm gọi API lấy dữ liệu cá koi
+    try {
+      const response = await api.get("koi/Koi");
+      setKoiFishs(response.data);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+  useEffect(() => {
+    fetchKoiFish(); // chạy thằng này mỗi khi mà trang load lên
+  }, []);
 
   useEffect(() => {
     const savedCart = JSON.parse(localStorage.getItem("cartItems")) || [];
