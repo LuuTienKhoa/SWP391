@@ -28,7 +28,7 @@ const RegisterPage = () => {
       //Store tokens
       localStorage.setItem("token", accessToken);
       localStorage.setItem("refreshToken", refreshToken);
-      navigate("/");
+      navigate("/login");
     } catch (err) {
       console.log("Registration Error:",err);
       alert(err.response?.data?.message || "An error occurred. Please try again.");
