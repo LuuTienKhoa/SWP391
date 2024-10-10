@@ -7,6 +7,8 @@ const KoiFishProducts = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [sortOrder, setSortOrder] = useState("asc");
   const [selectedColors, setSelectedColors] = useState([]); // State for color filter
+  const [ageRange, setAgeRange] = useState([0, 10]); // State for age filter
+  const [priceRange, setPriceRange] = useState([0, 1000]); // State for price filter
   const location = useLocation();
   const navigate = useNavigate();
 
@@ -46,7 +48,7 @@ const KoiFishProducts = () => {
     );
   };
 
-  // Updated filtering logic to handle multiple colors
+  // Updated filtering logic to handle age and price
   const filteredAndSortedKoiFishs = useMemo(() => {
     return koiFishs
       .filter((koiFish) =>
@@ -56,16 +58,23 @@ const KoiFishProducts = () => {
         const koiColors = koiFish.color.toLowerCase().split(", "); // Split the color string into an array
         return selectedColors.length === 0 || selectedColors.some(color => koiColors.includes(color));
       })
+      .filter((koiFish) => koiFish.age >= ageRange[0] && koiFish.age <= ageRange[1]) // Filter by age
+      .filter((koiFish) => koiFish.price >= priceRange[0] && koiFish.price <= priceRange[1]) // Filter by price
       .sort((a, b) =>
         sortOrder === "asc" ? a.price - b.price : b.price - a.price
       );
-  }, [koiFishs, searchQuery, selectedColors, sortOrder]);
+  }, [koiFishs, searchQuery, selectedColors, sortOrder, ageRange, priceRange]);
 
   const availableColors = ["red", "white", "black", "yellow", "blue", "orange"];
 
   return (
     <div className="container mx-auto px-4 py-8">
+      <div className="w-full text-5xl font-semibold mb-2 flex flex-col items-center">
+        <h1>F Koi Shop</h1>
+      </div>
+      
       <div className="flex justify-between items-center mb-4">
+        
         <input
           type="text"
           placeholder="Search koi fish by name"
@@ -74,12 +83,7 @@ const KoiFishProducts = () => {
           className="mb-4 p-2 border border-gray-300 rounded"
         />
 
-        <button
-          onClick={() => setSortOrder(sortOrder === "asc" ? "desc" : "asc")}
-          className="mb-4 p-2 bg-gray-200 rounded"
-        >
-          Sort by Price: {sortOrder === "asc" ? "Ascending" : "Descending"}
-        </button>
+        
       </div>
 
       <div className="mb-4">
@@ -97,6 +101,57 @@ const KoiFishProducts = () => {
             </label>
           ))}
         </div>
+      </div>
+<div>
+      <div className="mb-4 ">
+        <span className="font-bold">Filter by Age:    </span>
+        <input
+          type="range"
+          min="0"
+          max="10"
+          value={ageRange[0]}
+          onChange={(e) => setAgeRange([Number(e.target.value), ageRange[1]])}
+        />
+        <input
+          type="range"
+          min="0"
+          max="10"
+          value={ageRange[1]}
+          onChange={(e) => setAgeRange([ageRange[0], Number(e.target.value)])}
+        />
+        <span>{ageRange[0]} - {ageRange[1]} years</span>
+      </div>
+
+      <div className="mb-4 ">
+        <span className="font-bold">Filter by Price: </span>
+        <input
+          type="range"
+          min="0"
+          max="1000"
+          value={priceRange[0]}
+          onChange={(e) => setPriceRange([Number(e.target.value), priceRange[1]])}
+        />
+        <input
+          type="range"
+          min="0"
+          max="1000"
+          value={priceRange[1]}
+          onChange={(e) => setPriceRange([priceRange[0], Number(e.target.value)])}
+        />
+        <span>${priceRange[0]} - ${priceRange[1]}</span>
+      </div>
+</div>
+
+      <div className="mb-4 flex justify-end">
+        <select
+          value={sortOrder}
+          onChange={(e) => setSortOrder(e.target.value)}
+          className="p-2 bg-gray-200 rounded"
+        >
+          <option value="asc">Sort by Price: Ascending</option>
+          <option value="desc">Sort by Price: Descending</option>
+          <option value="latest">Sort by Latest</option>
+        </select>
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
