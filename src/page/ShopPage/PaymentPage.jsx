@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useParams, useLocation } from 'react-router-dom';
 import { products } from '../../constants';
 
@@ -7,19 +7,23 @@ const PaymentPage = () => {
   const { cartItems } = location.state || { cartItems: [] }; // Get cart items from location state
   const { id } = useParams(); // Get the product ID from URL parameters
   const [paymentMethod, setPaymentMethod] = useState('credit-card');
-  const [cardDetails, setCardDetails] = useState({
-    name: '',
-    number: '',
-    expiry: '',
-    cvv: '',
-    discountCode: ''
-  });
+ 
+  const [paymentMethods, setPaymentMethods] = useState([]);
+  const [transaction, setTransaction] = useState(null);
 
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setCardDetails({ ...cardDetails, [name]: value });
-  };
+  useEffect(() => {
+    // Fetch payment methods from the database
+    fetch('/api/payment-methods')    
+      .then(response => response.json())
+      .then(data => setPaymentMethods(data));
 
+    // Fetch transaction details if needed
+    fetch(`/api/transactions/${id}`)
+      .then(response => response.json())
+      .then(data => setTransaction(data));
+  }, [id]);
+
+  
   const handlePayment = () => {
     // Handle payment logic here
     console.log('Processing payment...');
@@ -49,75 +53,17 @@ const PaymentPage = () => {
         <div className="lg:w-1/2 lg:ml-8">
           <h2 className="text-3xl font-semibold mb-6">Payment</h2>
 
-          {/* Payment Method Selection */}
-          <div className="mb-6">
-            <label className="block text-lg font-medium mb-2">Select Payment Method</label>
-            <select
-              className="w-full p-3 bg-gray-700 rounded-lg"
-              value={paymentMethod}
-              onChange={(e) => setPaymentMethod(e.target.value)}
-            >
-              <option value="paypal">Paypal</option>
-              <option value="credit-card">Credit / Debit Card</option>
-            </select>
-          </div>
-
           {/* Price */}
           <div className="bg-gray-700 p-6 rounded-lg mb-6">
             <p className="text-4xl font-bold">${product.price.toFixed(2)}</p>
             <p className="text-sm mt-2">
-              We will save all details of your payment. You may stop future automatic payments anytime.
+              Please scan the QR code to pay.
             </p>
           </div>
 
-          {/* Card Details Form */}
-          {paymentMethod === 'credit-card' && (
-            <div className="mb-6">
-              <label className="block text-lg font-medium mb-2">Card Holder Name</label>
-              <input
-                type="text"
-                name="name"
-                className="w-full p-3 bg-gray-700 rounded-lg mb-4"
-                placeholder="Card Holder Name"
-                value={cardDetails.name}
-                onChange={handleInputChange}
-              />
-              <label className="block text-lg font-medium mb-2">Card Number</label>
-              <input
-                type="text"
-                name="number"
-                className="w-full p-3 bg-gray-700 rounded-lg mb-4"
-                placeholder="Card Number"
-                value={cardDetails.number}
-                onChange={handleInputChange}
-              />
-              <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-lg font-medium mb-2">Expiry Date</label>
-                  <input
-                    type="text"
-                    name="expiry"
-                    className="w-full p-3 bg-gray-700 rounded-lg"
-                    placeholder="MM / YY"
-                    value={cardDetails.expiry}
-                    onChange={handleInputChange}
-                  />
-                </div>
-                <div>
-                  <label className="block text-lg font-medium mb-2">CVV</label>
-                  <input
-                    type="text"
-                    name="cvv"
-                    className="w-full p-3 bg-gray-700 rounded-lg"
-                    placeholder="CVV"
-                    value={cardDetails.cvv}
-                    onChange={handleInputChange}
-                  />
-                </div>
-              </div>
-            </div>
-          )}
-
+          <div>
+            <img src={paymentMethods.qrCode} alt="QR Code" />
+          </div>
           {/* Discount Code */}
           <div className="mb-6">
             <label className="block text-lg font-medium mb-2">Discount Code (Optional)</label>
@@ -126,8 +72,7 @@ const PaymentPage = () => {
               name="discountCode"
               className="w-full p-3 bg-gray-700 rounded-lg"
               placeholder="Discount Code"
-              value={cardDetails.discountCode}
-              onChange={handleInputChange}
+             
             />
             <button className="bg-blue-600 w-full mt-4 py-2 rounded-lg hover:bg-blue-700 transition">
               Apply
