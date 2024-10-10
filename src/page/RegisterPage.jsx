@@ -8,18 +8,30 @@ const RegisterPage = () => {
 
   // vùng của javascript
   const handleRegister = async (values) => { // Renamed from handleLogin to handleRegister
-    console.log(values);
+    
 
     try {
+      console.log("Sending registration request with values:",values);
       // gửi request đến server
-      const response = await api.post("register", values); // Changed endpoint from "login" to "register"
-      const { token } = response.data;
-      localStorage.setItem("token", token);
-      localStorage.setItem("user", JSON.stringify(response.data));
+      const response = await api.post("/User/register", {
+        username: values.username,
+        email: values.email,
+        password: values.password,
+        name: values.username,
+      }); // Changed endpoint from "login" to "register"
+      console.log("Received response:", response.data);
+
+      const { accessToken, refreshToken } = response.data;
+      if (!accessToken) {
+        throw new Error("Invalid response from server");
+      }
+      //Store tokens
+      localStorage.setItem("token", accessToken);
+      localStorage.setItem("refreshToken", refreshToken);
       navigate("/");
     } catch (err) {
-      console.log(err);
-      alert(err.response.data);
+      console.log("Registration Error:",err);
+      alert(err.response?.data?.message || "An error occurred. Please try again.");
     }
   };
 
@@ -50,7 +62,7 @@ const RegisterPage = () => {
                 onFinish={handleRegister} // Updated to use handleRegister
               >
                 <Form.Item
-                  name="Username"
+                  name="username"
                   rules={[
                     {
                       required: true,

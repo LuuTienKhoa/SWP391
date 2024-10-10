@@ -36,12 +36,12 @@ export default function AdminPage() {
     <div className="flex">
       {/* Sidebar */}
       <div className="w-64 flex flex-col bg-gray-800 text-white p-4 h-screen">
-        <h2 className="text-2xl font-semibold mb-8">Material Tailwind React</h2>
+        <h2 className="text-2xl font-semibold mb-8">Koi Fish Store Admin</h2>
         <ul>
           {[
             { label: 'Dashboard', icon: 'D' },
-            { label: 'Profile', icon: 'P' },
-            { label: 'Tables', icon: 'T' },
+            { label: 'Manage Inventory', icon: 'I' },
+            { label: 'Orders', icon: 'O' },
             { label: 'Notifications', icon: 'N' },
           ].map((item, index) => (
             <li key={index} className="mb-4">
@@ -110,10 +110,10 @@ export default function AdminPage() {
         {/* Metrics Cards */}
         <Grid container spacing={4}>
           {[
-            { title: "Today's Money", value: '$53k', percentage: '+55% than last week' },
-            { title: "Today's Users", value: '2,300', percentage: '+3% than last month' },
-            { title: 'New Clients', value: '3,462', percentage: '+5% than yesterday' },
-            { title: 'Sales', value: '$103,430', percentage: '+5% than yesterday' },
+            { title: "Today's Sales", value: '$2,500', percentage: '+20% from yesterday' },
+            { title: "Total Koi Fish in Inventory", value: '120', percentage: '-10% from last week' },
+            { title: 'New Orders', value: '15', percentage: '+5 from yesterday' },
+            { title: 'Returning Customers', value: '85', percentage: '+15% from last month' },
           ].map((card, index) => (
             <Grid item xs={12} sm={6} md={3} key={index}>
               <Card>
@@ -138,16 +138,16 @@ export default function AdminPage() {
           <Card>
             <CardContent>
               <Typography variant="h6" gutterBottom>
-                Website View
+                Monthly Sales Trends
               </Typography>
               <div className="chart-container" style={{ height: '300px', overflow: 'hidden' }}>
                 <Line
                   data={{
-                    labels: ['M', 'T', 'W', 'T', 'F', 'S', 'S'],
+                    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
                     datasets: [
                       {
-                        label: 'Views',
-                        data: [12, 19, 3, 5, 2, 3, 7],
+                        label: 'Sales in $',
+                        data: [1200, 1500, 1800, 2200, 2000, 2300, 2500, 2600, 2700, 3000, 3100, 3200],
                         backgroundColor: 'rgba(75,192,192,0.2)',
                         borderColor: 'rgba(75,192,192,1)',
                       },
@@ -159,7 +159,7 @@ export default function AdminPage() {
                     scales: {
                       y: {
                         beginAtZero: true,
-                        suggestedMax: 50, // Suggested max to avoid large imbalances
+                        suggestedMax: 4000,
                       },
                     },
                   }}
@@ -173,16 +173,16 @@ export default function AdminPage() {
           <Card>
             <CardContent>
               <Typography variant="h6" gutterBottom>
-                Daily Sales
+                Koi Fish Inventory
               </Typography>
               <div className="chart-container" style={{ height: '300px', overflow: 'hidden' }}>
                 <Line
                   data={{
-                    labels: ['Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+                    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
                     datasets: [
                       {
-                        label: 'Sales',
-                        data: [65, 59, 80, 81, 56, 55, 40, 60, 80],
+                        label: 'Number of Koi Fish',
+                        data: [150, 140, 130, 120, 110, 105, 100, 120, 125, 140, 135, 130],
                         backgroundColor: 'rgba(153,102,255,0.2)',
                         borderColor: 'rgba(153,102,255,1)',
                       },
@@ -194,7 +194,7 @@ export default function AdminPage() {
                     scales: {
                       y: {
                         beginAtZero: true,
-                        suggestedMax: 100, // Suggested max to control the y-axis scale
+                        suggestedMax: 200,
                       },
                     },
                   }}

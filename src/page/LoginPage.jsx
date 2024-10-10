@@ -18,14 +18,29 @@ const LoginPage = () => {
 
     try {
       // gửi request đến server
-      const response = await api.post("User/login", values);
-      const { token } = response.data;
-      localStorage.setItem("token", token);
-      localStorage.setItem("user", JSON.stringify(response.data));
-      navigate("/");
+      const response = await api.post("User/login", {
+        username: values.username,
+        password: values.password,
+        name: values.username,
+      });
+      const{ accessToken, refreshToken, user  } = response.data;
+
+      localStorage.setItem("token", accessToken);
+      localStorage.setItem("refreshToken", refreshToken);
+      localStorage.setItem("userRole", user.role);
+
+      //USER role = 2 & ADMIN role = 0 & STAFF ROLE = 1
+      if(user.role == 0){
+        navigate("/admin");
+      }else if(user.role == 2){
+        navigate("/");
+      }else{
+        throw new Error("Invalid user role")
+      }
+      
     } catch (err) {
-      console.log(err);
-      alert(err.response.data);
+      console.log("Login Error",err);
+      alert(err.response.data?.message || "An error occured. Please try again");
     }
   };
   const handleLoginGoogle = async (values) =>{
@@ -59,18 +74,18 @@ const LoginPage = () => {
                 onFinish={handleLogin}
               >
                 <Form.Item
-                  name="email"
+                  name="username"
                   rules={[
                     {
                       required: true,
-                      message: "Please input your email!",
+                      message: "Please input your username!",
                       type: "", // Ensure the input is a valid email
                     },
                   ]}
                 >
                   <Input
                     type=""
-                    placeholder="Email"
+                    placeholder="Username"
                     className="w-full text-black py-2 my-2 bg-transparent border-b border-black outline-none focus:outline-none"
                   />
                 </Form.Item>
