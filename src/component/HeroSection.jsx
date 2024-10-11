@@ -5,8 +5,6 @@ function HeroSection() {
   return (
     <section className="relative bg-cover bg-center h-screen ">
       <div className="relative z-10 flex flex-col items-center justify-center h-full">
-        <h1 className="text-white text-4xl sm:text-5xl lg:text-6xl text-center font-bold  tracking-wide pt-3">
-          Kodama Koi Farm & Auction
         <h1 className="text-white text-4xl sm:text-5xl lg:text-6xl text-center font-bold  tracking-wide pt-3 " style={{ fontFamily: 'Playfair Display SC, serif' }}>
           F Koi Farm &
         </h1>
@@ -27,8 +25,6 @@ function HeroSection() {
               <path d="M224 256A128 128 0 1 0 224 0a128 128 0 1 0 0 256zm89.6 32h-8.7c-21.8 10-45.7 16-70.9 16s-49.1-6-70.9-16h-8.7C60.2 288 0 348.2 0 422.4V464c0 26.5 21.5 48 48 48h352c26.5 0 48-21.5 48-48v-41.6c0-74.2-60.2-134.4-134.4-134.4z"></path>
             </svg>
           </Link>
-
-
         </div>
         <p className="mt-10 text-lg text-center text-neutral-200 max-w-4xl">
           Please call us at (012)-3445-789 or email us at fkoi@gmail.com
