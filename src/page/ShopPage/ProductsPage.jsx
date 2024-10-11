@@ -161,7 +161,7 @@ const KoiFishProducts = () => {
             className="bg-white rounded-lg shadow-md overflow-hidden"
           >
             <img
-              src={koiFish.image}
+              src={koiFish.image ?? "https://www.kodamakoifarm.com/wp-content/uploads/2024/09/w0911s005-re-260x421.jpg"}
               alt={koiFish.name}
               className="w-full h-100 object-cover"
             />
