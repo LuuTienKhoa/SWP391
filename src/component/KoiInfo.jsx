@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';  // Import useLocation from react-router-dom
 import { FaKey, FaPencilAlt, FaSearchPlus } from 'react-icons/fa';  // Import the icons
-import '../assets/wave.css';
+
 
 const KoiInfo = () => {
   return (

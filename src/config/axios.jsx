@@ -11,23 +11,17 @@ const api = axios.create({
   },
 });
 
-// Handle actions before making API requests (such as attaching the token)
 const handleBefore = (config) => {
-  // Get the JWT token from local storage
   const token = localStorage.getItem("token")?.replaceAll('"', "");
-
-  // If a token is found, add it to the Authorization header of the request
   if (token) {
     config.headers["Authorization"] = `Bearer ${token}`;
   }
-
   return config;
 };
 
-// Add the handleBefore function as an interceptor for all outgoing requests
 api.interceptors.request.use(handleBefore, (error) => {
   return Promise.reject(error);
 });
 
-// Export the configured Axios instance for use in your project
+
 export default api;

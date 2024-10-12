@@ -5,47 +5,60 @@ import { Form, Input } from "antd";
 import GOOGLE_ICON from "../assets/google.svg";
 import { Link } from "react-router-dom";
 import { useGoogleLogin } from "@react-oauth/google";
-
+import { useDispatch } from "react-redux";
+import {reduxLogin} from '../store/slices/authSlice' 
 const LoginPage = () => {
-  const login = useGoogleLogin({
+ const loginWithGoogle = useGoogleLogin({
     onSuccess: (tokenResponse) => console.log(tokenResponse),
   });
+  const handleLoginGoogle = async (values) =>{
+    console.log(values);
+  }
+
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   // vùng của javascript
   const handleLogin = async (values) => {
     console.log(values);
-
     try {
       // gửi request đến server
-      const response = await api.post("User/login", {
+      const response = await api.post("/User/login", {
         username: values.username,
-        password: values.password,
-        name: values.username,
+        password: values.password,  
+        Name: values.username
       });
-      const{ accessToken, refreshToken, user  } = response.data;
-
-      localStorage.setItem("token", accessToken);
-      localStorage.setItem("refreshToken", refreshToken);
-      localStorage.setItem("userRole", user.role);
-
-      //USER role = 2 & ADMIN role = 0 & STAFF ROLE = 1
-      if(user.role == 0){
-        navigate("/admin");
-      }else if(user.role == 2){
-        navigate("/");
-      }else{
-        throw new Error("Invalid user role")
+      if(!response || !response.data){
+        throw new Error("Invalid response from server")
       }
-      
+      const{ accessToken, refreshToken, role, name } = response.data;
+
+      dispatch(
+        reduxLogin({
+        accessToken,
+        refreshToken,
+        userRole: role,
+      }));
+
+      switch (role) {
+        case 0:
+          navigate("/admin");
+          break;
+        case 1:
+          navigate("/staff");
+          break;
+        case 2:
+          navigate("/");
+          break;
+        default:
+          throw new Error("Invalid user role");
+      }
     } catch (err) {
-      console.log("Login Error",err);
-      alert(err.response.data?.message || "An error occured. Please try again");
+      console.error("Login Error:", err);
+      alert(err.response?.data?.message || "An error occurred. Please try again.");
     }
   };
-  const handleLoginGoogle = async (values) =>{
-    console.log(values);
-  }
+
 
   return (
     <>
@@ -117,7 +130,7 @@ const LoginPage = () => {
                 </Form.Item>
                 <Form.Item>
                   <div className="w-ful flex flex-col">
-                    <button className="w-ful text-white my-2 font-semibold bg-black rounded-md p-4 text-center flex items-center justify-center">
+                    <button  className="w-ful text-white my-2 font-semibold bg-black rounded-md p-4 text-center flex items-center justify-center">
                       Login
                     </button>
                   </div>
@@ -130,7 +143,7 @@ const LoginPage = () => {
                 <div>
                 <button
                   className="w-full text-black my-2 bg-white border-2 border-black rounded-md p-4 text-center flex items-center justify-center"
-                  onClick={() => login()}
+                  onClick={() => loginWithGoogle()}
                 >
                   <img
                     src={GOOGLE_ICON}

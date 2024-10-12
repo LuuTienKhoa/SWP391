@@ -9,30 +9,30 @@ function Footer() {
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
             {/* About Us Section */}
             <div>
-              <h3 className="text-lg font-bold text-white mb-4">Kodama Koi Farm</h3>
-              <p className="text-gray-600">
+              <h3 className="text-lg font-bold text-white mb-4" style={{ fontFamily: 'sans-serif' }}>Kodama Koi Farm</h3>
+              <p className="text-blue-600">
                 Kodama Koi Farm is the premier destination for quality Japanese koi fish for sale. We are the largest importer of Koi in North America. We specialize in raising champion koi!
               </p>
-              <p className="text-gray-600 mt-2">P.O. Box 893086, Mililani HI 96789</p>
-              <p className="text-gray-600">Hours of Operation: Mon-Fri, 7:00 a.m. - 3:00 p.m. HST</p>
+              <p className="text-blue-600 mt-2">P.O. Box 893086, Mililani HI 96789</p>
+              <p className="text-blue-600">Hours of Operation: Mon-Fri, 7:00 a.m. - 3:00 p.m. HST</p>
             </div>
 
             {/* Contact Information Section */}
             <div>
-              <h3 className="text-lg font-bold text-orange-600 mb-4">Contact Us</h3>
-              <p className="text-gray-600 flex items-center">
+              <h3 className="text-lg font-bold text-white mb-4" style={{ fontFamily: 'sans-serif' }}>Contact Us</h3>
+              <p className="text-blue-600 flex items-center">
                 <FaPhoneAlt className="mr-2" /> +1 (833) Koi Love (1-833-564-5683)
               </p>
-              <p className="text-gray-600 flex items-center mt-2">
+              <p className="text-blue-600 flex items-center mt-2">
                 <FaEnvelope className="mr-2" /> info@fkoi.com
               </p>
-              <p className="text-gray-600">Help: info@fkoi.com</p>
+              <p className="text-blue-600">Help: info@fkoi.com</p>
             </div>
 
             {/* Account Information Section */}
             <div>
-              <h3 className="text-lg font-bold text-orange-600 mb-4">Account Information</h3>
-              <ul className="text-gray-600">
+              <h3 className="text-lg font-bold text-orange-600 mb-4" style={{ fontFamily: 'sans-serif' }}>Account Information</h3>
+              <ul className="text-blue-600">
                 <li><a href="/account/welcome">Welcome!</a></li>
                 <li><a href="/account">My Account</a></li>
                 <li><a href="/account/reset-password">Reset Password</a></li>
@@ -44,7 +44,7 @@ function Footer() {
 
             {/* For Koi Lovers Section */}
             <div>
-              <h3 className="text-lg font-bold text-orange-600 mb-4">For Koi Lovers!</h3>
+              <h3 className="text-lg font-bold text-orange-600 mb-4" style={{ fontFamily: 'sans-serif' }}>For Koi Lovers!</h3>
               <ul className="text-white">
                 <li><a href="/koi/nishikigoi">What is a Nishikigoi?</a></li>
                 <li><a href="/koi/cost">How Much Do Koi Fish Cost?</a></li>

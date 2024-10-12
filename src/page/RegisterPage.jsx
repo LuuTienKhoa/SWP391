@@ -73,6 +73,7 @@ const RegisterPage = () => {
                 >
                   <Input
                     type="text"
+                    autoComplete="off" //NOt suggest old userName
                     placeholder="Username"
                     className="w-full text-black py-2 my-2 bg-transparent border-b border-black outline-none focus:outline-none"
                   />

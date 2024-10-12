@@ -1,5 +1,6 @@
 import './App.css';
 import { Routes, Route, Navigate, useLocation } from 'react-router-dom';
+import { Provider } from 'react-redux';
 import Header from './component/header/header';
 import Footer from './component/footer/footer';
 import HomePage from './page/HomePage';
@@ -13,7 +14,7 @@ import ViewDetailsPage from "./page/ShopPage/ViewDetailsPage";
 import PaymentPage from "./page/ShopPage/PaymentPage";
 import UserProfilePage from './page/UserProfilePage';
 import ScrollToTop from './component/ScrollToTop';
-
+import store from './store/store';
 function App() {
   const location = useLocation();
 
@@ -24,7 +25,8 @@ function App() {
 
   return (
     <>
-      <ScrollToTop />
+    <Provider store={store}>
+    <ScrollToTop />
       {shouldRenderHeaderFooter && <Header />}
       <main>
         <Routes>
@@ -42,6 +44,7 @@ function App() {
         </Routes>
       </main>
       {shouldRenderHeaderFooter && <Footer />}
+    </Provider>     
     </>
   );
 }
