@@ -34,3 +34,9 @@
   }
   
   
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Balthazar', Georgia, "Times New Roman", serif;
+}
+body, input, textarea, select {
+  font-family: 'Lato', Helvetica, Arial, Lucida, sans-serif;
+}
