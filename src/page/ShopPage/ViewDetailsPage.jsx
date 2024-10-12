@@ -26,7 +26,8 @@ const ViewDetailsPage = () => {
       <div className="bg-white rounded-lg shadow-lg p-6 md:flex md:space-x-8">
         <div className="md:w-1/2 flex flex-col justify-bewteen items-center ">
         <img 
-          src={koiFish.image || "path_to_placeholder_image"}
+          src={koiFish.image ?? "https://www.kodamakoifarm.com/wp-content/uploads/2024/05/w0503s054-re-260x421.jpg"
+          }
           alt={koiFish.name}
           className="w-full h-auto max-w-xs object-cover rounded-md "
           />
