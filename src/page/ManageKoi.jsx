@@ -1,12 +1,12 @@
 import React, { useState, useEffect, useCallback } from "react";
-import { Link } from "react-router-dom";
-import api from "../../config/axios";
+import { Link, useNavigate } from "react-router-dom";
+import api from "../config/axios";
 
 const ProductsPage = () => {
   const [koiFishs, setKoiFishs] = useState([]);
   const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
 
-  // Fetch Koi Fish data
   const fetchKoiFish = useCallback(async () => {
     setLoading(true);
     try {
@@ -24,7 +24,6 @@ const ProductsPage = () => {
     fetchKoiFish();
   }, [fetchKoiFish]);
 
-  // Delete Koi Fish function
   const handleDeleteProduct = async (koiID) => {
     const confirmDelete = window.confirm("Are you sure you want to delete this product?");
     if (!confirmDelete) return;
@@ -32,7 +31,6 @@ const ProductsPage = () => {
     try {
       await api.delete(`/koi/Koi/${koiID}`);
       alert("Product deleted successfully!");
-      // Remove the deleted product from the state
       setKoiFishs(koiFishs.filter((koiFish) => koiFish.koiID !== koiID));
     } catch (error) {
       console.error("Error deleting product:", error);
@@ -44,6 +42,16 @@ const ProductsPage = () => {
     <div className="bg-orange-100 min-h-screen">
       <div className="container mx-auto px-4 py-7">
         <h1 className="text-5xl mb-2 text-center">F Koi Shop</h1>
+
+        {/* Create Koi Button */}
+        <div className="mb-4 text-center">
+          <button
+            onClick={() => navigate("/manageKoi/createKoi")}
+            className="bg-green-500 text-white rounded px-4 py-2"
+          >
+            Create Koi
+          </button>
+        </div>
 
         {/* Product Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
@@ -72,6 +80,12 @@ const ProductsPage = () => {
                     className="bg-red-500 text-white rounded px-4 py-2 mt-2"
                   >
                     Delete Product
+                  </button>
+                  <button
+                    onClick={() => navigate(`/manageKoi/updateKoi/${koiFish.koiID}`)}
+                    className="bg-blue-500 text-white rounded px-4 py-2 mt-2"
+                  >
+                    Update Product
                   </button>
                 </div>
               </div>
