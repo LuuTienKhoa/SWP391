@@ -14,12 +14,14 @@ import ViewDetailsPage from "./page/ShopPage/ViewDetailsPage";
 import PaymentPage from "./page/ShopPage/PaymentPage";
 import UserProfilePage from './page/UserProfilePage';
 import ScrollToTop from './component/ScrollToTop';
+import ProtectedRoute from './context/ProtectedRoute';
 import store from './store/store';
+import ManageUserProfiles from './page/ManageUserProfile';
 function App() {
   const location = useLocation();
 
   // Define paths that should not have the header and footer
-  const excludeHeaderFooterPaths = ['/admin'];
+  const excludeHeaderFooterPaths = ['/admin', '/admin/manage-user'];
 
   const shouldRenderHeaderFooter = !excludeHeaderFooterPaths.includes(location.pathname);
 
@@ -36,7 +38,10 @@ function App() {
           <Route path="/products" element={<ProductsPage />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/register" element={<RegisterPage />} />
+        <Route element={<ProtectedRoute allowedRoles={['0']} />}>
           <Route path="/admin" element={<AdminPage />} />
+          <Route path="/admin/manage-user" element={<ManageUserProfiles />} />
+        </Route>
           <Route path="/profile" element={<UserProfilePage />} />
           <Route path="/view-details/:id" element={<ViewDetailsPage />} />
           <Route path="/payment/:id" element={<PaymentPage />} />
