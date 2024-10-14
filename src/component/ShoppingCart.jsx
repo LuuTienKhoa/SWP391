@@ -1,7 +1,13 @@
-import { Dialog, DialogBackdrop, DialogPanel, DialogTitle } from '@headlessui/react';
-import { XMarkIcon } from '@heroicons/react/24/outline';
+import {
+  Dialog,
+  DialogBackdrop,
+  DialogPanel,
+  DialogTitle,
+} from "@headlessui/react";
+import { XMarkIcon } from "@heroicons/react/24/outline";
 
-const ShoppingCart = ({ open, setOpen, products }) => {
+const ShoppingCart = ({ open, setOpen, products, onRemove }) => {
+  const subtotal = products.reduce((total, item) => total + item.price, 0);
   return (
     <Dialog open={open} onClose={setOpen} className="relative z-10">
       <DialogBackdrop className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity duration-500 ease-in-out" />
@@ -13,7 +19,9 @@ const ShoppingCart = ({ open, setOpen, products }) => {
               <div className="flex h-full flex-col overflow-y-scroll bg-white shadow-xl">
                 <div className="flex-1 overflow-y-auto px-4 py-6 sm:px-6">
                   <div className="flex items-start justify-between">
-                    <DialogTitle className="text-lg font-medium text-gray-900">Shopping Cart</DialogTitle>
+                    <DialogTitle className="text-lg font-medium text-gray-900">
+                      Shopping Cart
+                    </DialogTitle>
                     <div className="ml-3 flex h-7 items-center">
                       <button
                         type="button"
@@ -27,13 +35,19 @@ const ShoppingCart = ({ open, setOpen, products }) => {
 
                   <div className="mt-8">
                     <div className="flow-root">
-                      <ul role="list" className="-my-6 divide-y divide-gray-200">
+                      <ul
+                        role="list"
+                        className="-my-6 divide-y divide-gray-200"
+                      >
                         {products.map((product) => (
                           <li key={product.koiID} className="flex py-6">
                             <div className="h-24 w-24 flex-shrink-0 overflow-hidden rounded-md border border-gray-200">
                               <img
                                 alt={product.name}
-                                src={product.image}
+                                src={
+                                  product.image ??
+                                  "https://www.kodamakoifarm.com/wp-content/uploads/2024/05/w0503s054-re-260x421.jpg"
+                                }
                                 className="h-full w-full object-cover object-center"
                               />
                             </div>
@@ -42,15 +56,20 @@ const ShoppingCart = ({ open, setOpen, products }) => {
                               <div>
                                 <div className="flex justify-between text-base font-medium text-gray-900">
                                   <h3>{product.name}</h3>
-                                  <p className="ml-4">${product.price.toFixed(2)}</p>
+                                  <p className="ml-4">
+                                    ${product.price.toFixed(2)}
+                                  </p>
                                 </div>
-                                <p className="mt-1 text-sm text-gray-500">{product.color}</p>
+                                <p className="mt-1 text-sm text-gray-500">
+                                  {product.color}
+                                </p>
                               </div>
-                              <div className="flex flex-1 items-end justify-between text-sm">
-                                <p className="text-gray-500">Qty {product.quantity || 1}</p>
-
+                              <div className="flex flex-1 items-end justify-end text-sm">
                                 <div className="flex">
-                                  <button type="button" className="font-medium text-indigo-600 hover:text-indigo-500">
+                                  <button
+                                    onClick={() => onRemove(product.koiID)}
+                                    className="text-blue-500"
+                                  >
                                     Remove
                                   </button>
                                 </div>
@@ -65,10 +84,17 @@ const ShoppingCart = ({ open, setOpen, products }) => {
 
                 <div className="border-t border-gray-200 px-4 py-6 sm:px-6">
                   <div className="flex justify-between text-base font-medium text-gray-900">
-                    <p>Subtotal</p>
-                    <p>${products.reduce((total, product) => total + product.price, 0).toFixed(2)}</p>
+                    <p>Total</p>
+                    <p>
+                      $
+                      {products
+                        .reduce((total, product) => total + product.price, 0)
+                        .toFixed(2)}
+                    </p>
                   </div>
-                  <p className="mt-0.5 text-sm text-gray-500">Shipping and taxes calculated at checkout.</p>
+                  <p className="mt-0.5 text-sm text-gray-500">
+                    Shipping and taxes calculated at checkout.
+                  </p>
                   <div className="mt-6">
                     <a
                       href="#"
@@ -79,7 +105,7 @@ const ShoppingCart = ({ open, setOpen, products }) => {
                   </div>
                   <div className="mt-6 flex justify-center text-center text-sm text-gray-500">
                     <p>
-                      or{' '}
+                      or{" "}
                       <button
                         type="button"
                         onClick={() => setOpen(false)}
@@ -101,4 +127,3 @@ const ShoppingCart = ({ open, setOpen, products }) => {
 };
 
 export default ShoppingCart;
-
