@@ -32,7 +32,7 @@ function Header() {
         <li>
           <Link to="/question" className="text-white hover:underline">FAQ</Link>
         </li>
-        {isAuthenticated && userRole === '0' &&(
+        {isAuthenticated && userRole === 0 &&(
           <li>
           <Link to="/admin" className="text-white hover:underline">Admin</Link>
         </li>

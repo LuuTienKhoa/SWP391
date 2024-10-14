@@ -1,6 +1,12 @@
 import React, { useEffect } from 'react';
 import { Card, CardContent, Typography, Avatar, Grid, Button } from '@mui/material';
+import { MdDashboard } from 'react-icons/md';
+import { FaUsers, FaFish } from 'react-icons/fa';
+import { FaShoppingCart } from 'react-icons/fa'; 
+
 import { Line } from 'react-chartjs-2';
+import { useSelector } from 'react-redux';
+import { Link, useNavigate } from 'react-router-dom';
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -27,26 +33,33 @@ ChartJS.register(
 import 'tailwindcss/tailwind.css';
 
 export default function AdminPage() {
+  const { isAuthenticated, userRole } = useSelector((state) => state.auth);
+  const navigate = useNavigate();
+
   useEffect(() => {
-    // Scroll to top to prevent any auto-scrolling behavior when charts are rendered
-    window.scrollTo(0, 0);
-  }, []);
+    console.log("Is Authenticated:", isAuthenticated);
+    console.log("User Role:", userRole);
+    
+    if (!isAuthenticated || userRole !== 0) { 
+      navigate('/'); 
+    }
+  }, [isAuthenticated, userRole, navigate]);
 
   return (
     <div className="flex">
       {/* Sidebar */}
       <div className="w-64 flex flex-col bg-gray-800 text-white p-4 h-screen">
-        <h2 className="text-2xl font-semibold mb-8">Koi Fish Store Admin</h2>
+        <h2 className="text-2xl font-semibold mb-8 text-center">F Koi</h2>
         <ul>
           {[
-            { label: 'Dashboard', icon: 'D' },
-            { label: 'Manage Inventory', icon: 'I' },
-            { label: 'Orders', icon: 'O' },
-            { label: 'Notifications', icon: 'N' },
-          ].map((item, index) => (
+            { label: 'Dashboard', icon: <MdDashboard size={24} />, link:'/' },
+            { label: 'Manage User', icon: <FaUsers size={24} />, link:'manage-user'},
+            { label: 'Manage Koi', icon: <FaFish size={24} />, link:'manage-koi'},
+            { label: 'Manage Orders', icon: <FaShoppingCart size={24} />, link:'manage-order' },
+          ].map((item, index) => (  
             <li key={index} className="mb-4">
+              <Link to={item.link}>
               <Button
-                color="inherit"
                 startIcon={
                   <Avatar
                     sx={{
@@ -61,6 +74,7 @@ export default function AdminPage() {
               >
                 {item.label}
               </Button>
+              </Link>
             </li>
           ))}
         </ul>
@@ -91,13 +105,13 @@ export default function AdminPage() {
                   width: 48,
                 }}
               >
-                S
               </Avatar>
             }
             className="mt-4"
           >
-            Sign Up
+            Return
           </Button>
+          
         </div>
       </div>
 

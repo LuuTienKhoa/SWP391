@@ -11,41 +11,41 @@ const LoginPage = () => {
  const loginWithGoogle = useGoogleLogin({
     onSuccess: (tokenResponse) => console.log(tokenResponse),
   });
-  const handleLoginGoogle = async (values) =>{
-    console.log(values);
-  }
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  // vùng của javascript
   const handleLogin = async (values) => {
     console.log(values);
     try {
-      // gửi request đến server
       const response = await api.post("/User/login", {
         username: values.username,
-        password: values.password,  
-        Name: values.username
+        password: values.password,
+        Name: values.username, 
       });
-      if(!response || !response.data){
-        throw new Error("Invalid response from server")
+      console.log("API Response:", response); 
+      if (!response.data || !response.data.token) {
+        throw new Error("Token or response data is undefined");
       }
-      const{ accessToken, refreshToken, role, name } = response.data;
+      const{ token:{accessToken, refreshToken}, role, name } = response.data;
+     
+      // Store tokens in localStorage
+      localStorage.setItem("authToken", accessToken);
+      localStorage.setItem("refreshToken", refreshToken);
 
+      // Dispatch Redux action to update the store with login details
       dispatch(
         reduxLogin({
-        accessToken,
-        refreshToken,
-        userRole: role,
-      }));
-
+          accessToken,
+          refreshToken,
+          userRole: role, 
+        })
+      );
+  
+      console.log("User Role:", role);
       switch (role) {
-        case 0:
-          navigate("/admin");
-          break;
-        case 1:
-          navigate("/staff");
+        case 0: 
+          navigate("/");
           break;
         case 2:
           navigate("/");
@@ -58,6 +58,7 @@ const LoginPage = () => {
       alert(err.response?.data?.message || "An error occurred. Please try again.");
     }
   };
+  
 
 
   return (
@@ -173,3 +174,4 @@ const LoginPage = () => {
 };
 
 export default LoginPage;
+
