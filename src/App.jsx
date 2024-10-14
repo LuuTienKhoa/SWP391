@@ -17,6 +17,10 @@ import ScrollToTop from './component/ScrollToTop';
 import ProtectedRoute from './context/ProtectedRoute';
 import store from './store/store';
 import ManageUserProfiles from './page/ManageUserProfile';
+import ManageKoi from './page/ManageKoi';
+import UpdateKoi from "./page/UpdateKoi";
+import CreateKoi from "./page/CreateKoi"
+
 function App() {
   const location = useLocation();
 
@@ -38,6 +42,7 @@ function App() {
           <Route path="/products" element={<ProductsPage />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/register" element={<RegisterPage />} />
+
         <Route element={<ProtectedRoute allowedRoles={['0']} />}>
           <Route path="/admin" element={<AdminPage />} />
           <Route path="/admin/manage-user" element={<ManageUserProfiles />} />
@@ -45,6 +50,10 @@ function App() {
           <Route path="/profile" element={<UserProfilePage />} />
           <Route path="/view-details/:id" element={<ViewDetailsPage />} />
           <Route path="/payment/:id" element={<PaymentPage />} />
+          <Route path="manageKoi" element={<ManageKoi />} />
+          <Route path="/manageKoi/updateKoi/:id" element={<UpdateKoi />} />
+          <Route path="/manageKoi/createKoi" element={<CreateKoi />} />
+
           <Route path="*" element={<NotFoundPage />} />
         </Routes>
       </main>
