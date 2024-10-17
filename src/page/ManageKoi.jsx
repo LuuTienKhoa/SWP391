@@ -46,7 +46,7 @@ const ProductsPage = () => {
         {/* Create Koi Button */}
         <div className="mb-4 text-center">
           <button
-            onClick={() => navigate("/manageKoi/createKoi")}
+            onClick={() => navigate("/admin/manageKoi/createKoi")}
             className="bg-green-500 text-white rounded px-4 py-2"
           >
             Create Koi
@@ -82,7 +82,7 @@ const ProductsPage = () => {
                     Delete Product
                   </button>
                   <button
-                    onClick={() => navigate(`/manageKoi/updateKoi/${koiFish.koiID}`)}
+                    onClick={() => navigate(`/admin/manageKoi/updateKoi/${koiFish.koiID}`)}
                     className="bg-blue-500 text-white rounded px-4 py-2 mt-2"
                   >
                     Update Product
