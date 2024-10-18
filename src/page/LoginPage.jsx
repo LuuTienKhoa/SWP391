@@ -1,65 +1,50 @@
+import React, { useContext } from 'react';
 import api from "../config/axios";
 import { useNavigate } from "react-router-dom";
 import Cover_Image from "../assets/bg.jpg";
 import { Form, Input } from "antd";
 import GOOGLE_ICON from "../assets/google.svg";
 import { Link } from "react-router-dom";
-import { useGoogleLogin } from "@react-oauth/google";
-import { useDispatch } from "react-redux";
-import {reduxLogin} from '../store/slices/authSlice' 
-const LoginPage = () => {
- const loginWithGoogle = useGoogleLogin({
-    onSuccess: (tokenResponse) => console.log(tokenResponse),
-  });
+import UserContext from '../context/userContext';
 
+const LoginPage = () => {
   const navigate = useNavigate();
-  const dispatch = useDispatch();
+  const { setIsLoggedIn, setRole } = useContext(UserContext);
 
   const handleLogin = async (values) => {
-    console.log(values);
     try {
-      const response = await api.post("/User/login", {
+      const response = await api.post('/User/login', {
         username: values.username,
         password: values.password,
-        Name: values.username, 
+        name: values.username,
       });
-      console.log("API Response:", response); 
-      if (!response.data || !response.data.token) {
-        throw new Error("Token or response data is undefined");
-      }
-      const{ token:{accessToken, refreshToken}, role, name } = response.data;
-     
-      // Store tokens in localStorage
-      localStorage.setItem("authToken", accessToken);
+      const { accessToken, refreshToken } = response.data.token;
+      const { role, name } = response.data;
+
+      localStorage.setItem("accessToken", accessToken);
       localStorage.setItem("refreshToken", refreshToken);
+      localStorage.setItem('userRole', role.toString());
+      localStorage.setItem('userName', name);
 
-      // Dispatch Redux action to update the store with login details
-      dispatch(
-        reduxLogin({
-          accessToken,
-          refreshToken,
-          userRole: role, 
-        })
-      );
-  
-      console.log("User Role:", role);
-      switch (role) {
-        case 0: 
-          navigate("/");
-          break;
-        case 2:
-          navigate("/");
-          break;
-        default:
-          throw new Error("Invalid user role");
+      setIsLoggedIn(true);
+      setRole(role.toString());
+
+      if (role === 0) {
+        navigate('/');
+      } else if (role === 1) {
+        navigate('/');
+      } else {
+        navigate('/');
       }
-    } catch (err) {
-      console.error("Login Error:", err);
-      alert(err.response?.data?.message || "An error occurred. Please try again.");
+      console.log('API Response:', response.data);
+      console.log('Access Token:', accessToken);
+      console.log('Refresh Token:', refreshToken);
+      console.log('Role:', role);
+      console.log('Name:', name);
+    } catch (e) {
+      console.log('Login failed', e);
     }
-  };
-  
-
+  }
 
   return (
     <>
@@ -131,7 +116,7 @@ const LoginPage = () => {
                 </Form.Item>
                 <Form.Item>
                   <div className="w-ful flex flex-col">
-                    <button  className="w-ful text-white my-2 font-semibold bg-black rounded-md p-4 text-center flex items-center justify-center">
+                    <button className="w-ful text-white my-2 font-semibold bg-black rounded-md p-4 text-center flex items-center justify-center">
                       Login
                     </button>
                   </div>
@@ -142,20 +127,20 @@ const LoginPage = () => {
                   <p className="text-lg absolute text-black/80 bg-white">or</p>
                 </div>
                 <div>
-                <button
-                  className="w-full text-black my-2 bg-white border-2 border-black rounded-md p-4 text-center flex items-center justify-center"
-                  onClick={() => loginWithGoogle()}
-                >
-                  <img
-                    src={GOOGLE_ICON}
-                    className="h-6 mr-2"
-                    alt="Google Icon"
-                  />
-                  Sign In With Google
-                </button>
-              </div>
+                  <button
+                    className="w-full text-black my-2 bg-white border-2 border-black rounded-md p-4 text-center flex items-center justify-center"
+                    onClick={() => loginWithGoogle()}
+                  >
+                    <img
+                      src={GOOGLE_ICON}
+                      className="h-6 mr-2"
+                      alt="Google Icon"
+                    />
+                    Sign In With Google
+                  </button>
+                </div>
               </Form>
-              
+
             </div>
           </div>
 
@@ -174,4 +159,3 @@ const LoginPage = () => {
 };
 
 export default LoginPage;
-

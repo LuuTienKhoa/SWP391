@@ -1,5 +1,6 @@
 import "./App.css";
-import { Routes, Route, Navigate, useLocation } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { Routes, Route, Navigate, useLocation, useNavigate } from "react-router-dom";
 import { Provider } from "react-redux";
 import Header from "./component/header/header";
 import Footer from "./component/footer/footer";
@@ -14,8 +15,7 @@ import ViewDetailsPage from "./page/ShopPage/ViewDetailsPage";
 import PaymentPage from "./page/ShopPage/PaymentPage";
 import UserProfilePage from "./page/UserProfilePage";
 import ScrollToTop from "./component/ScrollToTop";
-import ProtectedRoute from "./context/ProtectedRoute";
-import store from "./store/store";
+import AdminProtectedRoute from "./context/ProtectedRoute";
 import ManageUserProfiles from "./page/ManageUserProfile";
 import ManageKoi from "./page/ManageKoi";
 import UpdateKoi from "./page/UpdateKoi";
@@ -30,12 +30,22 @@ function App() {
   const shouldRenderHeaderFooter = !excludeHeaderFooterPaths.includes(
     location.pathname
   );
+  const navigate = useNavigate();
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [role, setRole] = useState(null);
+  useEffect(() => {
+    const token = localStorage.getItem('accessToken');
+    const userRole = localStorage.getItem('userRole');
+    if (token) {
+      setIsLoggedIn(true);
+      setRole(userRole);
+    }
+  }, []);
 
   return (
     <>
-      <Provider store={store}>
         <ScrollToTop />
-        {shouldRenderHeaderFooter && <Header />}
+        {shouldRenderHeaderFooter && <Header isLoggedIn={isLoggedIn} role={role} setIsLoggedIn={setIsLoggedIn} />}
         <main>
           <Routes>
             <Route path="/" element={<HomePage />} />
@@ -45,32 +55,53 @@ function App() {
             <Route path="/login" element={<LoginPage />} />
             <Route path="/register" element={<RegisterPage />} />
 
-            <Route element={<ProtectedRoute allowedRoles={["0"]} />}>
-              <Route path="/admin" element={<AdminPage />} />
-              <Route
-                path="/admin/manage-user"
-                element={<ManageUserProfiles />}
-              />
-            </Route>
+            <Route
+            path="/admin"
+            element={
+              <AdminProtectedRoute>
+                <AdminPage />
+              </AdminProtectedRoute>
+            }
+          />
+          <Route
+            path="/admin/manage-user"
+            element={
+              <AdminProtectedRoute>
+                <ManageUserProfiles />
+              </AdminProtectedRoute>
+            }
+          />
+          <Route
+            path="/admin/manageKoi"
+            element={
+              <AdminProtectedRoute>
+                <ManageKoi />
+              </AdminProtectedRoute>
+            }
+          />
+           <Route
+        path="/admin/manageKoi/updateKoi/:id"
+        element={
+          <AdminProtectedRoute>
+            <UpdateKoi />
+          </AdminProtectedRoute>
+        }
+      />
+      <Route
+        path="/admin/manageKoi/createKoi"
+        element={
+          <AdminProtectedRoute>
+            <CreateKoi />
+          </AdminProtectedRoute>
+        }
+      />
             <Route path="/profile" element={<UserProfilePage />} />
             <Route path="/view-details/:id" element={<ViewDetailsPage />} />
             <Route path="/payment/:id" element={<PaymentPage />} />
-            <Route element={<ProtectedRoute allowedRoles={["0","1"]} />}>
-              <Route path="/admin/manageKoi" element={<ManageKoi />} />
-              <Route
-                path="/admin/manageKoi/updateKoi/:id"
-                element={<UpdateKoi />}
-              />
-              <Route
-                path="/admin/manageKoi/createKoi"
-                element={<CreateKoi />}
-              />
-            </Route>
             <Route path="*" element={<NotFoundPage />} />
           </Routes>
         </main>
         {shouldRenderHeaderFooter && <Footer />}
-      </Provider>
     </>
   );
 }

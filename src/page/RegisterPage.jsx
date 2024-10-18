@@ -3,38 +3,34 @@ import { useNavigate } from "react-router-dom";
 import Cover_Image from "../assets/bg.jpg";
 import { Form, Input } from "antd";
 import { Link } from "react-router-dom";
+
 const RegisterPage = () => {
-   const navigate = useNavigate();
+  const navigate = useNavigate();
 
-  // vùng của javascript
-  const handleRegister = async (values) => { // Renamed from handleLogin to handleRegister
-    
-
+  // Handle the form submission for registering a user
+  const handleRegister = async (values) => {
     try {
-      console.log("Sending registration request with values:",values);
-      // gửi request đến server
+      // Send the registration data to the backend
       const response = await api.post("/User/register", {
         username: values.username,
-        email: values.email,
         password: values.password,
-        name: values.username,
-      }); // Changed endpoint from "login" to "register"
-      console.log("Received response:", response.data);
+      });
 
-      const { accessToken, refreshToken } = response.data;
-      if (!accessToken) {
-        throw new Error("Invalid response from server");
-      }
-      //Store tokens
-      localStorage.setItem("token", accessToken);
+      // Extract the tokens from the response
+      const { accessToken, refreshToken } = response.data.token;
+      const { role, name } = response.data;
+
+      // Store the tokens in localStorage
+      localStorage.setItem("accessToken", accessToken);
       localStorage.setItem("refreshToken", refreshToken);
-      navigate("/login");
-    } catch (err) {
-      console.log("Registration Error:",err);
-      alert(err.response?.data?.message || "An error occurred. Please try again.");
-    }
-  };
+      localStorage.setItem("userRole", role);
+      localStorage.setItem("userName", name);
 
+      navigate("/");
+
+    } catch (error) {
+      console.error("Registration failed:", error);
+    }};
   return (
     <>
       <div className="w-full h-screen flex items-start">

@@ -33,17 +33,20 @@ ChartJS.register(
 import 'tailwindcss/tailwind.css';
 
 export default function AdminPage() {
-  const { isAuthenticated, userRole } = useSelector((state) => state.auth);
   const navigate = useNavigate();
 
+  // Check the role in localStorage when the page loads
   useEffect(() => {
-    console.log("Is Authenticated:", isAuthenticated);
-    console.log("User Role:", userRole);
-    
-    if (!isAuthenticated || userRole !== 0) { 
+    const userRole = localStorage.getItem('userRole');
+    if (userRole !== '0') {
+    localStorage.removeItem('accessToken');
+    localStorage.removeItem('refreshToken');
+    localStorage.removeItem('role');
+    localStorage.removeItem('userName');
       navigate('/'); 
     }
-  }, [isAuthenticated, userRole, navigate]);
+  }, [navigate]);
+
 
   return (
     <div className="flex">

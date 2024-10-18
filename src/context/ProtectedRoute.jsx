@@ -1,18 +1,19 @@
-import { Navigate, Outlet } from 'react-router-dom';
-import { useSelector } from 'react-redux';
+  import { Navigate } from 'react-router-dom';
+  import React from 'react';
 
-function ProtectedRoute({ allowedRoles }) {
-  const { isAuthenticated, userRole } = useSelector((state) => state.auth);
+  // Protected route for admin
+  const AdminProtectedRoute = ({ children }) => {
+    const userRole = localStorage.getItem('userRole'); 
 
-  if (!isAuthenticated) {
-    return <Navigate to="/login" replace />;
-  }
+    if (userRole !== '0') {  
+      localStorage.removeItem('accessToken');
+      localStorage.removeItem('refreshToken');
+      localStorage.removeItem('userRole');
+      localStorage.removeItem('userName');
+      return <Navigate to="/login" />;
+    }
 
-  if (!allowedRoles.includes(userRole.toString())) {
-    return <Navigate to="/admin" replace />;
-  }
+    return children;
+  };
 
-  return <Outlet />;
-}
-
-export default ProtectedRoute;
+  export default AdminProtectedRoute;

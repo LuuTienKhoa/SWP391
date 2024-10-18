@@ -13,7 +13,7 @@ export default function ManageUserProfiles() {
   useEffect(() => {
     const fetchUsers = async () => {
         try {
-          const token = localStorage.getItem('authToken');
+          const token = localStorage.getItem('accessToken');
   
           if (!token) {
             navigate('/login');
@@ -39,7 +39,7 @@ export default function ManageUserProfiles() {
   const handleDeleteUser = async (userId) => {
       try{
         window.confirm('Are you sure you want to delete this user?');
-        const token = localStorage.getItem('authToken');
+        const token = localStorage.getItem('accessToken');
           if (!token) {
             navigate('/login');
             return;
@@ -61,7 +61,7 @@ export default function ManageUserProfiles() {
 
   const handleEditUser = async (userId, updatedUserData) => {
     try {
-      const token = localStorage.getItem('authToken');
+      const token = localStorage.getItem('accessToken');
       if (!token) {
         console.error("No authentication token found. Redirecting to login.");
         return;
