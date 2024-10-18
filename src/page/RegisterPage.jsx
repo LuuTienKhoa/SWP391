@@ -14,6 +14,7 @@ const RegisterPage = () => {
       const response = await api.post("/User/register", {
         username: values.username,
         password: values.password,
+        name: values.username,
       });
 
       // Extract the tokens from the response
