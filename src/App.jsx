@@ -20,6 +20,7 @@ import ManageUserProfiles from "./page/ManageUserProfile";
 import ManageKoi from "./page/ManageKoi";
 import UpdateKoi from "./page/UpdateKoi";
 import CreateKoi from "./page/CreateKoi";
+import ComparisonPage from "./page/ComparisonPage";
 
 function App() {
   const location = useLocation();
@@ -52,6 +53,7 @@ function App() {
             <Route path="/home" element={<Navigate to="/" />} />
             <Route path="/about" element={<AboutPage />} />
             <Route path="/products" element={<ProductsPage />} />
+            <Route path="/products/comparison" element={<ComparisonPage />}/>
             <Route path="/login" element={<LoginPage />} />
             <Route path="/register" element={<RegisterPage />} />
 
