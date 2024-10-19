@@ -1,6 +1,12 @@
 import "./App.css";
 import { useState, useEffect } from "react";
-import { Routes, Route, Navigate, useLocation, useNavigate } from "react-router-dom";
+import {
+  Routes,
+  Route,
+  Navigate,
+  useLocation,
+  useNavigate,
+} from "react-router-dom";
 import { Provider } from "react-redux";
 import Header from "./component/header/header";
 import Footer from "./component/footer/footer";
@@ -17,11 +23,13 @@ import UserProfilePage from "./page/UserProfilePage";
 import ScrollToTop from "./component/ScrollToTop";
 import AdminProtectedRoute from "./context/ProtectedRoute";
 import ManageUserProfiles from "./page/ManageUserProfile";
-import ManageKoi from "./page/ManageKoi";
-import UpdateKoi from "./page/UpdateKoi";
-import CreateKoi from "./page/CreateKoi";
+import ManageKoi from "./page/ManageKoi/ManageKoi";
+import UpdateKoi from "./page/ManageKoi/UpdateKoi";
+import CreateKoi from "./page/ManageKoi/CreateKoi";
 import ComparisonPage from "./page/ComparisonPage";
-
+import ManagePromotion from "./page/ManagePromotion/ManagePromotion";
+import UpdatePromotion from "./page/ManagePromotion/UpdatePromotion";
+import CreatePromotion from "./page/ManagePromotion/CreatePromotion";
 function App() {
   const location = useLocation();
 
@@ -45,19 +53,25 @@ function App() {
 
   return (
     <>
-        <ScrollToTop />
-        {shouldRenderHeaderFooter && <Header isLoggedIn={isLoggedIn} role={role} setIsLoggedIn={setIsLoggedIn} />}
-        <main>
-          <Routes>
-            <Route path="/" element={<HomePage />} />
-            <Route path="/home" element={<Navigate to="/" />} />
-            <Route path="/about" element={<AboutPage />} />
-            <Route path="/products" element={<ProductsPage />} />
-            <Route path="/products/comparison" element={<ComparisonPage />}/>
-            <Route path="/login" element={<LoginPage />} />
-            <Route path="/register" element={<RegisterPage />} />
+      <ScrollToTop />
+      {shouldRenderHeaderFooter && (
+        <Header
+          isLoggedIn={isLoggedIn}
+          role={role}
+          setIsLoggedIn={setIsLoggedIn}
+        />
+      )}
+      <main>
+        <Routes>
+          <Route path="/" element={<HomePage />} />
+          <Route path="/home" element={<Navigate to="/" />} />
+          <Route path="/about" element={<AboutPage />} />
+          <Route path="/products" element={<ProductsPage />} />
+          <Route path="/products/comparison" element={<ComparisonPage />} />
+          <Route path="/login" element={<LoginPage />} />
+          <Route path="/register" element={<RegisterPage />} />
 
-            <Route
+          <Route
             path="/admin"
             element={
               <AdminProtectedRoute>
@@ -81,29 +95,54 @@ function App() {
               </AdminProtectedRoute>
             }
           />
-           <Route
-        path="/admin/manageKoi/updateKoi/:id"
-        element={
-          <AdminProtectedRoute>
-            <UpdateKoi />
-          </AdminProtectedRoute>
-        }
-      />
-      <Route
-        path="/admin/manageKoi/createKoi"
-        element={
-          <AdminProtectedRoute>
-            <CreateKoi />
-          </AdminProtectedRoute>
-        }
-      />
-            <Route path="/profile" element={<UserProfilePage />} />
-            <Route path="/view-details/:id" element={<ViewDetailsPage />} />
-            <Route path="/payment/:id" element={<PaymentPage />} />
-            <Route path="*" element={<NotFoundPage />} />
-          </Routes>
-        </main>
-        {shouldRenderHeaderFooter && <Footer />}
+          <Route
+            path="/admin/manageKoi/updateKoi/:id"
+            element={
+              <AdminProtectedRoute>
+                <UpdateKoi />
+              </AdminProtectedRoute>
+            }
+          />
+          <Route
+            path="/admin/manageKoi/createKoi"
+            element={
+              <AdminProtectedRoute>
+                <CreateKoi />
+              </AdminProtectedRoute>
+            }
+          />
+          <Route
+            path="/admin/managePromotion"
+            element={
+              <AdminProtectedRoute>
+                <ManagePromotion />
+              </AdminProtectedRoute>
+            }
+          />
+          <Route
+            path="/admin/managePromotion/updatePromotion/:id"
+            element={
+              <AdminProtectedRoute>
+                <UpdatePromotion />
+              </AdminProtectedRoute>
+            }
+          />
+          <Route
+            path="/admin/managePromotion/createPromotion"
+            element={
+              <AdminProtectedRoute>
+                <CreatePromotion />
+              </AdminProtectedRoute>
+            }
+          />     
+          
+          <Route path="/profile" element={<UserProfilePage />} />
+          <Route path="/view-details/:id" element={<ViewDetailsPage />} />
+          <Route path="/payment/:id" element={<PaymentPage />} />
+          <Route path="*" element={<NotFoundPage />} />
+        </Routes>
+      </main>
+      {shouldRenderHeaderFooter && <Footer />}
     </>
   );
 }
