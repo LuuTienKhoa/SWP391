@@ -58,6 +58,7 @@ export default function AdminPage() {
             { label: 'Dashboard', icon: <MdDashboard size={24} />, link:'/' },
             { label: 'Manage User', icon: <FaUsers size={24} />, link:'manage-user'},
             { label: 'Manage Koi', icon: <FaFish size={24} />, link:'manageKoi'},
+            { label: 'Manage Promotion', icon: <FaFish size={24} />, link:'managePromotion'},
             { label: 'Manage Orders', icon: <FaShoppingCart size={24} />, link:'manage-order' },
           ].map((item, index) => (  
             <li key={index} className="mb-4">
