@@ -31,6 +31,11 @@ const ComparisonPage = () => {
   const handleAddToCart = (item) => {
     setCartItems((prevItems) => [...prevItems, item]);
   };
+  const handleCompareNow = () => {
+    if (compareItems.length === 2) {
+      console.log("Comparing items:", compareItems);
+    }
+  };
 
   return (
     <div className="min-h-screen bg-gray-100 flex flex-col items-center justify-center">
