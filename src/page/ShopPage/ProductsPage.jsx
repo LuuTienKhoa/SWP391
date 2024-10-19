@@ -131,6 +131,10 @@ const ProductsPage = () => {
     setIsCartVisible(!isCartVisible);
   };
 
+  const handleNavigateToPayment = (koiFish) => {
+    navigate(`/payment/${koiFish.koiID}`, { state: { koiFish } });
+  };
+
   const availableColors = ["Red", "Black", "Orange", "White", "Blue", "Yellow"];
 
   return (
@@ -326,7 +330,7 @@ const ProductsPage = () => {
                     Add to Cart
                   </button>
                   <button
-                    onClick={() => navigate("/payment")}
+                    onClick={() => handleNavigateToPayment(koiFish)}
                     className="bg-white text-red-500 border border-red-500 px-4 py-2 rounded hover:bg-red-100 transition duration-300"
                   >
                     Pay Now
