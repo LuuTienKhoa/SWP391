@@ -7,10 +7,18 @@ import Button from "../../component/Button";
 import ShoppingCart from "../../component/ShoppingCart";
 import { ShoppingCartIcon } from "@heroicons/react/24/outline";
 import { ShoppingBagIcon } from "lucide-react";
+import ComparisonCart from "../../component/Comparison";
 
 const ProductsPage = () => {
   const [koiFishs, setKoiFishs] = useState([]);
-  const [cartItems, setCartItems] = useState([]); // State for cart items
+  const [cartItems, setCartItems] = useState(() => {
+    const savedCart = localStorage.getItem("cartItems");
+    return savedCart ? JSON.parse(savedCart) : [];
+  });
+  const [compareItems, setCompareItems] = useState(() => {
+    const savedCompare = localStorage.getItem("compareItems");
+    return savedCompare ? JSON.parse(savedCompare) : [];
+  });
   const [searchQuery, setSearchQuery] = useState("");
   const [sortOrder, setSortOrder] = useState("asc");
   const [ageRange, setAgeRange] = useState([0, 10]);
@@ -18,7 +26,8 @@ const ProductsPage = () => {
   const [sizeRange, setSizeRange] = useState([0, 100]);
   const [color, setColor] = useState("");
   const [cartOpen, setCartOpen] = useState(false);
-  const [filterVisible, setFilterVisible] = useState(false); // State for filter visibility
+  const [filterVisible, setFilterVisible] = useState(false);
+  const [isCartVisible, setIsCartVisible] = useState(false);
   const location = useLocation();
   const navigate = useNavigate();
 
@@ -45,7 +54,6 @@ const ProductsPage = () => {
       const response = await api.get(`${endpoint}?${params.toString()}`);
       let sortedData = response.data;
 
-      // Sort by price "
       if (sortOrder !== "normal") {
         sortedData = sortedData.sort((a, b) => {
           return sortOrder === "asc" ? a.price - b.price : b.price - a.price;
@@ -65,19 +73,62 @@ const ProductsPage = () => {
     if (location.pathname === "/products") {
       fetchKoiFish();
     }
-  }, [location, searchQuery, sortOrder, ageRange, priceRange, sizeRange, color, fetchKoiFish]);
+  }, [
+    location,
+    searchQuery,
+    sortOrder,
+    ageRange,
+    priceRange,
+    sizeRange,
+    color,
+    fetchKoiFish,
+  ]);
+
+  useEffect(() => {
+    localStorage.setItem("cartItems", JSON.stringify(cartItems));
+  }, [cartItems]);
+
+  useEffect(() => {
+    localStorage.setItem("compareItems", JSON.stringify(compareItems));
+  }, [compareItems]);
 
   const handleAddToCart = (koiFish) => {
-    // Update cart state directly 
-    setCartItems((prevItems) => [...prevItems, koiFish]);    
+    setCartItems((prevItems) => [...prevItems, koiFish]);
     alert(`${koiFish.name} has been added to cart`);
   };
 
   const handleRemoveFromCart = (koiFishId) => {
-    // Remove item from cart by filtering it out
-    setCartItems((prevItems) => prevItems.filter(item => item.koiID !== koiFishId));
+    setCartItems((prevItems) =>
+      prevItems.filter((item) => item.koiID !== koiFishId)
+    );
+  };
 
-    
+  const handleCompare = (koiFish) => {
+    setCompareItems((prevItems) => {
+      if (prevItems.find((item) => item.koiID === koiFish.koiID)) {
+        return prevItems.filter((item) => item.koiID !== koiFish.koiID);
+      } else if (prevItems.length < 2) {
+        return [...prevItems, koiFish];
+      }
+      return prevItems;
+    });
+  };
+
+  const handleRemoveFromCompare = (koiFishId) => {
+    setCompareItems((prevItems) =>
+      prevItems.filter((item) => item.koiID !== koiFishId)
+    );
+  };
+
+  const handleCompareNow = () => {
+    if (compareItems.length === 2) {
+      navigate("/products/comparison");
+      console.log("Comparing items:", compareItems);
+    }
+  };
+
+  const toggleCartVisibility = () => {
+    setIsCartVisible(!isCartVisible);
   };
 
   const availableColors = ["Red", "Black", "Orange", "White", "Blue", "Yellow"];
@@ -179,8 +230,12 @@ const ProductsPage = () => {
                   type="number"
                   inputMode="numeric"
                   value={priceRange[0]}
-                  onChange={(e) => setPriceRange([e.target.value, priceRange[1]])}
-                  onBlur={(e) => setPriceRange([+e.target.value, priceRange[1]])}
+                  onChange={(e) =>
+                    setPriceRange([e.target.value, priceRange[1]])
+                  }
+                  onBlur={(e) =>
+                    setPriceRange([+e.target.value, priceRange[1]])
+                  }
                   className="w-full p-2 border border-gray-300 rounded"
                   placeholder="Min"
                 />
@@ -188,8 +243,12 @@ const ProductsPage = () => {
                   type="number"
                   inputMode="numeric"
                   value={priceRange[1]}
-                  onChange={(e) => setPriceRange([priceRange[0], e.target.value])}
-                  onBlur={(e) => setPriceRange([priceRange[0], +e.target.value])}
+                  onChange={(e) =>
+                    setPriceRange([priceRange[0], e.target.value])
+                  }
+                  onBlur={(e) =>
+                    setPriceRange([priceRange[0], +e.target.value])
+                  }
                   className="w-full p-2 border border-gray-300 rounded"
                   placeholder="Max"
                 />
@@ -198,17 +257,26 @@ const ProductsPage = () => {
           </div>
         )}
 
-        {/* Sort */}
-        <div className="flex justify-end mb-3">
-          <select
-            value={sortOrder}
-            onChange={(e) => setSortOrder(e.target.value)}
-            className="p-2 border border-gray-300 rounded"
+        <div className="flex justify-between items-center mb-4 p-4">
+          <button
+            onClick={toggleCartVisibility}
+            className="flex items-center justify-center bg-gradient-to-r from-orange-400 to-orange-600 text-white border-none rounded-full px-6 py-3 shadow-lg hover:from-orange-500 hover:to-orange-700 transition duration-300 transform hover:scale-105"
           >
-            <option value="normal">Price</option>
-            <option value="asc">Price: Ascending</option>
-            <option value="desc">Price: Descending</option>
-          </select>
+            <span className="mr-2">🔄</span>{" "}
+            {/* Replace with an icon if needed */} So sánh (
+            {compareItems.length})
+          </button>
+          <div className="flex justify-end ">
+            <select
+              value={sortOrder}
+              onChange={(e) => setSortOrder(e.target.value)}
+              className="p-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-orange-500 transition duration-300"
+            >
+              <option value="normal">Price</option>
+              <option value="asc">Price: Ascending</option>
+              <option value="desc">Price: Descending</option>
+            </select>
+          </div>
         </div>
 
         {/* Product Grid */}
@@ -263,17 +331,37 @@ const ProductsPage = () => {
                   >
                     Pay Now
                   </button>
+                  <button
+                    onClick={() => handleCompare(koiFish)}
+                    className={`px-4 py-2 rounded ${
+                      compareItems.find((item) => item.koiID === koiFish.koiID)
+                        ? "bg-blue-600"
+                        : "bg-blue-400"
+                    }`}
+                  >
+                    {compareItems.find((item) => item.koiID === koiFish.koiID)
+                      ? "Remove from Compare"
+                      : "Compare"}
+                  </button>
                 </div>
               </div>
             </div>
           ))}
         </div>
+        {isCartVisible && (
+          <ComparisonCart
+            compareItems={compareItems}
+            onRemove={handleRemoveFromCompare}
+            onCompare={handleCompareNow}
+            onClose={toggleCartVisibility}
+          />
+        )}
 
         {/* Shopping Cart Dialog */}
-        <ShoppingCart 
-          open={cartOpen} 
-          setOpen={setCartOpen} 
-          products={cartItems} 
+        <ShoppingCart
+          open={cartOpen}
+          setOpen={setCartOpen}
+          products={cartItems}
           onRemove={handleRemoveFromCart} // Pass the function here
         />
       </div>
