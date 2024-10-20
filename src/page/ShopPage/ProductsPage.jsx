@@ -8,7 +8,7 @@ import ShoppingCart from "../../component/ShoppingCart";
 import { ShoppingCartIcon } from "@heroicons/react/24/outline";
 import { ShoppingBagIcon } from "lucide-react";
 import ComparisonCart from "../../component/Comparison";
-
+import Pagination from '../../component/Pagination';
 const ProductsPage = () => {
   const [koiFishs, setKoiFishs] = useState([]);
   const [cartItems, setCartItems] = useState(() => {
@@ -28,6 +28,13 @@ const ProductsPage = () => {
   const [cartOpen, setCartOpen] = useState(false);
   const [filterVisible, setFilterVisible] = useState(false);
   const [isCartVisible, setIsCartVisible] = useState(false);
+  //Pagination 
+  const [currentPage, setCurrentPage] = useState(1);
+  const [postsPerPage] = useState(8); // Number of batches per page
+  const lastPostIndex = currentPage * postsPerPage;
+  const firstPostIndex = lastPostIndex - postsPerPage;
+  const currentPosts = koiFishs.slice(firstPostIndex, lastPostIndex);
+  const paginate = (pageNumber) => setCurrentPage(pageNumber);
   const location = useLocation();
   const navigate = useNavigate();
 
@@ -369,6 +376,12 @@ const ProductsPage = () => {
           onRemove={handleRemoveFromCart} // Pass the function here
         />
       </div>
+
+      <Pagination
+        totalPosts={koiFishs.length}
+        postPerPage={postsPerPage}
+        paginate={paginate}
+      />
     </div>
   );
 };

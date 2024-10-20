@@ -96,8 +96,9 @@ export default function AdminPage() {
                 S
               </Avatar>
             }
+            onClick={handleLogout}
           >
-            Sign In
+            Sign Out
           </Button>
           <Button
             color="inherit"

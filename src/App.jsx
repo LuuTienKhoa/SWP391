@@ -30,6 +30,7 @@ import ComparisonPage from "./page/ComparisonPage";
 import ManagePromotion from "./page/ManagePromotion/ManagePromotion";
 import UpdatePromotion from "./page/ManagePromotion/UpdatePromotion";
 import CreatePromotion from "./page/ManagePromotion/CreatePromotion";
+import KoiBatchPage from "./page/KoiBatch/KoiBatchPage";
 function App() {
   const location = useLocation();
 
@@ -139,6 +140,7 @@ function App() {
           <Route path="/profile" element={<UserProfilePage />} />
           <Route path="/view-details/:id" element={<ViewDetailsPage />} />
           <Route path="/payment/:id" element={<PaymentPage />} />
+          <Route path="/koiBatch" element={<KoiBatchPage />}/>
           <Route path="*" element={<NotFoundPage />} />
         </Routes>
       </main>
