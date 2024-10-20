@@ -7,6 +7,7 @@ import { FaShoppingCart } from 'react-icons/fa';
 import { Line } from 'react-chartjs-2';
 import { useSelector } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
+
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -83,24 +84,7 @@ export default function AdminPage() {
           ))}
         </ul>
         <div className="mt-auto">
-          <Button
-            color="inherit"
-            startIcon={
-              <Avatar
-                sx={{
-                  backgroundColor: '#0288d1',
-                  height: 48,
-                  width: 48,
-                }}
-              >
-                S
-              </Avatar>
-            }
-            onClick={handleLogout}
-          >
-            Sign Out
-          </Button>
-          <Button
+          <Button 
             color="inherit"
             startIcon={
               <Avatar

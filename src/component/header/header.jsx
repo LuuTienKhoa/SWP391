@@ -11,7 +11,7 @@ function Header() {
   const { isLoggedIn, setIsLoggedIn, role, setRole } = useContext(UserContext);
 
   // Handle user logout
-  const handleLogout = async () => {
+     const handleLogout = async () => {
     try {
       const refreshToken = localStorage.getItem("refreshToken");
       await api.post("/User/logout", refreshToken, {
