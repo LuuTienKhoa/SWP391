@@ -7,12 +7,11 @@ import {
   useLocation,
   useNavigate,
 } from "react-router-dom";
-import { Provider } from "react-redux";
 import Header from "./component/header/header";
 import Footer from "./component/footer/footer";
 import HomePage from "./page/HomePage";
 import AboutPage from "./page/AboutPage";
-import NotFoundPage from "./page/NotFoundPage";
+import NotFoundPage from "./page/NotFound/NotFoundPage";
 import LoginPage from "./page/LoginPage";
 import RegisterPage from "./page/RegisterPage";
 import AdminPage from "./page/AdminPage";
@@ -31,6 +30,9 @@ import ManagePromotion from "./page/ManagePromotion/ManagePromotion";
 import UpdatePromotion from "./page/ManagePromotion/UpdatePromotion";
 import CreatePromotion from "./page/ManagePromotion/CreatePromotion";
 import KoiBatchPage from "./page/KoiBatch/KoiBatchPage";
+import ManageKoiBatch from "./page/KoiBatch/ManageKoiBatch";
+import BlogPage from "./page/Blog/BlogPage";
+import UserBlogPage from "./page/Blog/UserBlogPage";
 function App() {
   const location = useLocation();
 
@@ -71,6 +73,8 @@ function App() {
           <Route path="/products/comparison" element={<ComparisonPage />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/register" element={<RegisterPage />} />
+          <Route path="/blog" element={<BlogPage />} />
+          <Route path="/userBlog" element={<UserBlogPage />} />
 
           <Route
             path="/admin"
@@ -133,6 +137,14 @@ function App() {
             element={
               <AdminProtectedRoute>
                 <CreatePromotion />
+              </AdminProtectedRoute>
+            }
+          />     
+          <Route
+            path="/admin/manageBatch/"
+            element={
+              <AdminProtectedRoute>
+                <ManageKoiBatch />
               </AdminProtectedRoute>
             }
           />     
