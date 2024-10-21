@@ -1,5 +1,5 @@
 import React from 'react'
-import Card from '../component/NotFoundCard';
+import Card from './NotFoundCard';
 
 function NotFoundPage() {
   return (

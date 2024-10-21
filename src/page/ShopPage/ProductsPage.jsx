@@ -3,7 +3,7 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import api from "../../config/axios";
 import Slider from "rc-slider";
 import "rc-slider/assets/index.css";
-import Button from "../../component/Button";
+import Button from "../../component/button/Button";
 import ShoppingCart from "../../component/ShoppingCart";
 import { ShoppingCartIcon } from "@heroicons/react/24/outline";
 import { ShoppingBagIcon } from "lucide-react";

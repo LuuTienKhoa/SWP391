@@ -59,39 +59,6 @@ export default function ManageUserProfiles() {
       }
   };
 
-  const handleEditUser = async (userId, updatedUserData) => {
-    try {
-      const token = localStorage.getItem('accessToken');
-      if (!token) {
-        console.error("No authentication token found. Redirecting to login.");
-        return;
-      }
-  
-      const response = await api.put('/User/edit', {
-        UserID: userId, // Ensure you pass the correct user ID
-        Username: updatedUserData.Username,
-        Password: updatedUserData.Password,
-        Name: updatedUserData.Name,
-        Email: updatedUserData.Email,
-        Phone: updatedUserData.Phone,
-        Address: updatedUserData.Address,
-        Role: updatedUserData.Role
-      }, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          'Content-Type': 'application/json'
-        }
-      });
-  
-      if (response.status === 200) {
-        console.log('User updated successfully:', response.data);
-      } else {
-        console.error('Error updating user:', response.data);
-      }
-    } catch (error) {
-      console.error('Error during user update:', error);
-    }
-  };
 
   return (
     <div className="p-8">
@@ -120,7 +87,7 @@ export default function ManageUserProfiles() {
                   Role: {user.role === 0 ? 'Admin' : 'Customer'}
                 </Typography>
                 <div className="flex justify-between mt-4">
-                  <Button variant="contained" color="primary" onClick={() => handleEditUser(user.userID)}>
+                  <Button variant="contained" color="primary">
                     Edit
                   </Button>
                   <Button variant="contained" color="secondary" onClick={() => handleDeleteUser(user.userID)}>
