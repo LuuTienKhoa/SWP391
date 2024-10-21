@@ -6,6 +6,7 @@ import api from '../../config/axios';
 const PaymentPage = () => {
   const location = useLocation();
   const { koiFish } = location.state || {}; // Access koiFish from location state
+  const { promotion } = location.state || {};
   const [paymentMethod, setPaymentMethod] = useState('credit-card');
   
   const [promotionID, setPromotionID] = useState('');
@@ -14,21 +15,28 @@ const PaymentPage = () => {
   
 
   const handlePayment = async () => {
+    if (!koiFish) {
+      alert("Koi fish data is missing!");
+      return;
+    }
+  
     try {
-      const response = await api.post('/api/Order/create', {
+      // Gửi yêu cầu tới backend để tạo URL thanh toán VNPay
+      const response = await api.post('/Order/create', {
         kois: [koiFish.koiID],
-        batches: [],
+         // Batch rỗng nếu chỉ có 1 cá
         promotionID: parseInt(promotionID, 10) || 0,
         paymentMethod: paymentMethod === 'VNPay' ? 1 : 0
       });
-
-      console.log('Payment successful:', response.data);
-      alert('Payment processed successfully!');
+  
+      // Chuyển hướng tới URL thanh toán VNPay
+      window.location.href = response.data.paymentUrl;
     } catch (error) {
       console.error('Error processing payment:', error);
       alert('Failed to process payment. Please try again.');
     }
   };
+  
 
   return (
     <div
