@@ -30,11 +30,12 @@ const ManagePromotion = () => {
     if (!confirmDelete) return;
 
     try {
-      await api.delete(`/Promotion/${promotionID}`);
+      const response = await api.delete(`/Promotion/${promotionID}`);
+      console.log("Delete response:", response);
       alert("Product deleted successfully!");
       setPromotions(promotions.filter((promotion) => promotion.promotionID !== promotionID));
     } catch (error) {
-      console.error("Error deleting product:", error);
+      console.error("Error deleting product:", error.response || error);
       alert("Failed to delete the product.");
     }
   }; 
