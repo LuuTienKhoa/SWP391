@@ -35,6 +35,8 @@ import BlogPage from "./page/Blog/BlogPage";
 import UserBlogPage from "./page/Blog/UserBlogPage";
 import ManageFeedback from "./page/ManageFeedback/ManageFeedback"
 import OrderPage from "./page/OrderPage"
+import ManageOrder from "./page/ManageOrder/ManageOrder";
+import UpdateOrder from "./page/ManageOrder/UpdateOrder";
 function App() {
   const location = useLocation();
 
@@ -157,7 +159,24 @@ function App() {
                 <ManageFeedback />
               </AdminProtectedRoute>
             }
-          />     
+          />    
+          <Route
+            path="/admin/manageOrder/"
+            element={
+              <AdminProtectedRoute>
+                <ManageOrder />
+              </AdminProtectedRoute>
+            }
+          />    
+          <Route
+            path="/admin/manageOrder/updateOrder/:id"
+            element={
+              <AdminProtectedRoute>
+                <UpdateOrder />
+              </AdminProtectedRoute>
+            }
+          />       
+
           
           <Route path="/profile" element={<UserProfilePage />} />
           <Route path="/view-details/:id" element={<ViewDetailsPage />} />
