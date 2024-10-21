@@ -33,6 +33,8 @@ import KoiBatchPage from "./page/KoiBatch/KoiBatchPage";
 import ManageKoiBatch from "./page/KoiBatch/ManageKoiBatch";
 import BlogPage from "./page/Blog/BlogPage";
 import UserBlogPage from "./page/Blog/UserBlogPage";
+import ManageFeedback from "./page/ManageFeedback/ManageFeedback"
+import OrderPage from "./page/OrderPage"
 function App() {
   const location = useLocation();
 
@@ -148,11 +150,20 @@ function App() {
               </AdminProtectedRoute>
             }
           />     
+          <Route
+            path="/admin/manageFeedback/"
+            element={
+              <AdminProtectedRoute>
+                <ManageFeedback />
+              </AdminProtectedRoute>
+            }
+          />     
           
           <Route path="/profile" element={<UserProfilePage />} />
           <Route path="/view-details/:id" element={<ViewDetailsPage />} />
           <Route path="/payment/:id" element={<PaymentPage />} />
           <Route path="/koiBatch" element={<KoiBatchPage />}/>
+          <Route path="/order" element={<OrderPage />} />
           <Route path="*" element={<NotFoundPage />} />
         </Routes>
       </main>
