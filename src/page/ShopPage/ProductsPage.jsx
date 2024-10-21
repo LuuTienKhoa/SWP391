@@ -22,7 +22,7 @@ const ProductsPage = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [sortOrder, setSortOrder] = useState("asc");
   const [ageRange, setAgeRange] = useState([0, 10]);
-  const [priceRange, setPriceRange] = useState([0, 1000]);
+  const [priceRange, setPriceRange] = useState([0, 1000000000]);
   const [sizeRange, setSizeRange] = useState([0, 100]);
   const [color, setColor] = useState("");
   const [cartOpen, setCartOpen] = useState(false);
