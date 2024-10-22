@@ -37,11 +37,15 @@ import ManageFeedback from "./page/ManageFeedback/ManageFeedback"
 import OrderPage from "./page/OrderPage"
 import ManageOrder from "./page/ManageOrder/ManageOrder";
 import UpdateOrder from "./page/ManageOrder/UpdateOrder";
+import StaffPage from "./page/StaffPage"
+import StaffProtectedRoute from "./context/StaffProtectedRoute";
+import StaffLayout from "./layouts/StaffLayout";
+
 function App() {
   const location = useLocation();
 
   // Define paths that should not have the header and footer
-  const excludeHeaderFooterPaths = ["/admin", "/admin/manage-user"];
+  const excludeHeaderFooterPaths = ["/admin", "/admin/manage-user" ,"/staff", "/staff/manageKoi" ,"/staff/manageKoiBatch", "/staff/manageOrder" ];
 
   const shouldRenderHeaderFooter = !excludeHeaderFooterPaths.includes(
     location.pathname
@@ -175,7 +179,47 @@ function App() {
                 <UpdateOrder />
               </AdminProtectedRoute>
             }
-          />       
+          />  
+            <Route
+            path="/staff"
+            element={
+              <StaffProtectedRoute>
+                <StaffLayout>
+                  <StaffPage />
+                </StaffLayout>
+              </StaffProtectedRoute>
+            }
+          />     
+           <Route
+            path="/staff/manageKoi"
+            element={
+              <StaffProtectedRoute>
+                <StaffLayout>
+                  <ManageKoi />
+                </StaffLayout>
+              </StaffProtectedRoute>
+            }
+          />     
+          <Route
+            path="/staff/manageKoiBatch"
+            element={
+              <StaffProtectedRoute>
+                <StaffLayout>
+                  <ManageKoiBatch />
+                </StaffLayout>
+              </StaffProtectedRoute>
+            }
+          />     
+          <Route
+            path="/staff/manageOrder"
+            element={
+              <StaffProtectedRoute>
+                <StaffLayout>
+                  <ManageOrder />
+                </StaffLayout>
+              </StaffProtectedRoute>
+            }
+          />     
 
           
           <Route path="/profile" element={<UserProfilePage />} />
