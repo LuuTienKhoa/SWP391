@@ -4,7 +4,7 @@ function Testinominals() {
   return (
     <>
       <div className="mt-20 tracking-wide">
-        <h2 className="text-gray-700 text-3xl sm:text-5xl lg:text-6xl text-center my-10 lg:my-20 font-thin">What People Are Saying</h2>
+        <h2 className="text-white text-3xl sm:text-5xl lg:text-6xl text-center mt-5 lg:my-20 ">What People Are Saying</h2>
       </div>
       <div className="flex flex-wrap justify-center">
         {testimonials.map((testimonials, index) => (

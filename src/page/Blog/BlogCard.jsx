@@ -19,7 +19,7 @@ const BlogCard = ({ blog }) => {
 
       {/* Blog Author */}
       <div className="text-sm text-gray-600 mt-4">
-        <p>Author: {blog.user?.name || 'Unknown Author'}</p> {/* Use optional chaining for user */}
+        <p>Author: {blog.user?.name || 'Unknown Author'}</p>
         <p>Email: {blog.user?.email || 'No email available'}</p> {/* Safe access for email */}
       </div>
 
