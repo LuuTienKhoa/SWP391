@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { Card, Button, Avatar } from '@mui/material';
 import { MdDashboard } from 'react-icons/md';
 import { FaFish, FaShoppingCart } from 'react-icons/fa';
+import { FaUsers } from 'react-icons/fa'
 
 const StaffLayout = ({ children }) => {
   return (
@@ -13,9 +14,11 @@ const StaffLayout = ({ children }) => {
         <ul>
           {[
             { label: 'Dashboard', icon: <MdDashboard size={24} />, link: '/' },
+            { label: 'Manage User', icon: <FaUsers size={24} />, link:'/staff/manage-user'},
+            { label: 'Manage Orders', icon: <FaShoppingCart size={24} />, link: '/staff/manageOrder' },          
             { label: 'Manage Koi', icon: <FaFish size={24} />, link: '/staff/manageKoi' },
-            { label: 'Manage Batch', icon: <FaFish size={24} />, link: '/staff/manageKoiBatch' },
-            { label: 'Manage Orders', icon: <FaShoppingCart size={24} />, link: '/staff/manageOrder' },
+            { label: 'Manage Batch', icon: <FaFish size={24} />, link: '/staff/manageKoiBatch' },             
+            { label: 'Manage Promotion', icon: <FaFish size={24} />, link:'/staff/managePromotion'},
           ].map((item, index) => (
             <li key={index} className="mb-4">
               <Link to={item.link}>
