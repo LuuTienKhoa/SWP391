@@ -59,6 +59,11 @@ function Header() {
             <Link to="/admin" className="text-white hover:underline">Admin</Link>
           </li>
         )}
+        {isLoggedIn && role === '1' && (
+          <li>
+            <Link to="/staff" className="text-white hover:underline">Staff</Link>
+          </li>
+        )}
       </ul>
       <div className="flex items-center space-x-6">
         {isLoggedIn ? (
