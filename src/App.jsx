@@ -45,7 +45,17 @@ function App() {
   const location = useLocation();
 
   // Define paths that should not have the header and footer
-  const excludeHeaderFooterPaths = ["/admin", "/admin/manage-user" ,"/staff", "/staff/manageKoi" ,"/staff/manageKoiBatch", "/staff/manageOrder" ];
+  const excludeHeaderFooterPaths = [
+    "/admin", 
+    "/admin/manage-user" ,
+    "/staff",
+    "/staff/manageKoi",
+    "/staff/manageKoiBatch",
+    "/staff/manageOrder",
+    "/staff/manage-user",
+    "/staff/managePromotion",
+    
+   ];
 
   const shouldRenderHeaderFooter = !excludeHeaderFooterPaths.includes(
     location.pathname
@@ -186,6 +196,26 @@ function App() {
               <StaffProtectedRoute>
                 <StaffLayout>
                   <StaffPage />
+                </StaffLayout>
+              </StaffProtectedRoute>
+            }
+          />     
+          <Route
+            path="/staff/manage-user"
+            element={
+              <StaffProtectedRoute>
+                <StaffLayout>
+                  <ManageUserProfiles />
+                </StaffLayout>
+              </StaffProtectedRoute>
+            }
+          />     
+          <Route
+            path="/staff/managePromotion"
+            element={
+              <StaffProtectedRoute>
+                <StaffLayout>
+                  <ManagePromotion />
                 </StaffLayout>
               </StaffProtectedRoute>
             }
