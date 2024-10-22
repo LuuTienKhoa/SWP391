@@ -59,7 +59,7 @@ const KoiBatchPage = () => {
 
   return (
     <div className="p-8">
-      <h1 className="text-3xl font-bold mb-6 text-center">Koi Batches Available</h1>
+      <h1 className="text-4xl font-bold mb-6 text-center text-gray-800">Koi Batches Available</h1>
 
       <div className="text-center mb-6">
         <button

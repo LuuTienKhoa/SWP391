@@ -147,7 +147,7 @@ const ProductsPage = () => {
   return (
     <div className="bg-orange-100 min-h-screen">
       <div className="container mx-auto px-4 py-7">
-        <div className="w-full text-5xl mb-2 flex flex-col items-center">
+        <div className="text-4xl font-bold mb-6 text-center text-gray-800">
           <h1>F Koi Shop</h1>
         </div>
 

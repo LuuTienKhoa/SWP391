@@ -9,7 +9,7 @@ import PreKoiInfo from '../component/PreKoiInfo'
 function HomePage() {
   return (
     <>
-      <div className="bg-orange-200 min-h-screen">
+      <div className="bg-orange-300 min-h-screen">
         {/* Hero Section - No padding applied here */}
         <div
           className="max-w-2xl mx-auto pt-20"
