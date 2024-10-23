@@ -39,9 +39,8 @@ const ProductsPage = () => {
   };
 
   return (
-    <div className="bg-orange-100 min-h-screen">
-      <div className="container mx-auto px-4 py-7">
-        <h1 className="text-5xl mb-2 text-center">F Koi Shop</h1>
+    <div className="p-6 ">
+      <h1 className="text-3xl font-bold mb-6 text-center">Koi Fish</h1>
 
         {/* Create Koi Button */}
         <div className="mb-4 text-center">
@@ -54,12 +53,12 @@ const ProductsPage = () => {
         </div>
 
         {/* Product Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
           {loading ? (
             <p className="text-center">Loading...</p>
           ) : (
             koiFishs.map((koiFish) => (
-              <div key={koiFish.koiID} className="max-w-xs overflow-hidden">
+              <div key={koiFish.koiID} className="border rounded-lg shadow-lg p-6 text-center bg-white">
                 <Link to={`/view-details/${koiFish.koiID}`}>
                   <img
                     src={
@@ -70,22 +69,22 @@ const ProductsPage = () => {
                     className="w-full h-40 object-cover"
                   />
                 </Link>
-                <div className="p-4">
+                <div className="border rounded-lg shadow-lg p-6 text-center bg-white">
                   <h2 className="text-xl font-bold">{koiFish.name}</h2>
                   <p>Price: ${koiFish.price}</p>
                   <p>Size: {koiFish.size} cm</p>
 
                   <button
                     onClick={() => handleDeleteProduct(koiFish.koiID)}
-                    className="bg-red-500 text-white rounded px-4 py-2 mt-2"
+                    className="bg-red-500 text-white px-4 py-2 rounded mt-2 mr-2"
                   >
-                    Delete Product
+                    Delete 
                   </button>
                   <button
                     onClick={() => navigate(`/admin/manageKoi/updateKoi/${koiFish.koiID}`)}
-                    className="bg-blue-500 text-white rounded px-4 py-2 mt-2"
+                    className="bg-blue-500 text-white px-4 py-2 rounded mt-2 mr-2"
                   >
-                    Update Product
+                    Update 
                   </button>
                 </div>
               </div>
@@ -93,7 +92,7 @@ const ProductsPage = () => {
           )}
         </div>
       </div>
-    </div>
+    
   );
 };
 
