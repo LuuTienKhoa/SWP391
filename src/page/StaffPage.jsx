@@ -50,9 +50,7 @@ export default function AdminPage() {
 
 
   return (
-    <div className="flex">
-      
-
+    <div className="flex">    
       {/* Main Content */}
       <div className="flex-1 p-8 overflow-hidden">
         <Typography variant="h4" gutterBottom>
