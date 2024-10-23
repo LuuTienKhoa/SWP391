@@ -42,9 +42,8 @@ const ManagePromotion = () => {
 
   return (
     
-      <div className="bg-orange-100 min-h-screen">
-      <div className="container mx-auto px-4 py-7">
-        <h1 className="text-5xl mb-4 text-center">Promotions</h1>
+    <div className="p-6 ">
+      <h1 className="text-3xl font-bold mb-6 text-center">Promotion</h1>
         <div className="mb-4 text-center">
           <button
             onClick={() => navigate("/admin/managePromotion/createPromotion")}
@@ -59,9 +58,9 @@ const ManagePromotion = () => {
       {loading ? (
         <p>Loading...</p>
       ) : (
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '20px' }}>
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
           {promotions.map(promotion => (
-            <div key={promotion.promotionID} style={{ border: '1px solid #ccc', padding: '20px' }}>
+            <div key={promotion.promotionID} className="border rounded-lg shadow-lg p-6 text-center bg-white">
               <h2>{promotion.code}</h2>
               <p><strong>Description:</strong> {promotion.description}</p>
               <p><strong>Discount Rate:</strong> {promotion.discountRate}%</p>
@@ -71,24 +70,24 @@ const ManagePromotion = () => {
 
               <button 
                 onClick={() => handleDeleteProduct(promotion.promotionID)}
-                className="bg-red-500 text-white rounded px-4 py-2 mt-2"
+                className="bg-red-500 text-white px-4 py-2 rounded mt-2 mr-2"
 
               >
-                Delete Promotion
+                Delete 
               </button>
               <button 
                 onClick={() => navigate(`/admin/managePromotion/updatePromotion/${promotion.promotionID}`)}
-                className="bg-blue-500 text-white rounded px-4 py-2 mt-2"
+                className="bg-blue-500 text-white px-4 py-2 rounded mt-2 mr-2"
 
               >
-                Update Promotion
+                Update 
               </button>
             </div>
           ))}
         </div>
       )}
     </div>
-    </div>
+    
   );
 };
 
