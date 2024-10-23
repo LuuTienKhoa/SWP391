@@ -39,23 +39,23 @@ const ManageFeedback = () => {
   };
 
   return (
-    <div>
-      <h1>Feedback List</h1>
+    <div className="p-6">
+      <h1 className="text-3xl font-bold mb-6 text-center">FeedBacks</h1>
       {loading ? (
         <p>Loading...</p>
       ) : (
-        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '20px' }}>
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
           {feedbacks.map(feedback => (
-            <div key={feedback.feedbackID} style={{ border: '1px solid #ccc', padding: '10px', width: '300px' }}>
+            <div key={feedback.feedbackID} className="border rounded-lg shadow-lg p-6 text-center bg-white">
               <p><strong>Order ID:</strong> {feedback.orderID}</p>
               <p><strong>Customer ID:</strong> {feedback.customerID}</p>
               <p><strong>Rating:</strong> {feedback.rating}</p>
               <p><strong>Comment:</strong> {feedback.comment}</p>
               <p><strong>Date:</strong> {new Date(feedback.dateFb).toLocaleString()}</p>
-              <button onClick={() => handleDeleteFeedback(feedback.feedbackID)} style={{ backgroundColor: 'red', color: 'white', marginRight: '10px' }}>
+              <button onClick={() => handleDeleteFeedback(feedback.feedbackID)} className="bg-red-500 text-white px-4 py-2 rounded mt-2 mr-2">
                 Delete Feedback
               </button>
-              <button onClick={() => navigate(`/update-feedback/${feedback.feedbackID}`)} style={{ backgroundColor: 'blue', color: 'white' }}>
+              <button onClick={() => navigate(`/update-feedback/${feedback.feedbackID}`)} className="bg-blue-500 text-white px-4 py-2 rounded mt-2 mr-2">
                 Update Feedback
               </button>
             </div>
