@@ -61,10 +61,9 @@ export default function ManageUserProfiles() {
 
 
   return (
-    <div className="p-8">
-      <Typography variant="h4" gutterBottom className="text-center py-5">
-        Manage User Profiles
-      </Typography>
+    <div className="p-6 ">
+            <h1 className="text-3xl font-bold mb-6 text-center">User Profiles</h1>
+
       {/* User Cards */}
       <Grid container spacing={4} className="pt-10">
         {users.map((user) => (
