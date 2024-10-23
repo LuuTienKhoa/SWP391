@@ -36,11 +36,11 @@ const ManageOrder = () => {
   if (loading) return <div>Loading...</div>;
 
   return (
-    <div className="p-6 bg-orange-100">
-      <h1 className="text-2xl font-bold mb-4">Orders</h1>
-      <div className="flex flex-wrap gap-4">
+    <div className="p-6 ">
+      <h1 className="text-3xl font-bold mb-6 text-center">Order</h1>
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
         {orders.map(order => (
-          <div className="bg-orange-200 border border-gray-300 rounded-lg p-4 w-72 shadow-md" key={order.orderID}>
+          <div className="border rounded-lg shadow-lg p-6 text-center bg-white" key={order.orderID}>
             <div><strong>Order ID:</strong> {order.orderID}</div>
             <div><strong>Total Amount:</strong> {order.totalAmount}</div>
             <div><strong>Status:</strong> {order.status}</div>
@@ -48,13 +48,13 @@ const ManageOrder = () => {
               className="bg-red-500 text-white px-4 py-2 rounded mt-2 mr-2"
               onClick={() => deleteOrder(order.orderID)}
             >
-              Delete Order
+              Delete 
             </button>
             <button
               className="bg-blue-500 text-white px-4 py-2 rounded mt-2"
               onClick={() => navigate(`/admin/manageOrder/updateOrder/${order.orderID}`)}
             >
-              Update Order
+              Update
             </button>
           </div>
         ))}
