@@ -40,29 +40,20 @@ import UpdateOrder from "./page/ManageOrder/UpdateOrder";
 import StaffPage from "./page/StaffPage"
 import StaffProtectedRoute from "./context/StaffProtectedRoute";
 import StaffLayout from "./layouts/StaffLayout";
+import AdminLayout from "./layouts/AdminLayout";
 
 function App() {
   const location = useLocation();
 
-  // Define paths that should not have the header and footer
-  const excludeHeaderFooterPaths = [
-    "/admin", 
-    "/admin/manage-user" ,
-    "/staff",
-    "/staff/manageKoi",
-    "/staff/manageKoiBatch",
-    "/staff/manageOrder",
-    "/staff/manage-user",
-    "/staff/managePromotion",
-    
-   ];
-
-  const shouldRenderHeaderFooter = !excludeHeaderFooterPaths.includes(
-    location.pathname
+  // Loại bỏ header và footer cho tất cả các trang bắt đầu bằng /admin hoặc /staff
+  const shouldRenderHeaderFooter = !(
+    location.pathname.startsWith("/admin") || location.pathname.startsWith("/staff")
   );
+
   const navigate = useNavigate();
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [role, setRole] = useState(null);
+
   useEffect(() => {
     const token = localStorage.getItem('accessToken');
     const userRole = localStorage.getItem('userRole');
@@ -98,7 +89,9 @@ function App() {
             path="/admin"
             element={
               <AdminProtectedRoute>
-                <AdminPage />
+                <AdminLayout>
+                  <AdminPage />
+                </AdminLayout>
               </AdminProtectedRoute>
             }
           />
@@ -106,7 +99,9 @@ function App() {
             path="/admin/manage-user"
             element={
               <AdminProtectedRoute>
-                <ManageUserProfiles />
+                <AdminLayout>
+                  <ManageUserProfiles />
+                </AdminLayout>
               </AdminProtectedRoute>
             }
           />
@@ -114,7 +109,9 @@ function App() {
             path="/admin/manageKoi"
             element={
               <AdminProtectedRoute>
-                <ManageKoi />
+                <AdminLayout>
+                  <ManageKoi />
+                </AdminLayout>
               </AdminProtectedRoute>
             }
           />
@@ -122,7 +119,9 @@ function App() {
             path="/admin/manageKoi/updateKoi/:id"
             element={
               <AdminProtectedRoute>
-                <UpdateKoi />
+                <AdminLayout>
+                  <UpdateKoi />
+                </AdminLayout>
               </AdminProtectedRoute>
             }
           />
@@ -130,7 +129,9 @@ function App() {
             path="/admin/manageKoi/createKoi"
             element={
               <AdminProtectedRoute>
-                <CreateKoi />
+                <AdminLayout>
+                  <CreateKoi />
+                </AdminLayout>
               </AdminProtectedRoute>
             }
           />
@@ -138,7 +139,9 @@ function App() {
             path="/admin/managePromotion"
             element={
               <AdminProtectedRoute>
-                <ManagePromotion />
+                <AdminLayout>
+                  <ManagePromotion />
+                </AdminLayout>
               </AdminProtectedRoute>
             }
           />
@@ -146,7 +149,9 @@ function App() {
             path="/admin/managePromotion/updatePromotion/:id"
             element={
               <AdminProtectedRoute>
-                <UpdatePromotion />
+                <AdminLayout>
+                  <UpdatePromotion />
+                </AdminLayout>
               </AdminProtectedRoute>
             }
           />
@@ -154,7 +159,9 @@ function App() {
             path="/admin/managePromotion/createPromotion"
             element={
               <AdminProtectedRoute>
-                <CreatePromotion />
+                <AdminLayout>
+                  <CreatePromotion />
+                </AdminLayout>
               </AdminProtectedRoute>
             }
           />     
@@ -162,7 +169,9 @@ function App() {
             path="/admin/manageBatch/"
             element={
               <AdminProtectedRoute>
-                <ManageKoiBatch />
+                <AdminLayout>
+                  <ManageKoiBatch />
+                </AdminLayout>
               </AdminProtectedRoute>
             }
           />     
@@ -170,7 +179,9 @@ function App() {
             path="/admin/manageFeedback/"
             element={
               <AdminProtectedRoute>
-                <ManageFeedback />
+                <AdminLayout>
+                  <ManageFeedback />
+                </AdminLayout>
               </AdminProtectedRoute>
             }
           />    
@@ -178,7 +189,9 @@ function App() {
             path="/admin/manageOrder/"
             element={
               <AdminProtectedRoute>
-                <ManageOrder />
+                <AdminLayout>
+                  <ManageOrder />
+                </AdminLayout>
               </AdminProtectedRoute>
             }
           />    
@@ -186,7 +199,9 @@ function App() {
             path="/admin/manageOrder/updateOrder/:id"
             element={
               <AdminProtectedRoute>
-                <UpdateOrder />
+                <AdminLayout>
+                  <UpdateOrder />
+                </AdminLayout>
               </AdminProtectedRoute>
             }
           />  
