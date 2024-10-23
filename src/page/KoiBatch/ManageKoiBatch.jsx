@@ -11,6 +11,7 @@ const ManageKoiBatch = () => {
   const [showEditForm, setShowEditForm] = useState(false); 
   const [filterVisible, setFilterVisible] = useState(false); 
   const [species, setSpecies] = useState('');
+  const [name, setName] = useState('');
   const [minPrice, setMinPrice] = useState('');
   const [maxPrice, setMaxPrice] = useState('');
   const navigate = useNavigate();
@@ -117,9 +118,13 @@ const ManageKoiBatch = () => {
       console.error("Failed to edit batch", err);
     }
   };
+  useEffect(() => {
+    handleFilter(); // Gọi hàm lọc khi bất kỳ giá trị nào thay đổi
+  }, [name, species, minPrice, maxPrice]); // Theo dõi sự thay đổi của các biến
+  
 
   const handleFilter = async () => {
-    if (species.trim() === '' && minPrice === '' && maxPrice === '') {
+    if (name.strim == '' && species.trim() === '' && minPrice === '' && maxPrice === '') {
       try {
         const response = await api.get('/batch');
         setBatches(response.data);
@@ -135,6 +140,7 @@ const ManageKoiBatch = () => {
           species: species.trim() !== '' ? species : undefined,
           minPrice: minPrice !== '' ? parseFloat(minPrice) : undefined,
           maxPrice: maxPrice !== '' ? parseFloat(maxPrice) : undefined,
+          name: name.trim() !== '' ? name : undefined,
         },
       });
       setBatches(response.data);
@@ -157,18 +163,18 @@ const ManageKoiBatch = () => {
   };
 
   return (
-    <div className="p-8">
+    <div className="p-6 ">
       <h1 className="text-3xl font-bold mb-6 text-center">Koi Batches Available</h1>
 
       <div className="text-center mb-6">
         <button
-          className="bg-green-500 text-white py-2 px-4 ml-4 rounded hover:bg-green-600"
+          className="bg-green-500 text-white px-4 py-2 rounded mt-2 mr-2"
           onClick={() => setShowCreateForm(!showCreateForm)}
         >
           {showCreateForm ? 'Cancel' : 'Create New Batch'}
         </button>
         <button
-          className="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600"
+          className="bg-blue-500 text-white px-4 py-2 rounded mt-2 mr-2"
           onClick={() => setFilterVisible(!filterVisible)}
         >
           {filterVisible ? 'Close' : 'Search Batch'}
@@ -239,8 +245,18 @@ const ManageKoiBatch = () => {
       )}
 
       {filterVisible && (
-        <div className="mb-6 bg-gray-100 p-4 rounded-lg shadow-md">
+        <div className="mb-6 bg-gray-100 p-4 rounded-lg shadow-md">          
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
+          <div>
+              <label className="block mb-2 text-sm font-medium">Name</label>
+              <input
+                type="text"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                className="w-full p-2 border border-gray-300 rounded-lg"
+                placeholder="Enter name"
+              />
+            </div>
             <div>
               <label className="block mb-2 text-sm font-medium">Species</label>
               <input
@@ -271,13 +287,7 @@ const ManageKoiBatch = () => {
                 placeholder="Enter maximum price"
               />
             </div>
-          </div>
-          <button
-            className="bg-green-500 text-white py-2 px-4 rounded hover:bg-green-600"
-            onClick={handleFilter}
-          >
-            Apply Filter
-          </button>
+          </div>          
         </div>
       )}
 
@@ -358,12 +368,12 @@ const ManageKoiBatch = () => {
               <p className="mb-2"><strong>Description:</strong> {batch.description}</p>
               <p className="mb-2"><strong>Quantity Available:</strong> {batch.quantity}</p>
               <p className="mb-4"><strong>Species:</strong> {batch.species}</p>
-              <button onClick={() => startEditing(batch)} className="bg-yellow-500 text-white py-2 px-4 rounded hover:bg-yellow-600 mr-2">
-                Edit
-              </button>
-              <button onClick={() => handleDelete(batch.batchID)} className="bg-red-500 text-white py-2 px-4 rounded hover:bg-red-600">
+              <button onClick={() => handleDelete(batch.batchID)} className="bg-red-500 text-white px-4 py-2 rounded mt-2 mr-2">
                 Delete
               </button>
+              <button onClick={() => startEditing(batch)} className="bg-blue-500 text-white px-4 py-2 rounded mt-2 mr-2">
+                Update
+              </button>              
             </div>
           ))
         )}
