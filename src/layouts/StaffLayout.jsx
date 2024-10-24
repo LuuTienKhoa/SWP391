@@ -5,8 +5,11 @@ import { MdDashboard } from 'react-icons/md';
 import { FaFish, FaShoppingCart } from 'react-icons/fa';
 import { FaUsers } from 'react-icons/fa';
 import { FaBox, FaTags, FaComments, FaTruck,FaArrowLeft } from 'react-icons/fa'; 
+import { useNavigate } from 'react-router-dom'; // Đảm bảo đã import useNavigate
 
 const StaffLayout = ({ children }) => {
+  const navigate = useNavigate(); // Khởi tạo navigate
+
   return (
     <div className="flex">
       {/* Sidebar */}
@@ -21,7 +24,8 @@ const StaffLayout = ({ children }) => {
             { label: 'Manage Batch', icon: <FaBox size={24} />, link: '/staff/manageKoiBatch' },  // Changed to FaBox
             { label: 'Manage Promotion', icon: <FaTags size={24} />, link: '/staff/managePromotion' },  // Changed to FaTags
             { label: 'Manage Feedback', icon: <FaComments size={24} />, link: '/staff/manageFeedback' },  // Changed to FaComments
-            { label: 'Manage Consign', icon: <FaTruck size={24} />, link: '/staff/manageConsign' }  // Changed to FaTruck
+            { label: 'Manage Consign', icon: <FaTruck size={24} />, link: '/staff/manageConsign' },  // Changed to FaTruck
+            { label: 'Manage Delivery', icon: <FaTruck size={24} />, link: '/staff/manageDelivery' }  // Changed to FaTruck
 
           ].map((item, index) => (
             <li key={index} className="mb-4">
@@ -60,8 +64,10 @@ const StaffLayout = ({ children }) => {
               </Avatar>
             }
             className="mt-4"
+            onClick={() => navigate('/')} // Thêm sự kiện onClick để điều hướng về trang chủ
+
           >
-            Return
+            Home Page
           </Button>
         </div>
 
