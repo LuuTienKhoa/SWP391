@@ -57,6 +57,7 @@ function Header() {
         <li>
           <Link to="/question" className="text-white hover:underline">FAQ</Link>
         </li>
+
         {isLoggedIn && role === '0' && (
           <li>
             <Link to="/admin" className="text-white hover:underline">Admin</Link>
@@ -65,6 +66,11 @@ function Header() {
         {isLoggedIn && role === '1' && (
           <li>
             <Link to="/staff" className="text-white hover:underline">Staff</Link>
+          </li>
+        )}
+        {isLoggedIn && role === '2' && (
+          <li>
+            <Link to="/order" className="text-white hover:underline">Your Order</Link>
           </li>
         )}
       </ul>
