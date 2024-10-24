@@ -287,7 +287,17 @@ function App() {
                 </StaffLayout>
               </StaffProtectedRoute>
             }
-          />     
+          />    
+          <Route
+            path="/staff/manageFeedback"
+            element={
+              <StaffProtectedRoute>
+                <StaffLayout>
+                  <ManageFeedback />
+                </StaffLayout>
+              </StaffProtectedRoute>
+            }
+          />      
 
           
           <Route path="/profile" element={<UserProfilePage />} />
