@@ -41,6 +41,8 @@ import StaffPage from "./page/StaffPage"
 import StaffProtectedRoute from "./context/StaffProtectedRoute";
 import StaffLayout from "./layouts/StaffLayout";
 import AdminLayout from "./layouts/AdminLayout";
+import ManageConsignmentPage from "./page/Consignment/ManageConsign";
+import ConsignmentPage from "./page/Consignment/ConsignmentPage";
 
 function App() {
   const location = useLocation();
@@ -84,6 +86,7 @@ function App() {
           <Route path="/register" element={<RegisterPage />} />
           <Route path="/blog" element={<BlogPage />} />
           <Route path="/userBlog" element={<UserBlogPage />} />
+          <Route path="/consign" element={<ConsignmentPage />} />
 
           <Route
             path="/admin"
@@ -166,7 +169,7 @@ function App() {
             }
           />     
           <Route
-            path="/admin/manageBatch/"
+            path="/admin/manageKoiBatch/"
             element={
               <AdminProtectedRoute>
                 <AdminLayout>
@@ -205,6 +208,7 @@ function App() {
               </AdminProtectedRoute>
             }
           />  
+   
             <Route
             path="/staff"
             element={
@@ -214,7 +218,17 @@ function App() {
                 </StaffLayout>
               </StaffProtectedRoute>
             }
-          />     
+          />                 
+          <Route
+            path="/staff/manageConsign"
+            element={
+              <StaffProtectedRoute>
+                <StaffLayout>
+                  <ManageConsignmentPage />
+                </StaffLayout>
+              </StaffProtectedRoute>
+            }
+          />  
           <Route
             path="/staff/manage-user"
             element={

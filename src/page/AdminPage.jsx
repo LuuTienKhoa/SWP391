@@ -1,12 +1,7 @@
 import React, { useEffect } from 'react';
 import { Card, CardContent, Typography, Avatar, Grid, Button } from '@mui/material';
-import { MdDashboard } from 'react-icons/md';
-import { FaUsers, FaFish } from 'react-icons/fa';
-import { FaShoppingCart } from 'react-icons/fa'; 
-
 import { Line } from 'react-chartjs-2';
-import { useSelector } from 'react-redux';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 import {
   Chart as ChartJS,

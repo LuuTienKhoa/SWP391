@@ -4,7 +4,7 @@ const PreKoiInfoLayout = () => {
   return (
     <div className="max-w-7xl mx-auto py-12 grid grid-cols-1 lg:grid-cols-2 gap-8 ">     
       <div className="flex flex-col items-center justify-center">
-        <h2 className="text-2xl sm:text-3xl lg:text-4xl text-center font-semibold mb-6">
+        <h2 className="text-2xl sm:text-3xl lg:text-4xl text-center font-semibold mb-6 text-white ">
           3 Secrets for Buying Koi Fish, from the F Koi 
         </h2>
 

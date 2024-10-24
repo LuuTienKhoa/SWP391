@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import  { useContext } from 'react';
 import api from "../config/axios";
 import { useNavigate } from "react-router-dom";
 import Cover_Image from "../assets/bg.jpg";
@@ -36,11 +36,6 @@ const LoginPage = () => {
       } else {
         navigate('/');
       }
-      console.log('API Response:', response.data);
-      console.log('Access Token:', accessToken);
-      console.log('Refresh Token:', refreshToken);
-      console.log('Role:', role);
-      console.log('Name:', name);
     } catch (e) {
       console.log('Login failed', e);
     }
@@ -116,7 +111,7 @@ const LoginPage = () => {
                 </Form.Item>
                 <Form.Item>
                   <div className="w-ful flex flex-col">
-                    <button className="w-ful text-white my-2 font-semibold bg-black rounded-md p-4 text-center flex items-center justify-center">
+                    <button type="submit" className="w-ful text-white my-2 font-semibold bg-black rounded-md p-4 text-center flex items-center justify-center">
                       Login
                     </button>
                   </div>
@@ -129,7 +124,7 @@ const LoginPage = () => {
                 <div>
                   <button
                     className="w-full text-black my-2 bg-white border-2 border-black rounded-md p-4 text-center flex items-center justify-center"
-                    onClick={() => loginWithGoogle()}
+
                   >
                     <img
                       src={GOOGLE_ICON}
