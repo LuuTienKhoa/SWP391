@@ -38,33 +38,7 @@ const ManageKoiBatch = () => {
     fetchBatches();
   }, [navigate]);
 
-  const handleDelete = async (batchId) => {
-    try {
-      if (!window.confirm('Are you sure you want to delete this batch?')) return;
-
-      const token = localStorage.getItem('accessToken');
-      if (!token) {
-        navigate('/login');
-        return;
-      }
-
-      const response = await api.delete(`/Batch/${batchId}`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-
-      if (response.status === 204) {
-        setBatches(batches.filter((batch) => batch.batchID !== batchId));
-      } else {
-        console.error("Batch deletion failed:", response.status);
-      }
-    } catch (err) {
-      console.error("Failed to delete batch", err);
-    }
-  };
-
-  const handleCreateBatch = async () => {
+    const handleCreateBatch = async () => {
     try {
       const token = localStorage.getItem('accessToken');
       if (!token) {
@@ -116,6 +90,31 @@ const ManageKoiBatch = () => {
       }
     } catch (err) {
       console.error("Failed to edit batch", err);
+    }
+  };
+  const handleDelete = async (batchId) => {
+    try {
+      if (!window.confirm('Are you sure you want to delete this batch?')) return;
+
+      const token = localStorage.getItem('accessToken');
+      if (!token) {
+        navigate('/login');
+        return;
+      }
+
+      const response = await api.delete(`/Batch/${batchId}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      if (response.status === 204) {
+        setBatches(batches.filter((batch) => batch.batchID !== batchId));
+      } else {
+        console.error("Batch deletion failed:", response.status);
+      }
+    } catch (err) {
+      console.error("Failed to delete batch", err);
     }
   };
   useEffect(() => {

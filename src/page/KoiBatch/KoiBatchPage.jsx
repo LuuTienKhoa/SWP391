@@ -41,7 +41,7 @@ const KoiBatchPage = () => {
   const handleFilter = async () => {
     if (name.trim() === '' && species.trim() === '' && minPrice === '' && maxPrice === '') {
       try {
-        const response = await api.get('/Batch');
+        const response = await api.get('/batch');
         setBatches(response.data);
       } catch (error) {
         console.error('Error fetching batches:', error);
@@ -64,6 +64,10 @@ const KoiBatchPage = () => {
     }
     
   };
+  const handleNavigateToPayment = (batch) => {
+    navigate(`/payment/${batch.batchID}`, { state: { batch } });
+  };
+
   
 
   return (
@@ -146,7 +150,9 @@ const KoiBatchPage = () => {
               <p className="mb-2"><strong>Quantity Available:</strong> {batch.quantity}</p>
               <p className="mb-2"><strong>Remaining Batch:</strong> {batch.remainBatch}</p>
               <p className="mb-4"><strong>Species:</strong> {batch.species}</p>
-              <button className="bg-green-500 text-white py-2 px-4 rounded hover:bg-green-600">
+              <button 
+              onClick={() => handleNavigateToPayment(batch)}
+              className="bg-green-500 text-white py-2 px-4 rounded hover:bg-green-600">
                 Buy Now
               </button>
             </div>
