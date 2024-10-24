@@ -1,123 +1,127 @@
-import React, { useState, useEffect } from 'react';
-import { useUser } from '../context/userContext';
+import React, { useEffect, useState } from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
+import { Card, CardContent, Typography, Button, TextField } from '@mui/material';
+import api from '../config/axios';
 
-function UserInformation(){
-  const { user, setUser } = useUser();
+export default function EditUserPage() {
+  const { id } = useParams();
+  const [user, setUser] = useState({ name: '', username: '', email: '', phone: '', address: '' });
+  const [error, setError] = useState(null);
+  const navigate = useNavigate();
 
-  const [profile, setProfile] = useState(() => {
-    const savedProfile = localStorage.getItem('userProfile');
-    return savedProfile ? JSON.parse(savedProfile) : { ...user, gender: 'Male', profileImage: 'https://via.placeholder.com/150' };
-  });
+  useEffect(() => {
+    const fetchUserProfile = async () => {
+      try {
+        const token = localStorage.getItem('accessToken');
+        const response = await api.get(`/User/profile/`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        setUser(response.data);
+      } catch (error) {
+        setError('Failed to fetch user profile');
+        console.error('Error fetching user profile:', error);
+      }
+    };
 
-  const [isUpdated, setIsUpdated] = useState(false);
+    fetchUserProfile();
+  }, [id]);
 
-  const handleInputChange = (e) => {
+  const handleChange = (e) => {
     const { name, value } = e.target;
-    setProfile({
-      ...profile,
-      [name]: value,
-    });
-    setIsUpdated(false);
+    setUser({ ...user, [name]: value });
   };
 
-  const handleImageUpload = (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setProfile((prevState) => ({
-          ...prevState,
-          profileImage: reader.result,
-        }));
-      };
-      reader.readAsDataURL(file);
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      const token = localStorage.getItem('accessToken');
+      await api.put(`/User/edit`, user, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      navigate(`/profile`); 
+    } catch (error) {
+      setError('Failed to update user profile');
+      console.error('Error updating user profile:', error);
     }
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    setUser(profile);  
-
-    localStorage.setItem('userProfile', JSON.stringify(profile));
-
-    setIsUpdated(true); 
-  };
+  if (error) {
+    return <div className="text-red-500 text-center">{error}</div>;
+  }
 
   return (
-    <div className="max-w-xl mx-auto py-12">
-      <h2 className="text-3xl font-semibold text-center text-gray-800 mb-6">Edit Your Profile</h2>
-      <form onSubmit={handleSubmit} className="bg-white shadow-lg rounded-lg p-8">
-
-        <div className="mb-6 text-center">
-          <img
-            src={profile.profileImage}
-            alt="Profile"
-            className="w-24 h-24 rounded-full mx-auto mb-4"
-          />
-          <input
-            type="file"
-            onChange={handleImageUpload}
-            accept="image/*"
-            className="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:bg-orange-50 file:text-orange-700 hover:file:bg-orange-100"
-          />
-        </div>
-
-        <div className="mb-4">
-          <label className="block text-gray-700 text-sm font-semibold mb-2" htmlFor="name">
-            Name
-          </label>
-          <input
-            type="text"
-            id="name"
-            name="name"
-            value={profile.name}
-            onChange={handleInputChange}
-            className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-orange-500"
-          />
-        </div>
-
-        <div className="mb-4">
-          <label className="block text-gray-700 text-sm font-semibold mb-2" htmlFor="email">
-            Email
-          </label>
-          <input
-            type="email"
-            id="email"
-            name="email"
-            value={profile.email}
-            onChange={handleInputChange}
-            className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-orange-500"
-          />
-        </div>
-
-        <div className="mb-4">
-          <label className="block text-gray-700 text-sm font-semibold mb-2" htmlFor="gender">
-            Gender
-          </label>
-          <select
-            id="gender"
-            name="gender"
-            value={profile.gender}
-            onChange={handleInputChange}
-            className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-orange-500"
-          >
-            <option value="Male">Male</option>
-            <option value="Female">Female</option>
-            <option value="Other">Other</option>
-          </select>
-        </div>
-
-        <button
-          type="submit"
-          className="w-full bg-orange-500 text-white py-2 rounded-md hover:bg-orange-600 transition-all"
-        >
-          Update Profile
-        </button>
-
-        {isUpdated && <p className="text-green-600 text-center mt-4">Profile updated successfully!</p>}
-      </form>
+    <div className="p-6 min-h-screen flex justify-center items-center bg-gradient-to-r from-slate-500 to-orange-300">
+      <Card className="w-full max-w-lg shadow-lg rounded-lg bg-white">
+        <CardContent className="p-6">
+          <Typography variant="h4" className="text-center font-bold text-gray-800 mb-6">
+            {user.name}'s Profile
+          </Typography>
+          <form onSubmit={handleSubmit}>
+            <TextField
+              label="Name"
+              name="name"
+              value={user.name}
+              onChange={handleChange}
+              fullWidth
+              margin="normal"
+            />
+            <TextField
+              label="Username"
+              name="username"
+              value={user.username}
+              onChange={handleChange}
+              fullWidth
+              margin="normal"
+            />
+            <TextField
+              label="Password"
+              name="password"
+              value={user.password}
+              onChange={handleChange}
+              fullWidth
+              margin="normal"
+            />
+            <TextField
+              label="Email"
+              name="email"
+              value={user.email}
+              onChange={handleChange}
+              fullWidth
+              margin="normal"
+            />
+            <TextField
+              label="Phone Number"
+              name="phone"
+              value={user.phone}
+              onChange={handleChange}
+              fullWidth
+              margin="normal"
+            />
+            <TextField
+              label="Address"
+              name="address"
+              value={user.address}
+              onChange={handleChange}
+              fullWidth
+              margin="normal"
+            />
+            <div className="text-center">
+              <Button
+                variant="contained"
+                color="primary"
+                type="submit"
+                className="w-full py-2 mt-4 font-semibold rounded-lg shadow-md"
+              >
+                Save Changes
+              </Button>
+            </div>
+          </form>
+        </CardContent>
+      </Card>
     </div>
   );
-};
-
-export default UserInformation;
+}

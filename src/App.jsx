@@ -43,6 +43,7 @@ import StaffLayout from "./layouts/StaffLayout";
 import AdminLayout from "./layouts/AdminLayout";
 import ManageConsignmentPage from "./page/Consignment/ManageConsign";
 import ConsignmentPage from "./page/Consignment/ConsignmentPage";
+import EditUserPage from "./component/UserInformation"
 
 function App() {
   const location = useLocation();
@@ -301,6 +302,7 @@ function App() {
 
           
           <Route path="/profile" element={<UserProfilePage />} />
+          <Route path="/user/edit/:id" element={<EditUserPage />} />
           <Route path="/view-details/:id" element={<ViewDetailsPage />} />
           <Route path="/payment/:id" element={<PaymentPage />} />
           <Route path="/koiBatch" element={<KoiBatchPage />}/>
