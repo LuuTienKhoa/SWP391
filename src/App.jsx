@@ -208,7 +208,16 @@ function App() {
               </AdminProtectedRoute>
             }
           />  
-   
+             <Route
+            path="/admin/manageConsign"
+            element={
+              <StaffProtectedRoute>
+                <StaffLayout>
+                  <ManageConsignmentPage />
+                </StaffLayout>
+              </StaffProtectedRoute>
+            }
+          />  
             <Route
             path="/staff"
             element={
