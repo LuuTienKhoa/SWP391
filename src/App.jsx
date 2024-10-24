@@ -44,7 +44,7 @@ import AdminLayout from "./layouts/AdminLayout";
 import ManageConsignmentPage from "./page/Consignment/ManageConsign";
 import ConsignmentPage from "./page/Consignment/ConsignmentPage";
 import EditUserPage from "./component/UserInformation"
-
+import ManageDelivery from "./page/ManageDelivery";
 function App() {
   const location = useLocation();
 
@@ -219,6 +219,16 @@ function App() {
               </AdminProtectedRoute>
             }
           />  
+          <Route
+            path="/admin/manageDelivery"
+            element={
+              <AdminProtectedRoute>
+                <AdminLayout>
+                  <ManageDelivery />
+                </AdminLayout>
+              </AdminProtectedRoute>
+            }
+          />  
             <Route
             path="/staff"
             element={
@@ -228,7 +238,17 @@ function App() {
                 </StaffLayout>
               </StaffProtectedRoute>
             }
-          />                 
+          />        
+          <Route
+            path="/staff/manageDelivery"
+            element={
+              <StaffProtectedRoute>
+                <StaffLayout>
+                  <ManageDelivery />
+                </StaffLayout>
+              </StaffProtectedRoute>
+            }
+          />            
           <Route
             path="/staff/manageConsign"
             element={
