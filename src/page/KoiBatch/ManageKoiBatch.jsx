@@ -123,7 +123,7 @@ const ManageKoiBatch = () => {
   
 
   const handleFilter = async () => {
-    if (name.strim == '' && species.trim() === '' && minPrice === '' && maxPrice === '') {
+    if (name.trim == '' && species.trim() === '' && minPrice === '' && maxPrice === '') {
       try {
         const response = await api.get('/batch');
         setBatches(response.data);
