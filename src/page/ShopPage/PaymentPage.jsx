@@ -1,24 +1,29 @@
 import { useState } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import api from '../../config/axios';
 
 const PaymentPage = () => {
   const location = useLocation();
   const { koiFish } = location.state || {};
   const { batch } = location.state || {};
+  const { consignment } =location.state || {};
   const { promotion } = location.state || {};
   const [paymentMethod, setPaymentMethod] = useState('credit-card');
   const [promotionID, setPromotionID] = useState('');
   const [deliveryMethod, setDeliveryMethod] = useState('pick-up'); // Default to pick-up
+  const navigate = useNavigate();
 
+  // Hàm xử lý thanh toán
   const handlePayment = async () => {
-    if (!koiFish && !batch) {
+
+    if (!koiFish && !batch && !consignment) {
       alert("Koi data or batch data is missing!");
       return;
     }
 
     try {
       let orderData = {
+        consignmentKois : [1],
         promotionID: parseInt(promotionID, 10) || 0,
         paymentMethod: paymentMethod === 'VNPay' ? 1 : 0
       };
@@ -29,35 +34,46 @@ const PaymentPage = () => {
         orderData.kois = [koiFish.koiID];
       }
 
-      // 1. Send payment request to backend
+      // 1. Gửi yêu cầu thanh toán lên backend
       const response = await api.post('/Order/create', orderData);
+      console.log(response.data);
 
-      // If payment is successful
-      const orderId = response.data.orderId;
-      const customerId = location.state.customerId || 1;
+      // 2. Lấy orderId từ phản hồi của backend
+      const orderId = response.data.orderID;
+      console.log('Order ID:', orderId);
 
+
+      // Nếu người dùng chọn giao hàng (shipment), gọi hàm handleDelivery
       if (deliveryMethod === 'shipment') {
-        // 2. Create shipment delivery
-        const deliveryData = {
-          orderId: orderId,
-          customerId: customerId,
-          status: "pending",
-          startDeliDay: new Date().toISOString(),
-          endDeliDay: new Date(new Date().setDate(new Date().getDate() + 7)).toISOString()
-        };
-
-        await api.post('/koi/Delivery', deliveryData);
-        alert("Payment successful and shipment delivery created!");
-      } else {
-        alert("Payment successful for pick-up at the shop!");
+        const customerId = location.state.customerId || 1;
+        handleDelivery(orderId, customerId);
       }
 
-      // Redirect to the payment URL
+      // Chuyển hướng đến trang thanh toán
       window.location.href = response.data.paymentUrl;
+      navigate('/paymentSuccess', { state: { orderId } });
 
     } catch (error) {
-      console.error('Error processing payment or delivery:', error);
-      alert('Failed to process payment or delivery. Please try again.');
+      console.error('Error processing payment:', error);
+      alert('Failed to process payment. Please try again.');
+    }
+  };
+
+  // Hàm xử lý giao hàng
+  const handleDelivery = async (orderId, customerId) => {
+    try {
+      const deliveryData = {
+        orderId: orderId,
+        customerId: customerId,
+        startDeliDay: new Date().toISOString(),
+        endDeliDay: new Date(new Date().setDate(new Date().getDate() + 7)).toISOString()
+      };
+
+      await api.post('/koi/Delivery', deliveryData);
+      alert(`Shipment delivery created for Order ID: ${orderId}`);
+
+    } catch (error) {
+      console.error('Error processing delivery:', error);
     }
   };
 
