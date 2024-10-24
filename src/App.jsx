@@ -211,11 +211,11 @@ function App() {
              <Route
             path="/admin/manageConsign"
             element={
-              <StaffProtectedRoute>
-                <StaffLayout>
+              <AdminProtectedRoute>
+                <AdminLayout>
                   <ManageConsignmentPage />
-                </StaffLayout>
-              </StaffProtectedRoute>
+                </AdminLayout>
+              </AdminProtectedRoute>
             }
           />  
             <Route
