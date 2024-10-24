@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import api from '../config/axios';
-import { jwtDecode } from 'jwt-decode';
 
 const OrderPage = ({ token }) => {
   const [orders, setOrders] = useState([]);
@@ -9,27 +8,15 @@ const OrderPage = ({ token }) => {
 
   useEffect(() => {
     const fetchOrders = async () => {
-      if (!token) {
-        setError('Token not found');
-        setLoading(false);
-        return;
-      }
-
       try {
-        // Giải mã token để lấy userID
-        const decodedToken = jwtDecode(token);
-        const userID = decodedToken.userID;
-
         // Gửi yêu cầu API kèm token trong header
-        const response = await api.get('/Order', {
+        const response = await api.get('/Order/list', {
           headers: {
             Authorization: `Bearer ${token}`,
           },
         });
 
-        // Lọc đơn hàng theo customerID (khớp với userID của token)
-        const customerOrders = response.data.filter(order => order.customerID === userID);
-        setOrders(customerOrders);
+        setOrders(response.data);
       } catch (err) {
         if (err.response) {
           setError(`API Error: ${err.response.status} - ${err.response.data.message}`);
