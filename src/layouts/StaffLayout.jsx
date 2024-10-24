@@ -19,6 +19,7 @@ const StaffLayout = ({ children }) => {
             { label: 'Manage Koi', icon: <FaFish size={24} />, link: '/staff/manageKoi' },
             { label: 'Manage Batch', icon: <FaFish size={24} />, link: '/staff/manageKoiBatch' },             
             { label: 'Manage Promotion', icon: <FaFish size={24} />, link:'/staff/managePromotion'},
+            { label: 'Manage Feedback', icon: <FaUsers size={24} />, link:'/staff/manageFeedback'},
           ].map((item, index) => (
             <li key={index} className="mb-4">
               <Link to={item.link}>
