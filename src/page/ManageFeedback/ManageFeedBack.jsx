@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useCallback } from 'react';
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import api from '../../config/axios';
 
 const ManageFeedback = () => {
@@ -40,26 +40,50 @@ const ManageFeedback = () => {
 
   return (
     <div className="p-6">
-      <h1 className="text-3xl font-bold mb-6 text-center">FeedBacks</h1>
+      <h1 className="text-3xl font-bold mb-6 text-center">Feedbacks</h1>
       {loading ? (
         <p>Loading...</p>
       ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-          {feedbacks.map(feedback => (
-            <div key={feedback.feedbackID} className="border rounded-lg shadow-lg p-6 text-center bg-white">
-              <p><strong>Order ID:</strong> {feedback.orderID}</p>
-              <p><strong>Customer ID:</strong> {feedback.customerID}</p>
-              <p><strong>Rating:</strong> {feedback.rating}</p>
-              <p><strong>Comment:</strong> {feedback.comment}</p>
-              <p><strong>Date:</strong> {new Date(feedback.dateFb).toLocaleString()}</p>
-              <button onClick={() => handleDeleteFeedback(feedback.feedbackID)} className="bg-red-500 text-white px-4 py-2 rounded mt-2 mr-2">
-                Delete Feedback
-              </button>
-              <button onClick={() => navigate(`/update-feedback/${feedback.feedbackID}`)} className="bg-blue-500 text-white px-4 py-2 rounded mt-2 mr-2">
-                Update Feedback
-              </button>
-            </div>
-          ))}
+        <div className="overflow-x-auto">
+          <table className="min-w-full bg-white border border-gray-300">
+            <thead>
+              <tr className="bg-gray-200">
+              <th className="py-2 px-4 border">Feedback ID</th>
+                <th className="py-2 px-4 border">Order ID</th>
+                <th className="py-2 px-4 border">Customer ID</th>
+                <th className="py-2 px-4 border">Rating</th>
+                <th className="py-2 px-4 border">Comment</th>
+                <th className="py-2 px-4 border">Date</th>
+                <th className="py-2 px-4 border">Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              {feedbacks.map(feedback => (
+                <tr key={feedback.feedbackID} className="text-center border-b">
+                  <td className="py-2 px-4 border">{feedback.feedbackID}</td>
+                  <td className="py-2 px-4 border">{feedback.orderID}</td>
+                  <td className="py-2 px-4 border">{feedback.customerID}</td>
+                  <td className="py-2 px-4 border">{feedback.rating}</td>
+                  <td className="py-2 px-4 border">{feedback.comment}</td>
+                  <td className="py-2 px-4 border">{new Date(feedback.dateFb).toLocaleString()}</td>
+                  <td className="py-2 px-4 border">
+                    <button
+                      onClick={() => handleDeleteFeedback(feedback.feedbackID)}
+                      className="bg-red-500 text-white px-4 py-1 rounded mr-2"
+                    >
+                      Delete
+                    </button>
+                    <button
+                      onClick={() => navigate(`/update-feedback/${feedback.feedbackID}`)}
+                      className="bg-blue-500 text-white px-4 py-1 rounded"
+                    >
+                      Update
+                    </button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
         </div>
       )}
     </div>

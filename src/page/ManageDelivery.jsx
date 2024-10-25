@@ -56,32 +56,41 @@ const ManageDelivery = () => {
 
   return (
     <div className="container mx-auto p-4">
-      <h1 className="text-3xl font-bold mb-4">Delivery Management</h1>
+      <h1 className="text-3xl font-bold mb-6 text-center">Delivery Management</h1>
       <div className="mb-4">
-        
+        {/* Additional content for creating new delivery entries could be added here */}
       </div>
-      <h2 className="text-xl font-semibold mb-2">Existing Deliveries</h2>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-        {deliveries.map(delivery => (
-          <div key={delivery.deliveryID} className="border rounded-lg p-4 shadow-lg bg-white">
-            <h3 className="text-lg font-bold">Delivery ID: {delivery.deliveryID}</h3>
-            <p><strong>Order ID:</strong> {delivery.orderID}</p>
-            <p><strong>Customer ID:</strong> {delivery.customerID}</p>
-            <p><strong>Status:</strong> {delivery.status}</p>
-            <p><strong>Start Delivery Day:</strong> {new Date(delivery.startDeliDay).toLocaleString()}</p>
-            <p><strong>End Delivery Day:</strong> {new Date(delivery.endDeliDay).toLocaleString()}</p>
-            <h4 className="font-semibold mt-2">Order Details:</h4>
-            <p><strong>Order ID:</strong> {delivery.order.orderID}</p>
-            <p><strong>Total Amount:</strong> ${delivery.order.totalAmount}</p>
-            <p><strong>Customer Loyalty Points:</strong> {delivery.order.customer.loyaltyPoints}</p>
-            <div className="mt-4">
-            <button onClick={() => handleDeleteDelivery(delivery.deliveryID)} className="bg-red-500 text-white px-4 py-2 rounded">Delete</button>
-              <button onClick={() => handleUpdateDelivery(delivery.deliveryID)} className="bg-blue-500 text-white px-4 py-2 rounded mr-2">Update</button>
-              
-            </div>
-          </div>
-        ))}
-      </div>
+      <table className="w-full table-auto border-collapse bg-white shadow-md rounded-lg">
+        <thead>
+          <tr className="bg-gray-200">
+            <th className="p-2 border">Delivery ID</th>
+            <th className="p-2 border">Order ID</th>
+            <th className="p-2 border">Customer ID</th>
+            <th className="p-2 border">Start Delivery Day</th>
+            <th className="p-2 border">End Delivery Day</th>
+            <th className="p-2 border">Total Amount</th>
+            <th className="p-2 border">Status</th>
+            <th className="p-2 border">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {deliveries.map(delivery => (
+            <tr key={delivery.deliveryID} className="text-center border-b">
+              <td className="p-2 border">{delivery.deliveryID}</td>
+              <td className="p-2 border">{delivery.orderID}</td>
+              <td className="p-2 border">{delivery.customerID}</td>
+              <td className="p-2 border">{new Date(delivery.startDeliDay).toLocaleString()}</td>
+              <td className="p-2 border">{new Date(delivery.endDeliDay).toLocaleString()}</td>
+              <td className="p-2 border">${delivery.order.totalAmount}</td>
+              <td className="p-2 border">{delivery.status}</td>
+              <td className="p-2 border">
+                <button onClick={() => handleUpdateDelivery(delivery.deliveryID)} className="bg-blue-500 text-white px-2 py-1 rounded mr-2">Update</button>
+                <button onClick={() => handleDeleteDelivery(delivery.deliveryID)} className="bg-red-500 text-white px-2 py-1 rounded">Delete</button>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
     </div>
   );
 };

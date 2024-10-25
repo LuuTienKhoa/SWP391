@@ -39,60 +39,75 @@ const ProductsPage = () => {
   };
 
   return (
-    <div className="p-6 ">
+    <div className="p-6">
       <h1 className="text-3xl font-bold mb-6 text-center">Koi Fish</h1>
 
-        {/* Create Koi Button */}
-        <div className="mb-4 text-center">
-          <button
-            onClick={() => navigate("/admin/manageKoi/createKoi")}
-            className="bg-green-500 text-white rounded px-4 py-2"
-          >
-            Create Koi
-          </button>
-        </div>
-
-        {/* Product Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-          {loading ? (
-            <p className="text-center">Loading...</p>
-          ) : (
-            koiFishs.map((koiFish) => (
-              <div key={koiFish.koiID} className="border rounded-lg shadow-lg p-6 text-center bg-white">
-                <Link to={`/view-details/${koiFish.koiID}`}>
-                  <img
-                    src={
-                      koiFish.image ??
-                      "https://www.kodamakoifarm.com/wp-content/uploads/2024/05/w0503s3v1.png"
-                    }
-                    alt={koiFish.name}
-                    className="w-full h-40 object-cover"
-                  />
-                </Link>
-                <div className="border rounded-lg shadow-lg p-6 text-center bg-white">
-                  <h2 className="text-xl font-bold">{koiFish.name}</h2>
-                  <p>Price: ${koiFish.price}</p>
-                  <p>Size: {koiFish.size} cm</p>
-
-                  <button
-                    onClick={() => handleDeleteProduct(koiFish.koiID)}
-                    className="bg-red-500 text-white px-4 py-2 rounded mt-2 mr-2"
-                  >
-                    Delete 
-                  </button>
-                  <button
-                    onClick={() => navigate(`/admin/manageKoi/updateKoi/${koiFish.koiID}`)}
-                    className="bg-blue-500 text-white px-4 py-2 rounded mt-2 mr-2"
-                  >
-                    Update 
-                  </button>
-                </div>
-              </div>
-            ))
-          )}
-        </div>
+      {/* Create Koi Button */}
+      <div className="mb-4 text-center">
+        <button
+          onClick={() => navigate("/admin/manageKoi/createKoi")}
+          className="bg-green-500 text-white rounded px-4 py-2"
+        >
+          Create Koi
+        </button>
       </div>
-    
+
+      {loading ? (
+        <p className="text-center">Loading...</p>
+      ) : (
+        <div className="overflow-x-auto">
+          <table className="min-w-full bg-white border border-gray-300">
+            <thead>
+              <tr className="bg-gray-200">                
+                <th className="py-2 px-4 border">Image</th>
+                <th className="py-2 px-4 border">Koi ID</th>
+                <th className="py-2 px-4 border">Name</th>
+                <th className="py-2 px-4 border">Gender</th>
+                <th className="py-2 px-4 border">Color</th>
+                <th className="py-2 px-4 border">Size (cm)</th>
+                <th className="py-2 px-4 border">Price</th>              
+                <th className="py-2 px-4 border">Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              {koiFishs.map((koiFish) => (
+                <tr key={koiFish.koiID} className="text-center border-b">
+                  <td className="py-2 px-4 border">
+                    <Link to={`/view-details/${koiFish.koiID}`}>
+                      <img
+                        src={koiFish.image ?? "https://www.kodamakoifarm.com/wp-content/uploads/2024/05/w0503s3v1.png"}
+                        alt={koiFish.name}
+                        className="w-20 h-20 object-cover mx-auto"
+                      />
+                    </Link>
+                  </td>
+                  <td className="py-2 px-4 border">{koiFish.koiID}</td>
+                  <td className="py-2 px-4 border">{koiFish.name}</td>
+                  <td className="py-2 px-4 border">{koiFish.gender}</td>
+                  <td className="py-2 px-4 border">{koiFish.color}</td>
+                  <td className="py-2 px-4 border">{koiFish.size}</td>
+                  <td className="py-2 px-4 border">${koiFish.price}</td>                
+                  <td className="py-2 px-4 border">
+                    <button
+                      onClick={() => handleDeleteProduct(koiFish.koiID)}
+                      className="bg-red-500 text-white px-4 py-1 rounded mr-2"
+                    >
+                      Delete
+                    </button>
+                    <button
+                      onClick={() => navigate(`/admin/manageKoi/updateKoi/${koiFish.koiID}`)}
+                      className="bg-blue-500 text-white px-4 py-1 rounded"
+                    >
+                      Update
+                    </button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      )}
+    </div>
   );
 };
 
