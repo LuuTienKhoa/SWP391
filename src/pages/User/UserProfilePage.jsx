@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { Card, CardContent, Typography, Button } from '@mui/material';
-import api from '../config/axios'; // Assuming you have axios instance set up
+import api from '../../config/axios'; // Assuming you have axios instance set up
 import 'tailwindcss/tailwind.css'; // For styling
 
 export default function UserProfilePage() {

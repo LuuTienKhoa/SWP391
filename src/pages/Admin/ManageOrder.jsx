@@ -34,6 +34,21 @@ const ManageOrder = () => {
     }
   };
 
+  const getTypeLabel = (type) => {
+    return type === 0 ? "Online" : "Offline";
+  };
+  const getStatusLabel = (status) => {
+    switch (status) {
+      case 0:
+        return "Pending";
+      case 1:
+        return "Completed";
+      case 2:
+        return "Cancelled";
+      default:
+        return "Unknown";
+    }
+  };
   if (loading) return <div>Loading...</div>;
 
   return (
@@ -44,7 +59,6 @@ const ManageOrder = () => {
           <thead>
             <tr className="bg-gray-200">
               <th className="py-2 px-4 border">Order ID</th>
-              <th className="py-2 px-4 border">Product</th>
               <th className="py-2 px-4 border">Customer ID</th>
               <th className="py-2 px-4 border">Staff ID</th>
               <th className="py-2 px-4 border">Date of purchase</th>
@@ -59,16 +73,15 @@ const ManageOrder = () => {
           <tbody>
             {orders.map((order) => (
               <tr key={order.orderID} className="text-center border-b">
-                <td className="py-2 px-4 border">{order.orderID}</td>
-                <td className="py-2 px-4 border">{order.orderDetails?.koi?.name || 'not'}</td>                
+                <td className="py-2 px-4 border">{order.orderID}</td>            
                 <td className="py-2 px-4 border">{order.customerID}</td>
                 <td className="py-2 px-4 border">{order.staffID}</td>
                 <td className="py-2 px-4 border">{order.createAt}</td>
                 <td className="py-2 px-4 border">{order.updateAt}</td>
                 <td className="py-2 px-4 border">{order.promotionID}</td>
                 <td className="py-2 px-4 border">{order.totalAmount}</td>
-                <td className="py-2 px-4 border">{order.type}</td>
-                <td className="py-2 px-4 border">{order.status}</td>
+                <td className="py-2 px-4 border">{getTypeLabel(order.type)}</td>
+                <td className="py-2 px-4 border">{getStatusLabel(order.status)}</td>
                 <td className="py-2 px-4 border">
                   <button
                     className="bg-red-500 text-white px-4 py-1 rounded mr-2"

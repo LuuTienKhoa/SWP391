@@ -1,7 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect,useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import api from '../../config/axios';
-import Pagination from '../../component/Pagination';
+import BatchTable from '../KoiBatch/BatchTable';
+import EditBatchForm from '../KoiBatch/EditAndCreateForm';
+import Modal from '../../components/Modal/Modal';
 
 const ManageKoiBatch = () => {
   const [batches, setBatches] = useState([]);
@@ -15,15 +17,10 @@ const ManageKoiBatch = () => {
   const [minPrice, setMinPrice] = useState('');
   const [maxPrice, setMaxPrice] = useState('');
   const navigate = useNavigate();
+  const [showModal, setShowModal] = useState(false);
 
-  const [currentPage, setCurrentPage] = useState(1);
-  const [postsPerPage] = useState(8);
-
-  const lastPostIndex = currentPage * postsPerPage;
-  const firstPostIndex = lastPostIndex - postsPerPage;
-  const currentPosts = batches.slice(firstPostIndex, lastPostIndex);
-
-  const paginate = (pageNumber) => setCurrentPage(pageNumber);
+  const openModal = () => setShowModal(true);
+  const closeModal = () => setShowModal(false);
 
   useEffect(() => {
     const fetchBatches = async () => {
@@ -37,31 +34,6 @@ const ManageKoiBatch = () => {
     fetchBatches();
   }, [navigate]);
 
-  const handleCreateBatch = async () => {
-    try {
-      const token = localStorage.getItem('accessToken');
-      if (!token) {
-        navigate('/login');
-        return;
-      }
-
-      const response = await api.post('/Batch', newBatch, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-
-      if (response.status === 201) {
-        setBatches([...batches, response.data]);
-        setShowCreateForm(false);
-      } else {
-        console.error("Batch creation failed:", response.status);
-      }
-    } catch (err) {
-      console.error("Failed to create batch", err);
-    }
-  };
-
   const handleEdit = async () => {
     try {
       const token = localStorage.getItem('accessToken');
@@ -71,7 +43,7 @@ const ManageKoiBatch = () => {
       }
       const payload = {
         ...newBatch,
-        batchID: editBatchId, 
+        batchID: editBatchId,
       };
       const response = await api.put(`/Batch/${editBatchId}`, payload, {
         headers: {
@@ -90,7 +62,25 @@ const ManageKoiBatch = () => {
       console.error("Failed to edit batch", err);
     }
   };
-
+  const startEditing = (batch) => {
+    setNewBatch({
+      name: batch.name,
+      species: batch.species,
+      price: batch.price,
+      quantity: batch.quantity,
+      description: batch.description,
+    });
+    setEditBatchId(batch.batchID);
+    setShowEditForm(true);
+    setShowCreateForm(false);
+  };
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setNewBatch((prevBatch) => ({
+      ...prevBatch,
+      [name]: value,
+    }));
+  };
   const handleDelete = async (batchId) => {
     try {
       if (!window.confirm('Are you sure you want to delete this batch?')) return;
@@ -147,70 +137,56 @@ const ManageKoiBatch = () => {
     }
   };
 
-  const startEditing = (batch) => {
-    setNewBatch({
-      name: batch.name,
-      species: batch.species,
-      price: batch.price,
-      quantity: batch.quantity,
-      description: batch.description,
-    });
-    setEditBatchId(batch.batchID);
-    setShowEditForm(true);
-    setShowCreateForm(false);
-  };
 
+  const handleCreateBatch = async () => {
+    try {
+      const token = localStorage.getItem('accessToken');
+      if (!token) {
+        navigate('/login');
+        return;
+      }
+
+      const response = await api.post('/Batch', newBatch, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      if (response.status === 201) {
+        setBatches([...batches, response.data]);
+        setShowCreateForm(false);
+      } else {
+        console.error("Batch creation failed:", response.status);
+      }
+    } catch (err) {
+      console.error("Failed to create batch", err);
+    }
+  };
   return (
     <div className="p-6">
       <h1 className="text-3xl font-bold mb-6 text-center">Koi Batches Available</h1>
-
       <div className="text-center mb-6">
-        <button className="bg-green-500 text-white px-4 py-2 rounded mt-2 mr-2" onClick={() => setShowCreateForm(!showCreateForm)}>
-          {showCreateForm ? 'Cancel' : 'Create New Batch'}
-        </button>
-        <button className="bg-blue-500 text-white px-4 py-2 rounded mt-2 mr-2" onClick={() => setFilterVisible(!filterVisible)}>
-          {filterVisible ? 'Close' : 'Search Batch'}
-        </button>
+      <div className="text-center mb-6">
+        <button onClick={() => setShowCreateForm(true)}>Create New Batch</button>
+      </div>
       </div>
 
-      <table className="w-full table-auto border-collapse bg-white shadow-md rounded-lg">
-        <thead>
-          <tr className="bg-gray-200">
-            <th className="p-2 border">Name</th>
-            <th className="p-2 border">Species</th>
-            <th className="p-2 border">Price</th>
-            <th className="p-2 border">Quantity</th>
-            <th className="p-2 border">Description</th>
-            <th className="p-2 border">Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          {currentPosts.length === 0 ? (
-            <tr>
-              <td colSpan="6" className="text-center py-4">No batches available</td>
-            </tr>
-          ) : (
-            currentPosts.map((batch) => (
-              <tr key={batch.batchID} className="text-center border-b">
-                <td className="p-2 border">{batch.name}</td>
-                <td className="p-2 border">{batch.species}</td>
-                <td className="p-2 border">${batch.price}</td>
-                <td className="p-2 border">{batch.quantity}</td>
-                <td className="p-2 border">{batch.description}</td>
-                <td className="p-2 border">
-                  <button onClick={() => handleDelete(batch.batchID)} className="bg-red-500 text-white px-2 py-1 rounded mr-2">
-                    Delete
-                  </button>
-                  <button onClick={() => handleEdit(batch.batchID)} className="bg-blue-500 text-white px-2 py-1 rounded">
-                    Update
-                  </button>
-                </td>
-              </tr>
-            ))
-          )}
-        </tbody>
-      </table>
+      {filterVisible && <FilterForm {...{ name, species, minPrice, maxPrice, setName, setSpecies, setMinPrice, setMaxPrice, handleFilter }} />}
 
+      <BatchTable batches={batches} startEditing={startEditing} handleDelete={handleDelete}
+      />
+      {showEditForm && (
+        <Modal onClose={() => setShowEditForm(false)}>
+          <EditBatchForm newBatch={newBatch} handleChange={handleChange} handleSave={handleEdit}
+          />
+        </Modal>)}
+
+        {showCreateForm && (
+        <Modal onClose={() => setShowCreateForm(false)}>
+          <EditBatchForm newBatch={newBatch} handleChange={handleChange} handleSave={handleCreateBatch} 
+          />
+        </Modal>
+      )}
     </div>
   );
 };

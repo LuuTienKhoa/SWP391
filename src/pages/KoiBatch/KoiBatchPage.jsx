@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom';
 import api from '../../config/axios';
-import Pagination from '../../component/Pagination';
-import Button from "../../component/button/Button";
+import Pagination from '../../components/Pagination';
+import Button from "../../components/button/Button";
 
 const KoiBatchPage = () => {
   const [batches, setBatches] = useState([]);
@@ -64,11 +64,10 @@ const KoiBatchPage = () => {
     }
     
   };
+  //Navigate toi payment
   const handleNavigateToPayment = (batch) => {
     navigate(`/payment/${batch.batchID}`, { state: { batch } });
   };
-
-  
 
   return (
     <div className="p-8">
@@ -145,9 +144,9 @@ const KoiBatchPage = () => {
               className="border rounded-lg shadow-lg p-6 text-center bg-white"
             >
               <h2 className="text-xl font-semibold mb-2">Batch: {batch.name}</h2>
-              <p className="mb-2"><strong>Price:</strong> ${batch.price}</p>
+              <p className="mb-2"><strong>Price:</strong> ${batch.pricePerBatch}</p>
               <p className="mb-2"><strong>Description:</strong> {batch.description}</p>
-              <p className="mb-2"><strong>Quantity Available:</strong> {batch.quantity}</p>
+              <p className="mb-2"><strong>Quantity Available:</strong> {batch.quantityPerBatch}</p>
               <p className="mb-2"><strong>Remaining Batch:</strong> {batch.remainBatch}</p>
               <p className="mb-4"><strong>Species:</strong> {batch.species}</p>
               <button 

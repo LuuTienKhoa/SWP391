@@ -1,4 +1,4 @@
-// src/page/UpdateOrder/UpdateOrder.jsx
+// src/pages/UpdateOrder/UpdateOrder.jsx
 
 import React, { useState, useEffect } from 'react';
 import api from '../../config/axios';

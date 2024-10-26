@@ -1,10 +1,10 @@
 import React from 'react';
-import HeroSection from '../component/HeroSection';
+import HeroSection from '../components/HeroSection';
 import backgroundImage from '../assets/herosection.jpg';
-import Testinominals from '../component/Testinominals';
-import OurAdvantage from '../component/OurAdvantage';
-import KoiInfo from '../component/KoiInfo';
-import PreKoiInfo from '../component/PreKoiInfo'
+import Testinominals from '../components/Testinominals';
+import OurAdvantage from '../components/OurAdvantage';
+import KoiInfo from '../components/KoiInfo';
+import PreKoiInfo from '../components/PreKoiInfo'
 
 function HomePage() {
   return (

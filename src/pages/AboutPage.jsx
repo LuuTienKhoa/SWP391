@@ -1,7 +1,7 @@
 import React from 'react';
 import aboutBg from '../assets/about_bg.jpg';
 import fish from '../assets/koi1.jpg'; // Replace with your actual koi image path
-import FeedBackCard from '../component/feedBack/FeedBack';
+import FeedBackCard from '../components/feedBack/FeedBack';
 
 function AboutPage() {
   return (

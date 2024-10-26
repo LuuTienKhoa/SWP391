@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import ShoppingCart from "../component/ShoppingCart"; // Import your ShoppingCart component
+import ShoppingCart from "../components/ShoppingCart"; // Import your ShoppingCart component
 import { ShoppingCartIcon } from "@heroicons/react/24/outline";
 import { ShoppingBagIcon } from "lucide-react";
 const ComparisonPage = () => {

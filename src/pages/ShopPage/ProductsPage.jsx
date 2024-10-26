@@ -3,12 +3,12 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import api from "../../config/axios";
 import Slider from "rc-slider";
 import "rc-slider/assets/index.css";
-import Button from "../../component/button/Button";
-import ShoppingCart from "../../component/ShoppingCart";
+import Button from "../../components/button/Button";
+import ShoppingCart from "../../components/ShoppingCart";
 import { ShoppingCartIcon } from "@heroicons/react/24/outline";
 import { ShoppingBagIcon } from "lucide-react";
-import ComparisonCart from "../../component/Comparison";
-import Pagination from '../../component/Pagination';
+import ComparisonCart from "../../components/Comparison";
+import Pagination from '../../components/Pagination';
 const ProductsPage = () => {
   const [koiFishs, setKoiFishs] = useState([]);
   const [cartItems, setCartItems] = useState(() => {
@@ -167,9 +167,8 @@ const ProductsPage = () => {
           <div className="flex space-x-4">
             <Button
               onClick={() => setFilterVisible(!filterVisible)}
-              className={`px-4 py-2 rounded ${
-                filterVisible ? "bg-orange-600" : "bg-orange-400"
-              }`}
+              className={`px-4 py-2 rounded ${filterVisible ? "bg-orange-600" : "bg-orange-400"
+                }`}
             >
               Filter
             </Button>
@@ -328,33 +327,35 @@ const ProductsPage = () => {
                     <strong>Specie:</strong> {koiFish.species || "Unknown"}
                   </p>
                 </div>
-                <div className="flex justify-between items-center mt-4">
+                <div className="flex justify-between items-center mt-4 space-x-2">
                   <button
                     onClick={() => handleAddToCart(koiFish)}
-                    className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 transition duration-300 flex items-center"
+                    className="bg-green-500 text-white px-3 py-1 rounded-lg hover:bg-green-600 transition duration-300 flex items-center font-medium text-sm"
                   >
-                    <ShoppingBagIcon className="mr-2" />
+                    <ShoppingBagIcon className="mr-1 h-4 w-4" />
                     Add to Cart
                   </button>
+
                   <button
                     onClick={() => handleNavigateToPayment(koiFish)}
-                    className="bg-white text-red-500 border border-red-500 px-4 py-2 rounded hover:bg-red-100 transition duration-300"
+                    className="bg-white text-red-500 border border-red-500 px-3 py-1 rounded-lg hover:bg-red-100 transition duration-300 font-medium text-sm"
                   >
                     Pay Now
                   </button>
+
                   <button
                     onClick={() => handleCompare(koiFish)}
-                    className={`px-4 py-2 rounded ${
-                      compareItems.find((item) => item.koiID === koiFish.koiID)
-                        ? "bg-blue-600"
-                        : "bg-blue-400"
-                    }`}
+                    className={`px-3 py-1 rounded-lg font-medium text-sm transition duration-300 ${compareItems.find((item) => item.koiID === koiFish.koiID)
+                        ? "bg-blue-600 text-white hover:bg-blue-700"
+                        : "bg-blue-400 text-white hover:bg-blue-500"
+                      }`}
                   >
                     {compareItems.find((item) => item.koiID === koiFish.koiID)
                       ? "Remove from Compare"
                       : "Compare"}
                   </button>
                 </div>
+
               </div>
             </div>
           ))}

@@ -1,4 +1,4 @@
-// src/page/ManagePromotion/CreatePromotion.jsx
+// src/pages/ManagePromotion/CreatePromotion.jsx
 
 import React, { useState } from "react";
 import api from "../../config/axios";

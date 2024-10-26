@@ -2,10 +2,10 @@
   import React from 'react';
 
   // Protected route for admin
-  const AdminProtectedRoute = ({ children }) => {
+  const AdminProtectedRoute = ({ children , requiredRole}) => {
     const userRole = localStorage.getItem('userRole'); 
 
-    if (userRole !== '0') {  
+    if (userRole !== requiredRole) {  
       localStorage.removeItem('accessToken');
       localStorage.removeItem('refreshToken');
       localStorage.removeItem('userRole');

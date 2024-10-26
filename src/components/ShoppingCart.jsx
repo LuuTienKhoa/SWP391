@@ -5,9 +5,13 @@ import {
   DialogTitle,
 } from "@headlessui/react";
 import { XMarkIcon } from "@heroicons/react/24/outline";
-
+import { useNavigate } from "react-router-dom";
 const ShoppingCart = ({ open, setOpen, products, onRemove }) => {
+  const navigate = useNavigate();
   const subtotal = products.reduce((total, item) => total + item.price, 0);
+  const handleNavigateToPayment = () => {
+    navigate('/payment', { state: { items: products } });
+  };
   return (
     <Dialog open={open} onClose={setOpen} className="relative z-10">
       <DialogBackdrop className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity duration-500 ease-in-out" />
@@ -99,6 +103,7 @@ const ShoppingCart = ({ open, setOpen, products, onRemove }) => {
                     <a
                       href="#"
                       className="flex items-center justify-center rounded-md border border-transparent bg-indigo-600 px-6 py-3 text-base font-medium text-white shadow-sm hover:bg-indigo-700"
+                        onClick={handleNavigateToPayment}
                     >
                       Checkout
                     </a>
