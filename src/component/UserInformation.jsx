@@ -5,7 +5,7 @@ import api from '../config/axios';
 
 export default function EditUserPage() {
   const { id } = useParams();
-  const [user, setUser] = useState({ name: '', username: '', email: '', phone: '', address: '' });
+  const [user, setUser] = useState({ name: '', username: '',password: '', email: '', phone: '', address: '' });
   const [error, setError] = useState(null);
   const navigate = useNavigate();
 
