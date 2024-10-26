@@ -44,7 +44,8 @@ import AdminLayout from "./layouts/AdminLayout";
 import ManageConsignmentPage from "./page/Consignment/ManageConsign";
 import ConsignmentPage from "./page/Consignment/ConsignmentPage";
 import EditUserPage from "./component/UserInformation"
-import ManageDelivery from "./page/ManageDelivery";
+import ManageDelivery from "./page/ManageDelivery/ManageDelivery";
+import UpdateDelivery from "./page/ManageDelivery/UpdateDelivery";
 function App() {
   const location = useLocation();
 
@@ -225,6 +226,16 @@ function App() {
               <AdminProtectedRoute>
                 <AdminLayout>
                   <ManageDelivery />
+                </AdminLayout>
+              </AdminProtectedRoute>
+            }
+          />  
+           <Route
+            path="/admin/manageDelivery/updateDelivery/:id"
+            element={
+              <AdminProtectedRoute>
+                <AdminLayout>
+                  <UpdateDelivery />
                 </AdminLayout>
               </AdminProtectedRoute>
             }

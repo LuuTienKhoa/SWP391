@@ -1,22 +1,23 @@
-import React, { useEffect, useState } from 'react';
-import api from '../config/axios';
+import React, { useEffect, useState } from "react";
+import api from "../../config/axios";
+import { useNavigate } from "react-router-dom";
 
 const ManageDelivery = () => {
   const [deliveries, setDeliveries] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [newDelivery, setNewDelivery] = useState({});
-
+  const navigate = useNavigate();
   useEffect(() => {
     fetchDeliveries();
   }, []);
 
   const fetchDeliveries = async () => {
     try {
-      const response = await api.get('/koi/Delivery');
+      const response = await api.get("/koi/Delivery");
       setDeliveries(response.data);
     } catch (err) {
-      setError('Failed to fetch deliveries');
+      setError("Failed to fetch deliveries");
     } finally {
       setLoading(false);
     }
@@ -24,30 +25,24 @@ const ManageDelivery = () => {
 
   const handleCreateDelivery = async () => {
     try {
-      const response = await api.post('/koi/Delivery', newDelivery);
+      const response = await api.post("/koi/Delivery", newDelivery);
       setDeliveries([...deliveries, response.data]);
       setNewDelivery({});
-    } catch (err) {
-      setError('Failed to create delivery');
+    } catch (error) {
+      setError("Failed to create delivery");
     }
   };
 
-  const handleUpdateDelivery = async (id) => {
+  const handleDeleteDelivery = async (deliveryID) => {
+    const confirmDelete = window.confirm("Are you sure you want to delete this product?");
+    if (!confirmDelete) return;
     try {
-      const response = await api.put(`/koi/Delivery/${id}`, newDelivery);
-      setDeliveries(deliveries.map(delivery => (delivery.deliveryID === id ? response.data : delivery)));
-      setNewDelivery({});
-    } catch (err) {
-      setError('Failed to update delivery');
-    }
-  };
-
-  const handleDeleteDelivery = async (id) => {
-    try {
-      await api.delete(`/koi/Delivery/${id}`);
-      setDeliveries(deliveries.filter(delivery => delivery.deliveryID !== id));
-    } catch (err) {
-      setError('Failed to delete delivery');
+      await api.delete(`/koi/Delivery/${deliveryID}`);
+      setDeliveries(
+        deliveries.filter((delivery) => delivery.deliveryID !== deliveryID)
+      );
+    } catch (error) {
+      setError("Failed to delete delivery");
     }
   };
 
@@ -55,8 +50,10 @@ const ManageDelivery = () => {
   if (error) return <div>Error: {error}</div>;
 
   return (
-    <div className="container mx-auto p-4">
-      <h1 className="text-3xl font-bold mb-6 text-center">Delivery Management</h1>
+    <div className=" p-6">
+      <h1 className="text-3xl font-bold mb-6 text-center">
+        Delivery Management
+      </h1>
       <div className="mb-4">
         {/* Additional content for creating new delivery entries could be added here */}
       </div>
@@ -74,18 +71,36 @@ const ManageDelivery = () => {
           </tr>
         </thead>
         <tbody>
-          {deliveries.map(delivery => (
+          {deliveries.map((delivery) => (
             <tr key={delivery.deliveryID} className="text-center border-b">
               <td className="p-2 border">{delivery.deliveryID}</td>
               <td className="p-2 border">{delivery.orderID}</td>
               <td className="p-2 border">{delivery.customerID}</td>
-              <td className="p-2 border">{new Date(delivery.startDeliDay).toLocaleString()}</td>
-              <td className="p-2 border">{new Date(delivery.endDeliDay).toLocaleString()}</td>
+              <td className="p-2 border">
+                {new Date(delivery.startDeliDay).toLocaleString()}
+              </td>
+              <td className="p-2 border">
+                {new Date(delivery.endDeliDay).toLocaleString()}
+              </td>
               <td className="p-2 border">${delivery.order.totalAmount}</td>
               <td className="p-2 border">{delivery.status}</td>
               <td className="p-2 border">
-                <button onClick={() => handleUpdateDelivery(delivery.deliveryID)} className="bg-blue-500 text-white px-2 py-1 rounded mr-2">Update</button>
-                <button onClick={() => handleDeleteDelivery(delivery.deliveryID)} className="bg-red-500 text-white px-2 py-1 rounded">Delete</button>
+                <button
+                  onClick={() =>
+                    navigate(
+                      `/admin/managedelivery/updateDelivery/${delivery.deliveryID}`
+                    )
+                  }
+                  className="bg-blue-500 text-white px-4 py-1 rounded"
+                >
+                  Update
+                </button>
+                <button
+                  onClick={() => handleDeleteDelivery(delivery.deliveryID)}
+                  className="bg-red-500 text-white px-2 py-1 rounded"
+                >
+                  Delete
+                </button>
               </td>
             </tr>
           ))}
