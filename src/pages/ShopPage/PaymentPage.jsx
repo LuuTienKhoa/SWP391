@@ -29,7 +29,7 @@ const PaymentPage = () => {
       };
 
       if (batch) {
-        orderData.batchs = [[batch.batchID, batch.quantity]];
+        orderData.batchs = [[batch.batchID, batch.quantityPerBatch]];
       } else if (koiFish) {
         orderData.kois = [koiFish.koiID];
       }
@@ -84,9 +84,10 @@ const PaymentPage = () => {
         <div className="lg:w-1/2 p-4 bg-gray-800 rounded-lg mb-6 lg:mb-0 flex flex-col items-center">
           {batch ? (
             <>
-              <h2 className="text-2xl font-semibold mb-2 mt-2">Batch #{batch.batchID}</h2>
-              <p className="text-gray-400 mb-4">Quantity: {batch.quantity}</p>
-              <p className="text-4xl font-bold text-blue-500">${batch.price?.toFixed(2)}</p>
+              <h2 className="text-2xl font-semibold mb-2 mt-2">{batch.name} #{batch.batchID}</h2>
+
+              <p className="text-gray-400 mb-4">Quantity: {batch.quantityPerBatch}</p>
+              <p className="text-4xl font-bold text-blue-500">${batch.pricePerBatch?.toFixed(2)}</p>
             </>
           ) : (
             <>
@@ -135,7 +136,7 @@ const PaymentPage = () => {
           {/* Price */}
           <div className="bg-gray-700 p-6 rounded-lg mb-6">
             <p className="text-4xl font-bold">
-              {batch ? `$${batch.price?.toFixed(2)}` : `$${koiFish?.price?.toFixed(2)}`}
+              {batch ? `$${batch.pricePerBatch?.toFixed(2)}` : `$${koiFish?.price?.toFixed(2)}`}
             </p>
             <p className="text-sm mt-2">
               We will save all details of your payment. You may stop future automatic payments anytime.
