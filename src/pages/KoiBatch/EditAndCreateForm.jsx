@@ -16,6 +16,13 @@ const EditBatchForm = ({ newBatch, handleChange, handleSave }) => {
         placeholder="Species"
       />
       <input
+        type="int"
+        name="remainBatch"
+        value={newBatch.remainBatch}
+        onChange={handleChange}
+        placeholder="Species"
+      />
+      <input
         type="number"
         name="pricePerBatch" 
         value={newBatch.pricePerBatch}

@@ -6,6 +6,7 @@ const BatchTable = ({ batches, startEditing, handleDelete }) => (
       <tr className="bg-gray-200">
         <th className="p-2 border">Name</th>
         <th className="p-2 border">Species</th>
+        <th className="p-2 border">Remain Batches</th>
         <th className="p-2 border">Price</th>
         <th className="p-2 border">Quantity</th>
         <th className="p-2 border">Description</th>
@@ -22,6 +23,7 @@ const BatchTable = ({ batches, startEditing, handleDelete }) => (
           <tr key={batch.batchID} className="text-center border-b">
             <td className="p-2 border">{batch.name}</td>
             <td className="p-2 border">{batch.species}</td>
+            <td className="p-2 border">{batch.remainBatch}</td>
             <td className="p-2 border">${batch.pricePerBatch}</td>
             <td className="p-2 border">{batch.quantityPerBatch}</td>
             <td className="p-2 border">{batch.description}</td>

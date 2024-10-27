@@ -8,7 +8,7 @@ import Modal from '../../components/Modal/Modal';
 const ManageKoiBatch = () => {
   const [batches, setBatches] = useState([]);
   const [editBatchId, setEditBatchId] = useState(null);
-  const [newBatch, setNewBatch] = useState({ name: '', species: '', price: '', quantity: '', description: '' });
+  const [newBatch, setNewBatch] = useState({ name: '', species: '',remainBatch:'', price: '', quantity: '', description: '' });
   const [showCreateForm, setShowCreateForm] = useState(false);
   const [showEditForm, setShowEditForm] = useState(false);
   const [filterVisible, setFilterVisible] = useState(false);
@@ -68,6 +68,7 @@ const ManageKoiBatch = () => {
       setNewBatch({
         name: batch.name,
         species: batch.species,
+        remainBatch: batch.remainBatch,
         pricePerBatch: batch.pricePerBatch,
         quantityPerBatch: batch.quantityPerBatch,
         description: batch.description,
