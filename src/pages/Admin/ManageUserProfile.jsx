@@ -42,16 +42,31 @@ const ManageUserProfiles = () => {
 
     try {
       const token = localStorage.getItem('accessToken');
-      await api.delete(`/User/delete/${userId}`, {
+      const response = await api.delete(`/User/delete/${userId}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       });
-      setUsers(users.filter((user) => user.userID !== userId));
-    } catch (err) {
-      console.error('Error deleting user:', err);
+      if (response.status === 200) {
+        setUsers(users.filter((user) => user.userID !== userId));
+        alert('User deleted successfully');
     }
-  };
+    } catch (err) {
+        if (err.response) {
+            // Server responded with a status code other than 2xx
+            console.error('Server error:', err.response.data);
+            alert(`Error deleting user: ${err.response.data.message || err.response.statusText}`);
+        } else if (err.request) {
+            // Request was made but no response received
+            console.error('No response received:', err.request);
+            alert('No response received from the server.');
+        } else {
+            // Something else happened in setting up the request
+            console.error('Error setting up request:', err.message);
+            alert('An unexpected error occurred.');
+        }
+    }
+};
 
   const startEditing = (user) => {
     setNewUser({
@@ -111,7 +126,7 @@ const ManageUserProfiles = () => {
   return (
     <div className="p-6">
       <h1 className="text-3xl font-bold mb-6 text-center">User Profiles</h1>
-      <UserTable users={users} startEditing={startEditing} onDelete={handleDeleteUser} />
+      <UserTable users={users} startEditing={startEditing} handleDeleteUser={handleDeleteUser} />
 
       {showEditForm && (
         <Modal onClose={() => setShowEditForm(false)}>
