@@ -17,15 +17,15 @@ const EditBatchForm = ({ newBatch, handleChange, handleSave }) => {
       />
       <input
         type="number"
-        name="price"
-        value={newBatch.price}
+        name="pricePerBatch" 
+        value={newBatch.pricePerBatch}
         onChange={handleChange}
         placeholder="Price"
       />
       <input
         type="number"
-        name="quantity"
-        value={newBatch.quantity}
+        name="quantityPerBatch" 
+        value={newBatch.quantityPerBatch}
         onChange={handleChange}
         placeholder="Quantity"
       />

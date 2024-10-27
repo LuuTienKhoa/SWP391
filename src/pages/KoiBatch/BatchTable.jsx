@@ -22,8 +22,8 @@ const BatchTable = ({ batches, startEditing, handleDelete }) => (
           <tr key={batch.batchID} className="text-center border-b">
             <td className="p-2 border">{batch.name}</td>
             <td className="p-2 border">{batch.species}</td>
-            <td className="p-2 border">${batch.price}</td>
-            <td className="p-2 border">{batch.quantity}</td>
+            <td className="p-2 border">${batch.pricePerBatch}</td>
+            <td className="p-2 border">{batch.quantityPerBatch}</td>
             <td className="p-2 border">{batch.description}</td>
             <td className="p-2 border">
               <button onClick={() => handleDelete(batch.batchID)} className="bg-red-500 text-white px-2 py-1 rounded mr-2">Delete</button>

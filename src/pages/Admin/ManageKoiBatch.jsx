@@ -34,53 +34,55 @@ const ManageKoiBatch = () => {
     fetchBatches();
   }, [navigate]);
 
-  const handleEdit = async () => {
-    try {
-      const token = localStorage.getItem('accessToken');
-      if (!token) {
-        navigate('/login');
-        return;
-      }
-      const payload = {
-        ...newBatch,
-        batchID: editBatchId,
-      };
-      const response = await api.put(`/Batch/${editBatchId}`, payload, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+    const handleEdit = async () => {
+      try {
+        const token = localStorage.getItem('accessToken');
+        if (!token) {
+          navigate('/login');
+          return;
+        }
+        const payload = {
+          ...newBatch,
+          batchID: editBatchId,
+          pricePerBatch: parseFloat(newBatch.pricePerBatch),     
+          quantityPerBatch: parseInt(newBatch.quantityPerBatch, 10)
+        };
+        const response = await api.put(`/Batch/${editBatchId}`, payload, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
 
-      if (response.status === 204) {
-        setBatches(batches.map((batch) => (batch.batchID === editBatchId ? { ...newBatch, batchID: editBatchId } : batch)));
-        setShowEditForm(false);
-        setEditBatchId(null);
-      } else {
-        console.error("Batch edit failed:", response.status);
+        if (response.status === 204) {
+          setBatches(batches.map((batch) => (batch.batchID === editBatchId ? { ...newBatch, batchID: editBatchId } : batch)));
+          setShowEditForm(false);
+          setEditBatchId(null);
+        } else {
+          console.error("Batch edit failed:", response.status);
+        }
+      } catch (err) {
+        console.error("Failed to edit batch", err);
       }
-    } catch (err) {
-      console.error("Failed to edit batch", err);
-    }
-  };
-  const startEditing = (batch) => {
-    setNewBatch({
-      name: batch.name,
-      species: batch.species,
-      price: batch.price,
-      quantity: batch.quantity,
-      description: batch.description,
-    });
-    setEditBatchId(batch.batchID);
-    setShowEditForm(true);
-    setShowCreateForm(false);
-  };
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setNewBatch((prevBatch) => ({
-      ...prevBatch,
-      [name]: value,
-    }));
-  };
+    };
+    const startEditing = (batch) => {
+      setNewBatch({
+        name: batch.name,
+        species: batch.species,
+        pricePerBatch: batch.pricePerBatch,
+        quantityPerBatch: batch.quantityPerBatch,
+        description: batch.description,
+      });
+      setEditBatchId(batch.batchID);
+      setShowEditForm(true);
+      setShowCreateForm(false);
+    };
+    const handleChange = (e) => {
+      const { name, value } = e.target;
+      setNewBatch((prevBatch) => ({
+        ...prevBatch,
+        [name]: value,
+      }));
+    };
   const handleDelete = async (batchId) => {
     try {
       if (!window.confirm('Are you sure you want to delete this batch?')) return;
