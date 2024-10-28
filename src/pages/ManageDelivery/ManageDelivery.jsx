@@ -8,6 +8,7 @@ const ManageDelivery = () => {
   const [error, setError] = useState(null);
   const [newDelivery, setNewDelivery] = useState({});
   const navigate = useNavigate();
+  const [selectedStatus, setSelectedStatus] = useState('All');
   useEffect(() => {
     fetchDeliveries();
   }, []);
@@ -46,6 +47,24 @@ const ManageDelivery = () => {
     }
   };
 
+  const getStatusLabel = (status) => {
+    switch (status) {
+      case 0:
+        return "Delivering";
+      case 1:
+        return "Delivered";
+      case 2:
+        return "Failed";
+      case 3:
+        return "Cancelled";
+      default:
+        return "Unknown Status";
+    }
+  };
+  const filteredDeliveries = selectedStatus === 'All' 
+  ? deliveries 
+  : deliveries.filter(order => getStatusLabel(order.status) === selectedStatus);
+
   if (loading) return <div>Loading...</div>;
   if (error) return <div>Error: {error}</div>;
 
@@ -53,9 +72,14 @@ const ManageDelivery = () => {
     <div className=" p-6">
       <h1 className="text-3xl font-bold mb-6 text-center">
         Delivery Management
-      </h1>
-      <div className="mb-4">
-        {/* Additional content for creating new delivery entries could be added here */}
+      </h1>      
+      <div className="mb-4 text-center">
+        <button onClick={() => setSelectedStatus('All')} className="bg-gray-500 text-white px-4 py-1 rounded mr-2">All</button>
+        <button onClick={() => setSelectedStatus('Delivering')} className="bg-yellow-500 text-white px-4 py-1 rounded mr-2">Delivering</button>
+        <button onClick={() => setSelectedStatus('Delivered')} className="bg-green-500 text-white px-4 py-1 rounded mr-2">Delivered</button>
+        <button onClick={() => setSelectedStatus('Failed')} className="bg-gray-950 text-white px-4 py-1 rounded mr-2">Failed</button>
+        <button onClick={() => setSelectedStatus('Cancelled')} className="bg-red-500 text-white px-4 py-1 rounded mr-2">Cancelled</button>
+
       </div>
       <table className="w-full table-auto border-collapse bg-white shadow-md rounded-lg">
         <thead>
@@ -71,19 +95,15 @@ const ManageDelivery = () => {
           </tr>
         </thead>
         <tbody>
-          {deliveries.map((delivery) => (
+          {filteredDeliveries.map((delivery) => (
             <tr key={delivery.deliveryID} className="text-center border-b">
               <td className="p-2 border">{delivery.deliveryID}</td>
               <td className="p-2 border">{delivery.orderID}</td>
               <td className="p-2 border">{delivery.customerID}</td>
-              <td className="p-2 border">
-                {new Date(delivery.startDeliDay).toLocaleString()}
-              </td>
-              <td className="p-2 border">
-                {new Date(delivery.endDeliDay).toLocaleString()}
-              </td>
+              <td className="p-2 border">{new Date(delivery.startDeliDay).toLocaleString()}</td>
+              <td className="p-2 border">{new Date(delivery.endDeliDay).toLocaleString()}</td>
               <td className="p-2 border">${delivery.order.totalAmount}</td>
-              <td className="p-2 border">{delivery.status}</td>
+              <td className="p-2 border">{getStatusLabel(delivery.status)}</td>
               <td className="p-2 border">
                 <button
                   onClick={() =>

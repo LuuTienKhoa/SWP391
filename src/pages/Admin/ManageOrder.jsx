@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom';
 const ManageOrder = () => {
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [selectedStatus, setSelectedStatus] = useState('All');
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -49,11 +50,22 @@ const ManageOrder = () => {
         return "Unknown";
     }
   };
+
+  const filteredOrders = selectedStatus === 'All' 
+    ? orders 
+    : orders.filter(order => getStatusLabel(order.status) === selectedStatus);
+
   if (loading) return <div>Loading...</div>;
 
   return (
     <div className="p-6">
       <h1 className="text-3xl font-bold mb-6 text-center">Manage Orders</h1>
+      <div className="mb-4 text-center">
+        <button onClick={() => setSelectedStatus('All')} className="bg--500 text-white px-4 py-1 rounded mr-2">All</button>
+        <button onClick={() => setSelectedStatus('Pending')} className="bg-yellow-500 text-white px-4 py-1 rounded mr-2">Pending</button>
+        <button onClick={() => setSelectedStatus('Completed')} className="bg-green-500 text-white px-4 py-1 rounded mr-2">Completed</button>
+        <button onClick={() => setSelectedStatus('Cancelled')} className="bg-red-500 text-white px-4 py-1 rounded mr-2">Cancelled</button>
+      </div>
       <div className="overflow-x-auto">
         <table className="min-w-full bg-white border border-gray-300">
           <thead>
@@ -71,7 +83,7 @@ const ManageOrder = () => {
             </tr>
           </thead>
           <tbody>
-            {orders.map((order) => (
+            {filteredOrders.map((order) => (
               <tr key={order.orderID} className="text-center border-b">
                 <td className="py-2 px-4 border">{order.orderID}</td>            
                 <td className="py-2 px-4 border">{order.customerID}</td>
