@@ -4,54 +4,38 @@ import api from '../../config/axios';
 
 const PaymentPage = () => {
   const location = useLocation();
-  const { koiFish } = location.state || {};
-  const { batch } = location.state || {};
-  const { consignment } =location.state || {};
-  const { promotion } = location.state || {};
-  const [paymentMethod, setPaymentMethod] = useState('credit-card');
+  const { koiFish, batch, consignment, promotion, customerId = 0 } = location.state || {};
+  const [paymentMethod, setPaymentMethod] = useState('VNPay'); // Default to VNPay
   const [promotionID, setPromotionID] = useState('');
-  const [deliveryMethod, setDeliveryMethod] = useState('pick-up'); // Default to pick-up
   const navigate = useNavigate();
 
-  // Hàm xử lý thanh toán
+  // Payment processing function
   const handlePayment = async () => {
-
     if (!koiFish && !batch && !consignment) {
       alert("Koi data or batch data is missing!");
       return;
     }
 
     try {
-      let orderData = {
-        consignmentKois : [1],
+      const orderData = {
+        consignmentKois: [0],
         promotionID: parseInt(promotionID, 10) || 0,
-        paymentMethod: paymentMethod === 'VNPay' ? 1 : 0
+        paymentMethod: paymentMethod === 'VNPay' ? 0 : 1,
+        ...(batch && { batchs: [[batch.batchID, batch.quantityPerBatch]] }),
+        ...(koiFish && { kois: [koiFish.koiID] }),
       };
 
-      if (batch) {
-        orderData.batchs = [[batch.batchID, batch.quantityPerBatch]];
-      } else if (koiFish) {
-        orderData.kois = [koiFish.koiID];
-      }
-
-      // 1. Gửi yêu cầu thanh toán lên backend
+      // 1. Send payment request to the backend
       const response = await api.post('/Order/create', orderData);
-      console.log(response.data);
-
-      // 2. Lấy orderId từ phản hồi của backend
       const orderId = response.data.orderID;
-      console.log('Order ID:', orderId);
 
-
-      // Nếu người dùng chọn giao hàng (shipment), gọi hàm handleDelivery
-      if (deliveryMethod === 'shipment') {
-        const customerId = location.state.customerId || 1;
+      // If payment method is VNPay, handle delivery
+      if (paymentMethod === 'VNPay') {
         handleDelivery(orderId, customerId);
       }
 
-      // Chuyển hướng đến trang thanh toán
+      // Redirect to payment URL
       window.location.href = response.data.paymentUrl;
-      navigate('/paymentSuccess', { state: { orderId } });
 
     } catch (error) {
       console.error('Error processing payment:', error);
@@ -59,7 +43,7 @@ const PaymentPage = () => {
     }
   };
 
-  // Hàm xử lý giao hàng
+  // Delivery handling function
   const handleDelivery = async (orderId, customerId) => {
     try {
       const deliveryData = {
@@ -85,7 +69,6 @@ const PaymentPage = () => {
           {batch ? (
             <>
               <h2 className="text-2xl font-semibold mb-2 mt-2">{batch.name} #{batch.batchID}</h2>
-
               <p className="text-gray-400 mb-4">Quantity: {batch.quantityPerBatch}</p>
               <p className="text-4xl font-bold text-blue-500">${batch.pricePerBatch?.toFixed(2)}</p>
             </>
@@ -117,19 +100,6 @@ const PaymentPage = () => {
             >
               <option value="VNPay">VNPay</option>
               <option value="Direct-Payment">Direct Payment</option>
-            </select>
-          </div>
-
-          {/* Delivery Method Selection */}
-          <div className="mb-6">
-            <label className="block text-lg font-medium mb-2">Select Delivery Method</label>
-            <select
-              className="w-full p-3 bg-gray-700 rounded-lg"
-              value={deliveryMethod}
-              onChange={(e) => setDeliveryMethod(e.target.value)}
-            >
-              <option value="pick-up">Pick-up at Shop</option>
-              <option value="shipment">Shipment</option>
             </select>
           </div>
 

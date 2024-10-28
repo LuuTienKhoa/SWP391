@@ -22,7 +22,7 @@ import KoiBatchPage from './pages/KoiBatch/KoiBatchPage';
 import OrderPage from './pages/OrderPage';
 import NotFoundPage from './pages/NotFound/NotFoundPage';
 import RoleBasedRoutes from './Routes/AdminRoute';
-
+import PaymentSuccess from './pages/ShopPage/PaymentSuccess';
 function App() {
   const location = useLocation();
   const shouldRenderHeaderFooter = !(
@@ -53,6 +53,7 @@ function App() {
           <Route path="/payment/:id" element={<PaymentPage />} />
           <Route path="/koiBatch" element={<KoiBatchPage />} />
           <Route path="/order" element={<OrderPage />} />
+          <Route path="/paymentSuccess" element={<PaymentSuccess />} />
           <Route path="/*" element={<RoleBasedRoutes />} />
 
           <Route path="*" element={<NotFoundPage />} />
