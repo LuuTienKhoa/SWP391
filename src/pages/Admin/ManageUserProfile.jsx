@@ -13,6 +13,7 @@ const ManageUserProfiles = () => {
   const [newUser, setNewUser] = useState({username: '',name: '',email: '',phone: '',address: '',role: '',password:''});
   const [editUserId, setEditUserId] = useState(null);
   const [showEditForm, setShowEditForm] = useState(false);
+  const [filteredUsers, setFilteredUsers] = useState(null);
   useEffect(() => {
     fetchUsers();
   }, []);
@@ -122,11 +123,21 @@ const ManageUserProfiles = () => {
       console.error("Failed to edit user", err);
     }
   };
+    // Filter consignments based on selected status
+    const filteredUsersRole = filteredUsers !== null
+    ? users.filter((user) => user.role === filteredUsers)
+    : users;
 
   return (
     <div className="p-6">
       <h1 className="text-3xl font-bold mb-6 text-center">User Profiles</h1>
-      <UserTable users={users} startEditing={startEditing} handleDeleteUser={handleDeleteUser} />
+      <div className="flex justify-center mb-6 space-x-4">
+        <button onClick={() => setFilteredUsers(null)} className="bg-gray-300 text-black px-4 py-2 rounded">All</button>
+        <button onClick={() => setFilteredUsers(0)} className="bg-yellow-500 text-white px-4 py-2 rounded">Admin</button>
+        <button onClick={() => setFilteredUsers(1)} className="bg-green-500 text-white px-4 py-2 rounded">Staff</button>
+        <button onClick={() => setFilteredUsers(2)} className="bg-blue-500 text-white px-4 py-2 rounded">Customer</button>
+        </div>
+      <UserTable users={filteredUsersRole} startEditing={startEditing} handleDeleteUser={handleDeleteUser} />
 
       {showEditForm && (
         <Modal onClose={() => setShowEditForm(false)}>
