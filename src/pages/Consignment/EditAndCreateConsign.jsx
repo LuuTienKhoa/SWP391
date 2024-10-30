@@ -38,11 +38,12 @@ const EditConsignmentForm = ({ newConsignment, handleChange, handleSave }) => (
       onChange={handleChange} 
       className="w-full p-2 border"
     >
-      <option value={0}>Available</option>
-      <option value={1}>Finished</option>
-      <option value={2}>Raising</option>
-      <option value={3}>Pending</option>
-      <option value={4}>Negotiating</option>
+      <option value={0}>Awaiting Payment</option>
+  <option value={1}>Available</option>
+  <option value={2}>Finished</option>
+  <option value={3}>Raising</option>
+  <option value={4}>Pending</option>
+  <option value={5}>Negotiate</option>
     </select>
 
     <button type="submit" className="bg-green-500 text-white px-4 py-2 rounded mt-4">Save</button>

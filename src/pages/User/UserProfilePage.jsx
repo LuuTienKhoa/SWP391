@@ -62,9 +62,6 @@ export default function UserProfilePage() {
             Name: <span className="font-bold">{user.name}</span>
           </Typography>
           <Typography variant="body1" className="text-center text-gray-600 mb-2">
-            Username: {user.username}
-          </Typography>
-          <Typography variant="body1" className="text-center text-gray-600 mb-2">
             Email: {user.email}
           </Typography>
           <Typography variant="body1" className="text-center text-gray-600 mb-2">
@@ -72,9 +69,6 @@ export default function UserProfilePage() {
           </Typography>
           <Typography variant="body1" className="text-center text-gray-600 mb-2">
             Address: {user.address}
-          </Typography>
-          <Typography variant="body1" className="text-center text-gray-600 mb-4">
-            Role: {user.role === 0 ? 'Admin' : 'Customer'}
           </Typography>
           <div className="text-center">
             <Button

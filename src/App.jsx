@@ -3,8 +3,6 @@ import { BrowserRouter, Routes, Route, Navigate, useLocation, useNavigate } from
 import ScrollToTop from './components/ScrollToTop';
 import Header from './components/header/header';
 import Footer from './components/footer/footer';
-import AdminRoutes from './Routes/AdminRoute';
-import StaffRoutes from './Routes/StaffRoute';
 import HomePage from './pages/HomePage';
 import AboutPage from './pages/AboutPage';
 import ProductsPage from './pages/ShopPage/ProductsPage';
@@ -23,6 +21,7 @@ import OrderPage from './pages/OrderPage';
 import NotFoundPage from './pages/NotFound/NotFoundPage';
 import RoleBasedRoutes from './Routes/AdminRoute';
 import PaymentSuccess from './pages/ShopPage/PaymentSuccess';
+import ConsignmentDetailPage from './pages/Consignment/ConsignmentDetail';
 function App() {
   const location = useLocation();
   const shouldRenderHeaderFooter = !(
@@ -53,9 +52,9 @@ function App() {
           <Route path="/payment/:id" element={<PaymentPage />} />
           <Route path="/koiBatch" element={<KoiBatchPage />} />
           <Route path="/order" element={<OrderPage />} />
-          <Route path="/paymentSuccess" element={<PaymentSuccess />} />
+          <Route path="/paymentSuccess" element={<PaymentSuccess />} />        
+          <Route path="/user/:userId/consignments" element={<ConsignmentDetailPage />} />    
           <Route path="/*" element={<RoleBasedRoutes />} />
-
           <Route path="*" element={<NotFoundPage />} />
         </Routes>
       </main>

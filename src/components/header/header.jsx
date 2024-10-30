@@ -8,10 +8,10 @@ import UserContext from "../../context/userContext";
 
 function Header() {
   const navigate = useNavigate();
-  const { isLoggedIn, setIsLoggedIn, role, setRole } = useContext(UserContext);
-
+  const { isLoggedIn, setIsLoggedIn, userId,role,setRole } = useContext(UserContext);
+  
   // Handle user logout
-     const handleLogout = async () => {
+  const handleLogout = async () => {
     try {
       const refreshToken = localStorage.getItem("refreshToken");
       await api.post("/User/logout", refreshToken, {
@@ -25,7 +25,7 @@ function Header() {
       localStorage.removeItem('userRole');
       localStorage.removeItem('userName');
 
-      setIsLoggedIn(false); 
+      setIsLoggedIn(false);
       setRole(null);
 
       navigate('/');
@@ -57,6 +57,9 @@ function Header() {
         <li>
           <Link to="/question" className="text-white hover:underline">FAQ</Link>
         </li>
+        <li>
+          <Link to="/Consign" className="text-white hover:underline">Consgin</Link>
+        </li>
 
         {isLoggedIn && role === '0' && (
           <li>
@@ -69,14 +72,24 @@ function Header() {
           </li>
         )}
         {isLoggedIn && role === '2' && (
+            <li>
+              <Link to="/order" className="text-white hover:underline">Your Order</Link>
+            </li>
+        )}
+               {isLoggedIn && role === '2' && userId && (
           <li>
-            <Link to="/order" className="text-white hover:underline">Your Order</Link>
+            <Link to={`/user/${userId}/consignments`} className="text-white hover:underline">
+              Your Consignments
+            </Link>
           </li>
         )}
       </ul>
       <div className="flex items-center space-x-6">
         {isLoggedIn ? (
-          <button onClick={handleLogout} className="text-white hover:underline">Logout</button>
+          <>
+            <Link to="/profile" className="text-white hover:underline">Profile</Link>
+            <button onClick={handleLogout} className="text-white hover:underline">Logout</button>
+          </>
         ) : (
           <Link to="/login" className="text-white hover:underline flex items-center">
             Login

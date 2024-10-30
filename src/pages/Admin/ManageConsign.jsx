@@ -99,6 +99,7 @@ const ManageConsignmentPage = () => {
         ));
         setShowEditForm(false);
         setEditConsignmentId(null);
+        fetchConsignments();
         setErrorMessage('');
       } else {
         console.error("Unexpected status:", response.status);
