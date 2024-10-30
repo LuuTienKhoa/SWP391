@@ -17,6 +17,7 @@ const ManageConsignmentPage = () => {
   const [showCreateForm, setShowCreateForm] = useState(false);
   const [showEditForm, setShowEditForm] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
+  const [filteredStatus, setFilteredStatus] = useState(null);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -142,15 +143,30 @@ const ManageConsignmentPage = () => {
     }));
   };
 
+    // Filter consignments based on selected status
+    const filteredConsignments = filteredStatus !== null
+    ? consignments.filter((consignment) => consignment.status === filteredStatus)
+    : consignments;
+
   return (
     <div className="p-6">
       <h1 className="text-3xl font-bold mb-6 text-center">Manage Consignments</h1>
+      {/* Filter Buttons */}
+      <div className="flex justify-center mb-6 space-x-4">
+        <button onClick={() => setFilteredStatus(null)} className="bg-gray-300 text-black px-4 py-2 rounded">All</button>
+        <button onClick={() => setFilteredStatus(0)} className="bg-yellow-500 text-white px-4 py-2 rounded">Awaiting Payement</button>
+        <button onClick={() => setFilteredStatus(1)} className="bg-green-500 text-white px-4 py-2 rounded">Available</button>
+        <button onClick={() => setFilteredStatus(2)} className="bg-blue-500 text-white px-4 py-2 rounded">Finished</button>
+        <button onClick={() => setFilteredStatus(3)} className="bg-orange-500 text-white px-4 py-2 rounded">Raising</button>
+        <button onClick={() => setFilteredStatus(4)} className="bg-red-500 text-white px-4 py-2 rounded">Pending</button>
+        <button onClick={() => setFilteredStatus(5)} className="bg-red-500 text-white px-4 py-2 rounded">Negotiate</button>
+      </div>
       <div className="text-center mb-6">
         <button onClick={() => setShowCreateForm(true)} className="bg-green-500 text-white px-4 py-2 rounded">Create New Consignment</button>
       </div>
 
       <ConsignmentTable
-        consignments={consignments}
+        consignments={filteredConsignments}
         startEditing={startEditing}
         handleDelete={handleDeleteConsignment}
       />

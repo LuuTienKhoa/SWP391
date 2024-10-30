@@ -38,7 +38,7 @@ const EditConsignmentForm = ({ newConsignment, handleChange, handleSave }) => (
       onChange={handleChange} 
       className="w-full p-2 border"
     >
-      <option value={0}>Awaiting Payment</option>
+  <option value={0}>Awaiting Payment</option>
   <option value={1}>Available</option>
   <option value={2}>Finished</option>
   <option value={3}>Raising</option>
