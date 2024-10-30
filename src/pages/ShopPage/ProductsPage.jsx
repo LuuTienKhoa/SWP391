@@ -9,6 +9,7 @@ import { ShoppingCartIcon } from "@heroicons/react/24/outline";
 import { ShoppingBagIcon } from "lucide-react";
 import ComparisonCart from "../../components/Comparison";
 import Pagination from '../../components/Pagination';
+
 const ProductsPage = () => {
   const [koiFishs, setKoiFishs] = useState([]);
   const [cartItems, setCartItems] = useState(() => {
@@ -21,16 +22,21 @@ const ProductsPage = () => {
   });
   const [searchQuery, setSearchQuery] = useState("");
   const [sortOrder, setSortOrder] = useState("asc");
-  const [ageRange, setAgeRange] = useState([0, 10]);
-  const [priceRange, setPriceRange] = useState([0, 1000000000]);
-  const [sizeRange, setSizeRange] = useState([0, 100]);
+  const [minAge, setMinAge] = useState("");
+  const [maxAge, setMaxAge] = useState("");
+  const [minPrice, setMinPrice] = useState("");
+  const [maxPrice, setMaxPrice] = useState("");
+  const [size, setSize] = useState("");
   const [color, setColor] = useState("");
+  const [gender, setGender] = useState("");
+  const [species, setSpecies] = useState("");
   const [cartOpen, setCartOpen] = useState(false);
   const [filterVisible, setFilterVisible] = useState(false);
   const [isCartVisible, setIsCartVisible] = useState(false);
-  //Pagination 
+  
+  // Pagination 
   const [currentPage, setCurrentPage] = useState(1);
-  const [postsPerPage] = useState(8); // Number of batches per page
+  const [postsPerPage] = useState(8);
   const lastPostIndex = currentPage * postsPerPage;
   const firstPostIndex = lastPostIndex - postsPerPage;
   const currentPosts = koiFishs.slice(firstPostIndex, lastPostIndex);
@@ -41,21 +47,34 @@ const ProductsPage = () => {
   const fetchKoiFish = useCallback(async () => {
     try {
       const endpoint = "/koi/Koi/Filter";
-      const params = new URLSearchParams({
-        minPrice: priceRange[0].toString(),
-        maxPrice: priceRange[1].toString(),
-        minAge: ageRange[0].toString(),
-        maxAge: ageRange[1].toString(),
-        minSize: sizeRange[0].toString(),
-        maxSize: sizeRange[1].toString(),
-      });
-
-      if (color) {
-        params.append("color", color);
-      }
+      const params = new URLSearchParams();
 
       if (searchQuery) {
         params.append("name", searchQuery);
+      }
+      if (gender) {
+        params.append("gender", gender);
+      }
+      if (minAge) {
+        params.append("minAge", minAge);
+      }
+      if (maxAge) {
+        params.append("maxAge", maxAge);
+      }
+      if (size) {
+        params.append("size", size);
+      }
+      if (color) {
+        params.append("color", color);
+      }
+      if (minPrice) {
+        params.append("minPrice", minPrice);
+      }
+      if (maxPrice) {
+        params.append("maxPrice", maxPrice);
+      }
+      if (species) {
+        params.append("species", species);
       }
 
       const response = await api.get(`${endpoint}?${params.toString()}`);
@@ -70,26 +89,15 @@ const ProductsPage = () => {
       setKoiFishs(sortedData);
     } catch (error) {
       console.error("Error fetching koi fish:", error);
-      alert(
-        "Failed to fetch koi fish. Please check the console for more details."
-      );
+      alert("Failed to fetch koi fish. Please check the console for more details.");
     }
-  }, [priceRange, ageRange, sizeRange, color, searchQuery, sortOrder]);
+  }, [searchQuery, sortOrder, minAge, maxAge, size, color, minPrice, maxPrice, species]);
 
   useEffect(() => {
     if (location.pathname === "/products") {
       fetchKoiFish();
     }
-  }, [
-    location,
-    searchQuery,
-    sortOrder,
-    ageRange,
-    priceRange,
-    sizeRange,
-    color,
-    fetchKoiFish,
-  ]);
+  }, [location, searchQuery, sortOrder, minAge, maxAge, size, color, minPrice, maxPrice, species, fetchKoiFish]);
 
   useEffect(() => {
     localStorage.setItem("cartItems", JSON.stringify(cartItems));
@@ -167,15 +175,14 @@ const ProductsPage = () => {
           <div className="flex space-x-4">
             <Button
               onClick={() => setFilterVisible(!filterVisible)}
-              className={`px-4 py-2 rounded ${filterVisible ? "bg-orange-600" : "bg-orange-400"
-                }`}
+              className={`px-4 py-2 rounded ${filterVisible ? "bg-orange-600" : "bg-orange-400"}`}
             >
               Filter
             </Button>
 
             <button
               onClick={() => setCartOpen(true)}
-              className="relative flex items-center justify-center  text-gray-700 px-4 py-2 rounded hover:bg-gray-100 transition duration-300"
+              className="relative flex items-center justify-center text-gray-700 px-4 py-2 rounded hover:bg-gray-100 transition duration-300"
             >
               <ShoppingCartIcon className="h-6 w-6" aria-hidden="true" />
               {cartItems.length > 0 && (
@@ -207,25 +214,47 @@ const ProductsPage = () => {
               </select>
             </div>
 
-            {/* Search by Size */}
+            {/* Search by Gender */}
             <div>
-              <label className="font-bold">Search by size (cm):</label>
+              <label className="font-bold">Search by gender:</label>
+              <select
+                value={gender}
+                onChange={(e) => setGender(e.target.value)}
+                className="w-full p-2 border border-gray-300 rounded"
+              >
+                <option value="">All Genders</option>
+                <option value="Male">Male</option>
+                <option value="Female">Female</option>
+              </select>
+            </div>
+
+            {/* Search by Species */}
+            <div>
+              <label className="font-bold">Search by species:</label>
+              <input
+                type="text"
+                value={species}
+                onChange={(e) => setSpecies(e.target.value)}
+                className="w-full p-2 border border-gray-300 rounded"
+                placeholder="Species"
+              />
+            </div>
+
+            {/* Search by Age */}
+            <div>
+              <label className="font-bold">Search by Age:</label>
               <div className="flex space-x-2">
                 <input
                   type="number"
-                  inputMode="numeric"
-                  value={sizeRange[0]}
-                  onChange={(e) => setSizeRange([e.target.value, sizeRange[1]])}
-                  onBlur={(e) => setSizeRange([+e.target.value, sizeRange[1]])}
+                  value={minAge}
+                  onChange={(e) => setMinAge(e.target.value)}
                   className="w-full p-2 border border-gray-300 rounded"
                   placeholder="Min"
                 />
                 <input
                   type="number"
-                  inputMode="numeric"
-                  value={sizeRange[1]}
-                  onChange={(e) => setSizeRange([sizeRange[0], e.target.value])}
-                  onBlur={(e) => setSizeRange([sizeRange[0], +e.target.value])}
+                  value={maxAge}
+                  onChange={(e) => setMaxAge(e.target.value)}
                   className="w-full p-2 border border-gray-300 rounded"
                   placeholder="Max"
                 />
@@ -234,31 +263,19 @@ const ProductsPage = () => {
 
             {/* Search by Price */}
             <div>
-              <label className="font-bold">Search by price ($):</label>
+              <label className="font-bold">Search by Price ($):</label>
               <div className="flex space-x-2">
                 <input
                   type="number"
-                  inputMode="numeric"
-                  value={priceRange[0]}
-                  onChange={(e) =>
-                    setPriceRange([e.target.value, priceRange[1]])
-                  }
-                  onBlur={(e) =>
-                    setPriceRange([+e.target.value, priceRange[1]])
-                  }
+                  value={minPrice}
+                  onChange={(e) => setMinPrice(e.target.value)}
                   className="w-full p-2 border border-gray-300 rounded"
                   placeholder="Min"
                 />
                 <input
                   type="number"
-                  inputMode="numeric"
-                  value={priceRange[1]}
-                  onChange={(e) =>
-                    setPriceRange([priceRange[0], e.target.value])
-                  }
-                  onBlur={(e) =>
-                    setPriceRange([priceRange[0], +e.target.value])
-                  }
+                  value={maxPrice}
+                  onChange={(e) => setMaxPrice(e.target.value)}
                   className="w-full p-2 border border-gray-300 rounded"
                   placeholder="Max"
                 />
@@ -273,8 +290,7 @@ const ProductsPage = () => {
             className="flex items-center justify-center bg-gradient-to-r from-orange-400 to-orange-600 text-white border-none rounded-full px-6 py-3 shadow-lg hover:from-orange-500 hover:to-orange-700 transition duration-300 transform hover:scale-105"
           >
             <span className="mr-2">🔄</span>{" "}
-            {/* Replace with an icon if needed */} So sánh (
-            {compareItems.length})
+            So sánh ({compareItems.length})
           </button>
           <div className="flex justify-end ">
             <select
@@ -355,10 +371,10 @@ const ProductsPage = () => {
                       : "Compare"}
                   </button>
                 </div>
-
               </div>
             </div>
           ))}
+
         </div>
         {isCartVisible && (
           <ComparisonCart
