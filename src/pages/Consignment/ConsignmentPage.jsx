@@ -103,6 +103,7 @@ function ConsignmentPage() {
         { label: 'Fostering Days', name: 'fosteringDays', type: 'number' },
     ];
 
+
     return (
         <>
             <h1 className="text-5xl font-bold text-center text-gray-800 bg-gray-100">Consign Koi</h1>
