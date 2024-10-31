@@ -22,6 +22,7 @@ import NotFoundPage from './pages/NotFound/NotFoundPage';
 import RoleBasedRoutes from './Routes/AdminRoute';
 import PaymentSuccess from './pages/ShopPage/PaymentSuccess';
 import UserConsignmentsDetailPage from './pages/ConsignPage';
+import FeedBackPage from './pages/Feedback/FeedbackPage'
 function App() {
   const location = useLocation();
   const shouldRenderHeaderFooter = !(
@@ -55,6 +56,7 @@ function App() {
           <Route path="/paymentSuccess" element={<PaymentSuccess />} />        
           <Route path="/consigned" element={<UserConsignmentsDetailPage />} />    
           <Route path="/*" element={<RoleBasedRoutes />} />
+          <Route path="/feedback" element={<FeedBackPage />} />
           <Route path="*" element={<NotFoundPage />} />
         </Routes>
       </main>

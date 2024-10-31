@@ -87,10 +87,7 @@ const EditAndCreateConsignForm = ({ koi, setKoi, fetchConsignKois, editKoiId, is
         className="w-full px-4 py-2 border rounded"
         required
       />
-      <input type="file" name="Image" onChange={handleImageChange} accept="image/*" placeholder="Upload Koi Image" />
-      <input type="file" name="OriginCertificate" onChange={handleImageChange} accept="image/*" placeholder="Origin Certificate" />
-      <input type="file" name="HealthCertificate" onChange={handleImageChange} accept="image/*" placeholder="Health Certificate" />
-      <input type="file" name="OwnershipCertificate" onChange={handleImageChange} accept="image/*" placeholder="Ownership Certificate" />
+
       <button type="submit" className="bg-blue-500 text-white px-4 py-2 rounded">
         {isCreating ? 'Create Consignment Koi' : 'Save Changes'}
       </button>

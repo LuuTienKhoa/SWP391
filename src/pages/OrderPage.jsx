@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import api from '../config/axios';
-import { Button, Card, CardContent, Typography, TextField, Rating } from '@mui/material';
+import { Button, Card, CardContent, Typography, TextField, Rating,Snackbar,Alert } from '@mui/material';
 
 const OrderPage = ({ token }) => {
   const [orders, setOrders] = useState([]);
@@ -8,7 +8,7 @@ const OrderPage = ({ token }) => {
   const [error, setError] = useState(null);
   const [feedback, setFeedback] = useState({}); // State to hold feedback for each order
   const [ratings, setRatings] = useState({}); // State to hold ratings for each order
-
+  const [notification, setNotification] = useState({ open: false, message: '', severity: 'success' });
   useEffect(() => {
     const fetchOrders = async () => {
       try {
@@ -47,21 +47,24 @@ const OrderPage = ({ token }) => {
 
   const submitFeedback = async (orderID, customerID) => {
     const feedbackData = {
-      orderID,
-      customerID,
+      Order: { id: orderID },       
+      Customer: { id: customerID },  
       rating: ratings[orderID] || 5,
       comment: feedback[orderID] || '',
       dateFb: new Date().toISOString(),
     };
+    
+    
 
     try {
-      await api.post('/Feedback', feedbackData);
+      await api.post('/feedback', feedbackData);
       alert('Feedback submitted successfully!');
       setFeedback(prev => ({ ...prev, [orderID]: '' }));
       setRatings(prev => ({ ...prev, [orderID]: 5 }));
+      setNotification({ open: true, message: 'Feedback submitted successfully!', severity: 'success' });
     } catch (err) {
       console.error(err);
-      alert('Failed to submit feedback.');
+      setNotification({ open: true, message: 'Failed to submit feedback.', severity: 'error' });
     }
   };
 
@@ -96,7 +99,7 @@ const OrderPage = ({ token }) => {
               {/* Display Delivery Status */}
               <Typography variant="body2">Delivery Status: {getDeliveryLabel(order.status)}</Typography>
               {order.status === 1 && (
-                <>  
+                <>
                   {/* Feedback Section */}
                   <Rating
                     name={`rating-${order.orderID}`}
@@ -123,7 +126,16 @@ const OrderPage = ({ token }) => {
 
                 </>
               )}
-
+              {/* Snackar use to display a brief messages and fades out*/}
+              <Snackbar
+                open={notification.open}
+                autoHideDuration={3000}
+                onClose={() => setNotification({ ...notification, open: false })}
+              >
+                <Alert onClose={() => setNotification({ ...notification, open: false })} severity={notification.severity} sx={{ width: '100%' }}>
+                  {notification.message}
+                </Alert>
+              </Snackbar>
               {/* Delivery Details Section */}
               <Typography variant="h6" sx={{ marginTop: 2 }}>Delivery Details</Typography>
               <Typography variant="body2">Start Delivery Day: {new Date(order.startDeliDay).toLocaleString()}</Typography>

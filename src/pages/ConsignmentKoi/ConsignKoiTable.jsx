@@ -26,14 +26,10 @@ const ConsignKoiTable = ({ consignKois, startEditing, handleDelete }) => {
         {consignKois.map((consignKoi) => (
           <tr key={consignKoi.consignmentKoiID} className="border-b border-gray-200 hover:bg-gray-100">
             <td className="py-3 px-6 text-left whitespace-nowrap">
-              {consignKoi.originCertificate && (
-                <img src={consignKoi.originCertificate} alt="Origin Certificate" className="w-16 h-16 object-cover rounded mb-2" />
-              )}
-              {consignKoi.healthCertificate && (
-                <img src={consignKoi.healthCertificate} alt="Health Certificate" className="w-16 h-16 object-cover rounded mb-2" />
-              )}
-              {consignKoi.ownershipCertificate && (
-                <img src={consignKoi.ownershipCertificate} alt="Ownership Certificate" className="w-16 h-16 object-cover rounded mb-2" />
+              {consignKoi.image ? (
+                <img src={consignKoi.image} alt="Origin Certificate" className="w-16 h-16 object-cover rounded mb-2" />
+              ) : (
+                'No image here'
               )}
             </td>
             <td className="py-3 px-6 text-left whitespace-nowrap">{consignKoi.name}</td>
