@@ -53,10 +53,12 @@ const UpdateOrder = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log('Order data being sent:', order);
+    const updatedOrder = { ...order, updateAt: new Date().toISOString() };
+    console.log('Order data being sent:', updatedOrder);
     try {
-      await api.put(`/Order/${id}`, order);
-      navigate('/orders');
+      await api.put(`/Order/${id}`, updatedOrder);
+      alert("Promotion updated successfully!");
+      navigate('/admin/manageOrder');
     } catch (error) {
       console.error('Error updating order:', error);
       setError('Failed to update order.');
@@ -134,8 +136,10 @@ const UpdateOrder = () => {
         <div className="mb-4">
           <label className="block text-gray-700">Status</label>
           <select
+                      type="number"
+
             name="status"
-            value={order.status.toString()}
+            value={order.status}
             onChange={handleInputChange}
             className="mt-1 block w-full border border-gray-300 rounded p-2"
           >
