@@ -12,7 +12,7 @@ const AdminLayout = ({ children }) => {
 
   return (
     <div className="flex h-screen">
-      <div className="w-64 flex flex-col bg-gray-800 text-white p-4 h-full fixed">
+      <div className="w-64 flex flex-col bg-gray-800 text-white p-4 h-full fixed overflow-y-auto">
         <h2 className="text-2xl font-semibold mb-8 text-center">F Koi Admin</h2>
         <ul>
           {[
@@ -24,7 +24,8 @@ const AdminLayout = ({ children }) => {
             { label: 'Manage Promotion', icon: <FaTags size={24} />, link: '/admin/managePromotion' },  // Changed to FaTags
             { label: 'Manage Feedback', icon: <FaComments size={24} />, link: '/admin/manageFeedback' },  // Changed to FaComments
             { label: 'Manage Consign', icon: <FaTruck size={24} />, link: '/admin/manageConsign' },  // Changed to FaTruck
-            { label: 'Manage Delivery', icon: <FaTruck size={24} />, link: '/admin/manageDelivery' }  // Changed to FaTruck
+            { label: 'Manage Delivery', icon: <FaTruck size={24} />, link: '/admin/manageDelivery' },  // Changed to FaTruck
+            { label: 'Manage Consign Koi', icon: <FaTruck size={24} />, link: '/admin/manageConsignKoi' }  // Changed to FaTruck
 
           ].map((item, index) => (
             <li key={index} className="mb-4">

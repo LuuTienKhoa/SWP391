@@ -13,7 +13,7 @@ const StaffLayout = ({ children }) => {
   return (
     <div className="flex">
       {/* Sidebar */}
-      <div className="w-64 flex flex-col bg-gray-800 text-white p-4 h-full fixed">
+      <div className="w-64 flex flex-col bg-gray-800 text-white p-4 h-full fixed overflow-y-auto">
         <h2 className="text-2xl font-semibold mb-8 text-center">F Koi Staff</h2>
         <ul>
           {[
@@ -25,8 +25,8 @@ const StaffLayout = ({ children }) => {
             { label: 'Manage Promotion', icon: <FaTags size={24} />, link: '/staff/managePromotion' },  // Changed to FaTags
             { label: 'Manage Feedback', icon: <FaComments size={24} />, link: '/staff/manageFeedback' },  // Changed to FaComments
             { label: 'Manage Consign', icon: <FaTruck size={24} />, link: '/staff/manageConsign' },  // Changed to FaTruck
-            { label: 'Manage Delivery', icon: <FaTruck size={24} />, link: '/staff/manageDelivery' }  // Changed to FaTruck
-
+            { label: 'Manage Delivery', icon: <FaTruck size={24} />, link: '/staff/manageDelivery' },  // Changed to FaTruck
+            { label: 'Manage Consign Koi', icon: <FaTruck size={24} />, link: '/staff/manageConsignKoi' }  // Changed to FaTruck
           ].map((item, index) => (
             <li key={index} className="mb-4">
               <Link to={item.link}>

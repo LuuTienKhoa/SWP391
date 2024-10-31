@@ -10,7 +10,7 @@ const ManageConsignmentPage = () => {
   const [editConsignmentId, setEditConsignmentId] = useState(null);
   const [newConsignment, setNewConsignment] = useState({
     customerID: '',
-    type: '',
+    type: 0,
     fosterPrice: '',
     status: 0
   });
@@ -54,7 +54,7 @@ const ManageConsignmentPage = () => {
         setNewConsignment({
           customerID: '',
           consignmentKoiID: '',
-          type: '',
+          type: 0,
           fosterPrice: '',
           status: 0
         });
@@ -74,11 +74,10 @@ const ManageConsignmentPage = () => {
         return;
       }
   
-      // Updated payload to include consignmentID
       const payload = {
         consignmentID: editConsignmentId,  
         customerID: newConsignment.customerID,
-        type: newConsignment.type,
+        type: parseInt(newConsignment.type, 10),
         fosterPrice: newConsignment.fosterPrice,
         status: newConsignment.status
       };
@@ -115,7 +114,7 @@ const ManageConsignmentPage = () => {
   const startEditing = (consignment) => {
     setNewConsignment({
       customerID: consignment.customerID || '', 
-      type: consignment.type || '',
+      type: consignment.type || 0,
       fosterPrice: consignment.fosterPrice || '',
       status: consignment.status || 0,
       name: consignment.name  || '',
