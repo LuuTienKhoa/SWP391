@@ -10,7 +10,7 @@ const FeedbackPage = () => {
   useEffect(() => {
     const fetchFeedback = async () => {
       try {
-        const response = await api.get('/feedback');
+        const response = await api.get('/Feedback');
         setFeedbackList(response.data);
       } catch (err) {
         setError('Failed to fetch feedback');
@@ -41,7 +41,7 @@ const FeedbackPage = () => {
           <tbody className="text-gray-600 text-sm font-light">
             {feedbackList.map((feedback) => (
               <tr key={feedback.id} className="border-b border-gray-200 hover:bg-gray-100">
-                <td className="py-3 px-6 text-left whitespace-nowrap">{feedback.userName || 'Anonymous'}</td>
+                <td className="py-3 px-6 text-left whitespace-nowrap">{feedback.customer?.user?.userName  || 'Anonymous'}</td>
                 <td className="py-3 px-6 text-left">{feedback.comment}</td>
                 <td className="py-3 px-6 text-left">{feedback.rating} / 5</td>
                 <td className="py-3 px-6 text-left">{new Date(feedback.date).toLocaleDateString()}</td>

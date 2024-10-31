@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import api from '../config/axios';
-import { Card, CardContent, Typography } from '@mui/material';
+import { Card, CardContent, Typography,Box,Dialog} from '@mui/material';
 
 const ConsignPage = ({ token }) => {
   const [consignments, setConsignments] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-
+  const [openModal, setOpenModal] = useState(false);
+  const [selectedImage, setSelectedImage] = useState(null);
   useEffect(() => {
     const fetchUserConsignments = async () => {
       try {
@@ -15,7 +16,7 @@ const ConsignPage = ({ token }) => {
             Authorization: `Bearer ${token}`,
           },
         });
-        
+
         setConsignments(response.data);
       } catch (err) {
         if (err.response) {
@@ -32,7 +33,15 @@ const ConsignPage = ({ token }) => {
 
     fetchUserConsignments();
   }, [token]);
+  const handleClickImage = (imageUrl) => {
+    setSelectedImage(imageUrl);
+    setOpenModal(true);
+  };
 
+  const handleCloseModal = () => {
+    setOpenModal(false);
+    setSelectedImage(null);
+  };
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error: {error}</p>;
 
@@ -54,17 +63,73 @@ const ConsignPage = ({ token }) => {
               <Typography variant="body2">Price: {consignment.price}</Typography>
 
               {/* Display Certificates */}
-      {consignment.addOn && (
-        <>
-          {consignment.addOn.originCertificate && <img src={consignment.addOn.originCertificate} alt="Origin Certificate" />}
-          {consignment.addOn.healthCertificate && <img src={consignment.addOn.healthCertificate} alt="Health Certificate" />}
-          {consignment.addOn.ownershipCertificate && <img src={consignment.addOn.ownershipCertificate} alt="Ownership Certificate" />}
-        </>
-      )}
+              {consignment.addOn && (
+                <Box sx={{ display: 'flex', gap: 2, marginTop: 2 }}>
+                  {consignment.image && (
+                    <Box>
+                      <img
+                        src={consignment.addOn.originCertificate}
+                        alt="Consign Image"
+                        className="consign-mage"
+                        style={{ width: 100, height: 100, objectFit: 'cover', borderRadius: 8, cursor: 'pointer' }}
+                        onClick={() => handleClickImage(consignment.addOn.originCertificate)}
+                      />
+                      <Typography variant="caption">Cosign Koi Image</Typography>
+                    </Box>
+                  )}
+                  {consignment.addOn.originCertificate && (
+                    <Box>
+                      <img
+                        src={consignment.addOn.originCertificate}
+                        alt="Origin Certificate"
+                        className="certificate-image"
+                        style={{ width: 100, height: 100, objectFit: 'cover', borderRadius: 8, cursor: 'pointer' }}
+                        onClick={() => handleClickImage(consignment.addOn.originCertificate)}
+                      />
+                      <Typography variant="caption">Origin Certificate</Typography>
+                    </Box>
+                  )}
+                  {consignment.addOn.healthCertificate && (
+                    <Box>
+                      <img
+                        src={consignment.addOn.healthCertificate}
+                        alt="Health Certificate"
+                        className="certificate-image"
+                        style={{ width: 100, height: 100, objectFit: 'cover', borderRadius: 8, cursor: 'pointer' }}
+                        onClick={() => handleClickImage(consignment.addOn.healthCertificate)}
+                      />
+                      <Typography variant="caption">Health Certificate</Typography>
+                    </Box>
+                  )}
+                  {consignment.addOn.ownershipCertificate && (
+                    <Box>
+                      <img
+                        src={consignment.addOn.ownershipCertificate}
+                        alt="Ownership Certificate"
+                        className="certificate-image"
+                        style={{ width: 100, height: 100, objectFit: 'cover', borderRadius: 8, cursor: 'pointer' }}
+                        onClick={() => handleClickImage(consignment.addOn.ownershipCertificate)}
+                      />
+                      <Typography variant="caption">Ownership Certificate</Typography>
+                    </Box>
+                  )}
+                </Box>
+              )}
             </CardContent>
           </Card>
         ))}
       </div>
+
+      {/* Modal for full-size image */}
+      <Dialog open={openModal} onClose={handleCloseModal} maxWidth="lg">
+        {selectedImage && (
+          <img
+            src={selectedImage}
+            alt="Enlarged View"
+            style={{ maxWidth: '100%', maxHeight: '90vh', objectFit: 'contain' }}
+          />
+        )}
+      </Dialog>
     </div>
   );
 };
