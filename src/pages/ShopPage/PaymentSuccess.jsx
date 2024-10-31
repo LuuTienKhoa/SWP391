@@ -1,10 +1,12 @@
 // src/pages/PaymentSuccess.jsx
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate, useSearchParams } from 'react-router-dom';
 
 const PaymentSuccess = () => {
-  const location = useLocation();
   const navigate = useNavigate();
-  const { orderId, totalAmount, paymentMethod } = location.state || {};
+  const [searchParams, setSearchParams] = useSearchParams();
+  const transactionID = searchParams.get('transactionID');
+  const amount = searchParams.get('amount');
+  const status_text = searchParams.get('status_text');
 
   return (
     <div className="min-h-screen bg-white flex items-center justify-center p-4">
@@ -29,9 +31,10 @@ const PaymentSuccess = () => {
           <h2 className="text-2xl font-bold mb-4">Payment Successful!</h2>
           
           <div className="mb-6">
-            <p className="text-gray-300 mb-2">Order ID: #{orderId}</p>
-            <p className="text-gray-300 mb-2">Amount Paid: ${totalAmount?.toFixed(2)}</p>
-            <p className="text-gray-300">Payment Method: {paymentMethod}</p>
+            <p className="text-gray-300 mb-2">transaction ID: #{transactionID}</p>
+            <p className="text-gray-300 mb-2">Amount Paid: {amount} VNĐ</p>
+            {/* <p className="text-gray-300">Payment Method: {paymentMethod}</p> */}
+            <p className="text-gray-300">{status_text}</p>
           </div>
 
           <div className="space-y-4">
