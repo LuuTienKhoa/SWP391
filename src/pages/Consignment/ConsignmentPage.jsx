@@ -1,13 +1,12 @@
-import React, { useState, useEffect } from 'react';
-import api from '../../config/axios';  // Assuming Axios is configured
+import React, { useState } from 'react';
+import api from '../../config/axios';
 
 function ConsignmentPage() {
     const [loading, setLoading] = useState(false);
     const [successMessage, setSuccessMessage] = useState('');
     const [errorMessage, setErrorMessage] = useState('');
-
     const [formData, setFormData] = useState({
-        type: '',  // Sell (0) or Foster (1)
+        type: '',
         name: '',
         gender: '',
         age: '',
@@ -19,13 +18,17 @@ function ConsignmentPage() {
         selectionRate: '',
         species: '',
         fosteringDays: '',
+        image: null,
+        originCertificate: null,
+        healthCertificate: null,
+        ownershipCertificate: null,
     });
 
     const handleChange = (e) => {
-        const { name, value } = e.target;
+        const { name, value, files } = e.target;
         setFormData((prevData) => ({
             ...prevData,
-            [name]: value,
+            [name]: files ? files[0] : value,
         }));
     };
 
@@ -42,30 +45,21 @@ function ConsignmentPage() {
                 return;
             }
 
-            // Call the backend to submit the consignment
-            const response = await api.post('/Consignment/Pending', null, {
-                params: {
-                    type: formData.type, // 0 sell ; 1 foster
-                    name: formData.name,
-                    gender: formData.gender,
-                    age: formData.age,
-                    size: formData.size,
-                    color: formData.color,
-                    dailyFeedAmount: formData.dailyFeedAmount,
-                    personality: formData.personality,
-                    origin: formData.origin,
-                    selectionRate: formData.selectionRate,
-                    species: formData.species,
-                    fosteringDays: formData.fosteringDays,
-                },
+            // Create FormData object for file upload
+            const formDataObj = new FormData();
+            Object.entries(formData).forEach(([key, value]) => {
+                formDataObj.append(key, value);
+            });
+
+            const response = await api.post('/Consignment/pending', formDataObj, {
                 headers: {
                     Authorization: `Bearer ${token}`,
+                    'Content-Type': 'multipart/form-data',
                 },
             });
 
             if (response.status === 200) {
                 setSuccessMessage('Consignment submitted successfully and is pending approval.');
-                // Reset form after successful submission
                 setFormData({
                     type: '',
                     name: '',
@@ -79,6 +73,10 @@ function ConsignmentPage() {
                     selectionRate: '',
                     species: '',
                     fosteringDays: '',
+                    image: null,
+                    originCertificate: null,
+                    healthCertificate: null,
+                    ownershipCertificate: null,
                 });
             }
         } catch (error) {
@@ -101,8 +99,11 @@ function ConsignmentPage() {
         { label: 'Foster Origin', name: 'origin', type: 'text' },
         { label: 'Foster Species', name: 'species', type: 'text' },
         { label: 'Fostering Days', name: 'fosteringDays', type: 'number' },
+        { label: 'Upload Image', name: 'image', type: 'file', accept: 'image/*' },
+        { label: 'Origin Certificate', name: 'originCertificate', type: 'file', accept: 'image/*' },
+        { label: 'Health Certificate', name: 'healthCertificate', type: 'file', accept: 'image/*' },
+        { label: 'Ownership Certificate', name: 'ownershipCertificate', type: 'file', accept: 'image/*' },
     ];
-
 
     return (
         <>
@@ -132,10 +133,11 @@ function ConsignmentPage() {
                                     <input
                                         name={field.name}
                                         type={field.type}
-                                        value={formData[field.name]}
+                                        value={field.type === 'file' ? undefined : formData[field.name]}
                                         onChange={handleChange}
                                         className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                                         required={field.required}
+                                        accept={field.accept}
                                     />
                                 )}
                             </div>
