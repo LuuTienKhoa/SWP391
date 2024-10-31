@@ -75,7 +75,6 @@ const UpdateKoi = ({ onUpdateSuccess }) => {
       onUpdateSuccess(response.data);
     } catch (error) {
       console.error("Error updating koi fish:", error);
-      alert("Failed to update koi fish.");
     }
   };
 

@@ -61,7 +61,6 @@ const UpdateOrder = () => {
       navigate('/admin/manageOrder');
     } catch (error) {
       console.error('Error updating order:', error);
-      setError('Failed to update order.');
     }
   };
 

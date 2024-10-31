@@ -7,7 +7,6 @@ const PaymentPage = () => {
   const { koiFish, batch, consignment, promotion, customerId = 0 } = location.state || {};
   const [paymentMethod, setPaymentMethod] = useState('VNPay'); // Default to VNPay
   const [promotionID, setPromotionID] = useState('');
-  const [address, setAddress] = useState(''); // State to store the address
   const navigate = useNavigate();
 
   // Payment processing function
@@ -44,23 +43,25 @@ const PaymentPage = () => {
   };
 
   // Delivery handling function
-  const handleDelivery = async (orderId, customerId, address) => {
+  const handleDelivery = async (orderId, customerId, ) => {
     try {
       const deliveryData = {
-        orderId: orderId,
-        customerId: customerId,
+        orderID: orderId,
+        customerID: customerId,
         startDeliDay: new Date().toISOString(),
         endDeliDay: new Date(new Date().setDate(new Date().getDate() + 7)).toISOString(),
-        address: address // Use the address entered by the user
       };
-
+  
+      console.log("Delivery Data:", deliveryData); // Kiểm tra dữ liệu gửi đi
+  
       await api.post('/koi/Delivery', deliveryData);
       alert(`Shipment delivery created for Order ID: ${orderId}`);
-
+  
     } catch (error) {
       console.error('Error processing delivery:', error);
     }
   };
+  
 
   return (
     <div className="min-h-screen bg-white p-10 text-white flex justify-center items-center">
@@ -104,20 +105,7 @@ const PaymentPage = () => {
             </select>
           </div>
 
-          {/* Address Input */}
-          {paymentMethod === 'VNPay' && (
-            <div className="mb-6">
-              <label className="block text-lg font-medium mb-2">Delivery Address</label>
-              <input
-                type="text"
-                name="address"
-                className="w-full p-3 bg-gray-700 rounded-lg"
-                placeholder="Enter your delivery address"
-                value={address}
-                onChange={(e) => setAddress(e.target.value)}
-              />
-            </div>
-          )}
+          
 
           {/* Price */}
           <div className="bg-gray-700 p-6 rounded-lg mb-6">
