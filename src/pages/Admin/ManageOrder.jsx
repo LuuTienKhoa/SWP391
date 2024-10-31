@@ -51,8 +51,8 @@ const ManageOrder = () => {
     }
   };
 
-  const filteredOrders = selectedStatus === 'All' 
-    ? orders 
+  const filteredOrders = selectedStatus === 'All'
+    ? orders
     : orders.filter(order => getStatusLabel(order.status) === selectedStatus);
 
   if (loading) return <div>Loading...</div>;
@@ -85,7 +85,7 @@ const ManageOrder = () => {
           <tbody>
             {filteredOrders.map((order) => (
               <tr key={order.orderID} className="text-center border-b">
-                <td className="py-2 px-4 border">{order.orderID}</td>            
+                <td className="py-2 px-4 border">{order.orderID}</td>
                 <td className="py-2 px-4 border">{order.customerID}</td>
                 <td className="py-2 px-4 border">{order.staffID}</td>
                 <td className="py-2 px-4 border">{order.createAt}</td>
@@ -103,7 +103,13 @@ const ManageOrder = () => {
                   </button>
                   <button
                     className="bg-blue-500 text-white px-4 py-1 rounded"
-                    onClick={() => navigate(`/admin/manageOrder/updateOrder/${order.orderID}`)}
+                    onClick={() => {
+                      if (localStorage.getItem('userRole') === '0') {
+                        navigate(`/admin/manageOrder/updateOrder/${order.orderID}`)
+                      } else if (localStorage.getItem('userRole') === '1') {
+                        navigate(`/staff/manageOrder/updateOrder/${order.orderID}`)
+                      }
+                    }}
                   >
                     Update
                   </button>

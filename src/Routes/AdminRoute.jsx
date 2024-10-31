@@ -278,6 +278,16 @@ function RoleBasedRoutes() {
         }
       />
       <Route
+        path="/staff/manageOrder/updateOrder/:id"
+        element={
+          <ProtectedRoute requiredRole="1">
+            <StaffLayout>
+              <UpdateOrder />
+            </StaffLayout>
+          </ProtectedRoute>
+        }
+      />
+      <Route
         path="/staff/manageFeedback"
         element={
           <ProtectedRoute requiredRole="1">
