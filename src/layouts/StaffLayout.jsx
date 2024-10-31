@@ -26,7 +26,8 @@ const StaffLayout = ({ children }) => {
             { label: 'Manage Feedback', icon: <FaComments size={24} />, link: '/staff/manageFeedback' },  // Changed to FaComments
             { label: 'Manage Consign', icon: <FaTruck size={24} />, link: '/staff/manageConsign' },  // Changed to FaTruck
             { label: 'Manage Delivery', icon: <FaTruck size={24} />, link: '/staff/manageDelivery' },  // Changed to FaTruck
-            { label: 'Manage Consign Koi', icon: <FaTruck size={24} />, link: '/staff/manageConsignKoi' }  // Changed to FaTruck
+            { label: 'Manage Consign Koi', icon: <FaTruck size={24} />, link: '/staff/manageConsignKoi' }, // Changed to FaTruck
+            { label: 'Manage Trans', icon: <FaTruck size={24} />, link: '/staff/manageTrans' }  // Changed to FaTruck
           ].map((item, index) => (
             <li key={index} className="mb-4">
               <Link to={item.link}>

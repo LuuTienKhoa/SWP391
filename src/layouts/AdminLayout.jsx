@@ -26,7 +26,8 @@ const AdminLayout = ({ children }) => {
             { label: 'Manage Consign', icon: <FaTruck size={24} />, link: '/admin/manageConsign' },  
             { label: 'Manage Delivery', icon: <FaTruck size={24} />, link: '/admin/manageDelivery' },  
             { label: 'Manage Consign Koi', icon: <FaTruck size={24} />, link: '/admin/manageConsignKoi' },  
-            { label: 'Manage Feedback', icon: <FaTruck size={24} />, link: '/admin/manageFeedback' }  
+            { label: 'Manage Feedback', icon: <FaTruck size={24} />, link: '/admin/manageFeedback' } , 
+            { label: 'Manage Trans', icon: <FaTruck size={24} />, link: '/admin/manageTrans' }  
 
           ].map((item, index) => (
             <li key={index} className="mb-4">

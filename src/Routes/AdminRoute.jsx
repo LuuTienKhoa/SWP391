@@ -21,6 +21,7 @@ import UpdateOrder from "../pages/ManageOrder/UpdateOrder";
 import UpdateDelivery from "../pages/ManageDelivery/UpdateDelivery";
 import ManageConsignKoi from "../pages/Admin/ManageConsignKoi"
 import ManageFeedbackPage from "../pages/Admin/ManageFeedBack"
+import CreateTransactionPage from '../pages/CreateTransactionPage'
 function RoleBasedRoutes() {
   return (
     <Routes>
@@ -195,8 +196,28 @@ function RoleBasedRoutes() {
           </ProtectedRoute>
         }
       />
+      <Route
+        path="/admin/manageTrans"
+        element={
+          <ProtectedRoute requiredRole="0">
+            <AdminLayout>
+              <CreateTransactionPage />
+            </AdminLayout>
+          </ProtectedRoute>
+        }
+      />
 
       {/* Staff Routes */}
+      <Route
+        path="/staff/manageTrans"
+        element={
+          <ProtectedRoute requiredRole="1"> {/* Role '1' for Staff */}
+            <StaffLayout>
+              <CreateTransactionPage />
+            </StaffLayout>
+          </ProtectedRoute>
+        }
+      />
       <Route
         path="/staff"
         element={
