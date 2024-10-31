@@ -5,9 +5,17 @@ import api from '../../config/axios';
 const EditAndCreateConsignForm = ({ koi, setKoi, fetchConsignKois, editKoiId, isCreating }) => {
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setKoi((prevKoi) => ({ ...prevKoi, [name]: value }));
-  };
+    const intFields = ['age', 'pricePerDay', 'fosteringDays', 'consignmentId', 'ConsignmentKoiID'];
+    const newValue = intFields.includes(name) ? parseInt(value, 10) : value;
 
+    setKoi((prevKoi) => ({ ...prevKoi, [name]: newValue }));
+  };
+  const handleImageChange = (e) => {
+    const { name, files } = e.target;
+    if (files.length > 0) {
+      setKoi((prevKoi) => ({ ...prevKoi, [name]: files[0] }));
+    }
+  };
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
@@ -29,8 +37,60 @@ const EditAndCreateConsignForm = ({ koi, setKoi, fetchConsignKois, editKoiId, is
       <input type="number" name="age" value={koi.age} onChange={handleChange} placeholder="Age" required />
       <input type="text" name="size" value={koi.size} onChange={handleChange} placeholder="Size" />
       <input type="text" name="color" value={koi.color} onChange={handleChange} placeholder="Color" />
-      <input type="number" name="price" value={koi.price} onChange={handleChange} placeholder="Price" required />
-      <input type="number" name="fosteringDays" value={koi.fosteringDays} onChange={handleChange} placeholder="Fostering Days" />
+      <input type="number" name="pricePerDay" value={koi.price} onChange={handleChange} placeholder="Price Per Day" required />
+      <input
+        type="text"
+        name="dailyFeedAmount"
+        value={koi.dailyFeedAmount}
+        onChange={handleChange}
+        placeholder="Daily Feed Amount"
+        className="w-full px-4 py-2 border rounded"
+      />
+      <input
+        type="text"
+        name="personality"
+        value={koi.personality}
+        onChange={handleChange}
+        placeholder="Personality"
+        className="w-full px-4 py-2 border rounded"
+      />
+      <input
+        type="text"
+        name="origin"
+        value={koi.origin}
+        onChange={handleChange}
+        placeholder="Origin"
+        className="w-full px-4 py-2 border rounded"
+      />
+      <input
+        type="text"
+        name="selectionRate"
+        value={koi.selectionRate}
+        onChange={handleChange}
+        placeholder="Selection Rate"
+        className="w-full px-4 py-2 border rounded"
+      />
+      <input
+        type="text"
+        name="species"
+        value={koi.species}
+        onChange={handleChange}
+        placeholder="Species"
+        className="w-full px-4 py-2 border rounded"
+      />
+      <input
+        type="number"
+        name="fosteringDays"
+        value={koi.fosteringDays}
+        onChange={handleChange}
+        placeholder="Fostering Days"
+        className="w-full px-4 py-2 border rounded"
+        required
+      />
+      <input type="file" name="Image" onChange={handleImageChange} accept="image/*" placeholder="Upload Koi Image" />
+      <input type="file" name="OriginCertificate" onChange={handleImageChange} accept="image/*" placeholder="Origin Certificate" />
+      <input type="file" name="HealthCertificate" onChange={handleImageChange} accept="image/*" placeholder="Health Certificate" />
+      <input type="file" name="OwnershipCertificate" onChange={handleImageChange} accept="image/*" placeholder="Ownership Certificate" />
       <button type="submit" className="bg-blue-500 text-white px-4 py-2 rounded">
         {isCreating ? 'Create Consignment Koi' : 'Save Changes'}
       </button>
