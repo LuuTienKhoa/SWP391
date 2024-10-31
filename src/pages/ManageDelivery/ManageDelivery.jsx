@@ -89,6 +89,7 @@ const ManageDelivery = () => {
             <th className="p-2 border">Customer ID</th>
             <th className="p-2 border">Start Delivery Day</th>
             <th className="p-2 border">End Delivery Day</th>
+            <th className="p-2 border">Address</th>
             <th className="p-2 border">Total Amount</th>
             <th className="p-2 border">Status</th>
             <th className="p-2 border">Actions</th>
@@ -102,6 +103,7 @@ const ManageDelivery = () => {
               <td className="p-2 border">{delivery.customerID}</td>
               <td className="p-2 border">{new Date(delivery.startDeliDay).toLocaleString()}</td>
               <td className="p-2 border">{new Date(delivery.endDeliDay).toLocaleString()}</td>
+              <td className="p-2 border">{delivery.address}</td>
               <td className="p-2 border">${delivery.order.totalAmount}</td>
               <td className="p-2 border">{getStatusLabel(delivery.status)}</td>
               <td className="p-2 border">

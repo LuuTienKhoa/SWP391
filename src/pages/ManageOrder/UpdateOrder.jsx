@@ -19,6 +19,17 @@ const UpdateOrder = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
+  const deliveryStatuses = [
+    { value: 0, label: "Pending" },
+    { value: 1, label: "Completed" },
+    { value: 2, label: "Cancelled" },
+  ];
+
+  const orderTypes = [
+    { value: 0, label: "Online" },
+    { value: 1, label: "Offline" },
+  ];
+
   useEffect(() => {
     fetchOrder();
   }, []);
@@ -124,12 +135,15 @@ const UpdateOrder = () => {
           <label className="block text-gray-700">Status</label>
           <select
             name="status"
-            value={order.status}
+            value={order.status.toString()}
             onChange={handleInputChange}
             className="mt-1 block w-full border border-gray-300 rounded p-2"
           >
-            <option value="0">Pending</option>
-            <option value="1">Completed</option>
+            {deliveryStatuses.map((status) => (
+              <option key={status.value} value={status.value}>
+                {status.label}
+              </option>
+            ))}
           </select>
         </div>
         <div className="mb-4">
@@ -140,8 +154,11 @@ const UpdateOrder = () => {
             onChange={handleInputChange}
             className="mt-1 block w-full border border-gray-300 rounded p-2"
           >
-            <option value="0">Online</option>
-            <option value="1">In-store</option>
+            {orderTypes.map((type) => (
+              <option key={type.value} value={type.value}>
+                {type.label}
+              </option>
+            ))}
           </select>
         </div>
         <div className="mb-4">

@@ -45,7 +45,6 @@ const ViewDetailsPage = () => {
             <p className="text-lg"><strong>Selection Rate:</strong> {koiFish.selectionRate}</p>
             <p className="text-lg text-red-600"><strong>Species:</strong> {koiFish.species}</p>
             <p className="text-lg"><strong>Status:</strong> {koiFish.status}</p>
-            <p className="text-lg"><strong>Origin Certificate:</strong> {koiFish?.addOn?.originCertificate}</p>
 
           </div>
 
@@ -53,9 +52,26 @@ const ViewDetailsPage = () => {
           {koiFish.addOn && (
             <div className="mt-6 p-4 bg-gray-50 rounded-lg shadow">
               <h2 className="text-2xl font-semibold mb-2">Add-On Information</h2>
-              <p className="text-lg"><strong>Origin Certificate:</strong> {koiFish.addOn.originCertificate}</p>
-              <p className="text-lg"><strong>Health Certificate:</strong> {koiFish.addOn.healthCertificate}</p>
-              <p className="text-lg"><strong>Ownership Certificate:</strong> {koiFish.addOn.ownershipCertificate}</p>
+              <p className="text-lg"><strong>Origin Certificate:</strong> 
+              <img
+            src={koiFish?.addOn?.originCertificate ?? "https://www.kodamakoifarm.com/wp-content/uploads/2024/05/w0503s054-re-260x421.jpg"}
+            alt={koiFish.name}
+            className="w-full h-auto max-w-xs object-cover rounded-lg shadow-lg"
+          /></p>
+              <p className="text-lg"><strong>Health Certificate:</strong> 
+              <img
+            src={koiFish.addOn.healthCertificate}
+            alt={koiFish.name}
+            className="w-full h-auto max-w-xs object-cover rounded-lg shadow-lg"
+          />
+              </p>
+              <p className="text-lg"><strong>Ownership Certificate:</strong> 
+              <img
+            src={koiFish.addOn.ownershipCertificate}
+            alt={koiFish.name}
+            className="w-full h-auto max-w-xs object-cover rounded-lg shadow-lg"
+          />
+              </p>
             </div>
           )}
 

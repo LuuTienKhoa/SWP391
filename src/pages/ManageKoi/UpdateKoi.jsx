@@ -2,9 +2,8 @@ import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import api from "../../config/axios";
 
-const UpdateKoi = ({ onSuccess }) => {
+const UpdateKoi = ({ onUpdateSuccess }) => {
   const { id } = useParams();
-
   const [formData, setFormData] = useState({
     name: "",
     gender: "",
@@ -18,16 +17,14 @@ const UpdateKoi = ({ onSuccess }) => {
     selectionRate: "",
     species: "",
     status: 0,
+
     image: null,
-    addOn: {
-      originCertificate: null,
-      healthCertificate: null,
-      ownershipCertificate: null,
-    },
+    originCertificate: null,
+    healthCertificate: null,
+    ownershipCertificate: null,
   });
   const [error, setError] = useState("");
 
-  // Fetch existing koi data for the specified id
   useEffect(() => {
     const fetchKoiData = async () => {
       try {
@@ -35,26 +32,19 @@ const UpdateKoi = ({ onSuccess }) => {
         setFormData(response.data);
       } catch (error) {
         console.error("Error fetching koi data:", error);
-        setError("Failed to load koi data.");
+        alert("Failed to fetch koi data.");
       }
     };
+
     fetchKoiData();
   }, [id]);
 
   const handleChange = (e) => {
     const { name, value, files } = e.target;
-    if (files) {
-      if (name === "image") {
-        setFormData({ ...formData, image: files[0] });
-      } else {
-        setFormData({
-          ...formData,
-          addOn: { ...formData.addOn, [name]: files[0] },
-        });
-      }
-    } else {
-      setFormData({ ...formData, [name]: value });
-    }
+    setFormData({
+      ...formData,
+      [name]: files ? files[0] : value, // Handle file input
+    });
   };
 
   const handleSubmit = async (e) => {
@@ -73,52 +63,44 @@ const UpdateKoi = ({ onSuccess }) => {
         data.append(key, value);
       }
     });
-  
+
+
     try {
-      // Send request without setting Content-Type, Axios will handle it
-      await api.put(`/koi/Koi/${id}`, data);
+      const response = await api.put(`/koi/Koi/${id}`, data, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
       alert("Koi fish updated successfully!");
-      onSuccess(formData);
+      onUpdateSuccess(response.data);
     } catch (error) {
       console.error("Error updating koi fish:", error);
-      setError("Failed to update koi fish. Please try again.");
+      alert("Failed to update koi fish.");
     }
   };
-  
-  
+
+
+  const isFileField = (fieldName) => fieldName.includes("Certificate") || fieldName === "image";
 
   return (
     <form onSubmit={handleSubmit} className="bg-white p-4 rounded shadow-md">
       <h2 className="text-xl font-bold mb-4">Update Koi Fish</h2>
-
-      {error && <p className="text-red-500 mb-4">{error}</p>}
-
       {Object.keys(formData).map((key) => (
-        key !== "addOn" && key !== "image" && (
-          <div className="mb-2" key={key}>
-            <label className="block text-sm font-medium capitalize">{key}</label>
-            <input
-              type={typeof formData[key] === "number" ? "number" : "text"}
-              name={key}
-              value={formData[key]}
-              onChange={handleChange}
-              className="w-full p-2 border rounded"
-              required
-            />
-          </div>
-        )
+        <div className="mb-2" key={key}>
+          <label className="block text-sm font-medium">{key}</label>
+          <input
+            type={["age", "price"].includes(key) ? "number" : isFileField(key) ? "file" : "text"}
+            name={key}
+            value={isFileField(key) ? undefined : formData[key]} // Prevent showing file input value
+            onChange={handleChange}
+            className="w-full p-2 border rounded"
+            required={!isFileField(key)} // Adjust required as needed
+          />
+          {isFileField(key) && formData[key] && (
+            <p className="text-sm text-gray-00 mt-1">Selected file: {formData[key].name}</p>
+          )}
+        </div>
       ))}
-
-      {/* File inputs */}
-      <div className="mb-2">
-        <label className="block text-sm font-medium">Image</label>
-        <input
-          type="file"
-          name="image"
-          onChange={handleChange}
-          className="w-full p-2 border rounded"
-        />
-      </div>
       <div className="mb-2">
         <label className="block text-sm font-medium">Origin Certificate</label>
         <input
