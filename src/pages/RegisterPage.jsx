@@ -12,20 +12,27 @@ const RegisterPage = () => {
     try {
       // Send the registration data to the backend
       const response = await api.post("/User/register", {
+        userID: 0, // Assuming userID is auto-generated or set to 0
         username: values.username,
         password: values.password,
         name: values.username,
+        email: values.email, // Added email
+        phone: values.phone, // Added phone
+        address: values.address, // Added address
+       
       });
 
       // Extract the tokens from the response
       const { accessToken, refreshToken } = response.data.token;
-      const { role, name } = response.data;
+      const { role, name, address, phone } = response.data;
 
       // Store the tokens in localStorage
       localStorage.setItem("accessToken", accessToken);
       localStorage.setItem("refreshToken", refreshToken);
       localStorage.setItem("userRole", role);
       localStorage.setItem("userName", name);
+      localStorage.setItem("userAddress", address);
+      localStorage.setItem("userPhone", phone);
 
       navigate("/");
 
@@ -131,6 +138,38 @@ const RegisterPage = () => {
                   <Input
                     type="password"
                     placeholder="Confirm your password"
+                    className="w-full text-black py-2 my-2 bg-transparent border-b border-black outline-none focus:outline-none"
+                  />
+                </Form.Item>
+
+                <Form.Item
+                  name="phone"
+                  rules={[
+                    {
+                      required: true,
+                      message: "Please input your phone number!",
+                    },
+                  ]}
+                >
+                  <Input
+                    type="text"
+                    placeholder="Phone Number"
+                    className="w-full text-black py-2 my-2 bg-transparent border-b border-black outline-none focus:outline-none"
+                  />
+                </Form.Item>
+
+                <Form.Item
+                  name="address"
+                  rules={[
+                    {
+                      required: true,
+                      message: "Please input your address!",
+                    },
+                  ]}
+                >
+                  <Input
+                    type="text"
+                    placeholder="Address"
                     className="w-full text-black py-2 my-2 bg-transparent border-b border-black outline-none focus:outline-none"
                   />
                 </Form.Item>

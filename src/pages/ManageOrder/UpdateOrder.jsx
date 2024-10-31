@@ -58,7 +58,6 @@ const UpdateOrder = () => {
     try {
       await api.put(`/Order/${id}`, updatedOrder);
       alert("Promotion updated successfully!");
-      navigate('/admin/manageOrder');
     } catch (error) {
       console.error('Error updating order:', error);
     }
