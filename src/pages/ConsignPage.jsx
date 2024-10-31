@@ -47,7 +47,7 @@ const ConsignPage = ({ token }) => {
 
   return (
     <div>
-      <h1>Your Consignments</h1>
+     <Typography variant="h4" align="center" gutterBottom>Your Consignment</Typography>
       <div>
         {consignments.map(consignment => (
           <Card key={consignment.consignmentKoiID} sx={{ marginBottom: 2 }}>

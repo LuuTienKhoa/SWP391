@@ -1,14 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import api from '../config/axios';
-import { Button, Card, CardContent, Typography, TextField, Rating,Snackbar,Alert } from '@mui/material';
+import { Button, Card, CardContent, Typography, TextField, Rating,Snackbar,Alert,ButtonGroup } from '@mui/material';
 
 const OrderPage = ({ token }) => {
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [feedback, setFeedback] = useState({}); // State to hold feedback for each order
-  const [ratings, setRatings] = useState({}); // State to hold ratings for each order
+  const [rating, setRating] = useState({}); // State to hold ratings for each order
   const [notification, setNotification] = useState({ open: false, message: '', severity: 'success' });
+  const [filterStatus, setFilterStatus] = useState(null);
   useEffect(() => {
     const fetchOrders = async () => {
       try {
@@ -42,34 +43,45 @@ const OrderPage = ({ token }) => {
   };
 
   const handleRatingChange = (orderID, value) => {
-    setRatings(prev => ({ ...prev, [orderID]: value }));
+    setRating(prev => ({ ...prev, [orderID]: value }));
   };
 
   const submitFeedback = async (orderID, customerID) => {
     const feedbackData = {
-      Order: { id: orderID },       
-      Customer: { id: customerID },  
-      rating: ratings[orderID] || 5,
-      comment: feedback[orderID] || '',
-      dateFb: new Date().toISOString(),
+      CustomerID: customerID, 
+      OrderID: orderID,       
+      Rating: rating[orderID] || 5,
+      Comment: feedback[orderID] || '',
     };
     
     
 
     try {
-      await api.post('/feedback', feedbackData);
-      alert('Feedback submitted successfully!');
+      await api.post('/Feedback/CreateFeedback', feedbackData, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
       setFeedback(prev => ({ ...prev, [orderID]: '' }));
-      setRatings(prev => ({ ...prev, [orderID]: 5 }));
+      setRating(prev => ({ ...prev, [orderID]: 5 }));
       setNotification({ open: true, message: 'Feedback submitted successfully!', severity: 'success' });
     } catch (err) {
-      console.error(err);
       setNotification({ open: true, message: 'Failed to submit feedback.', severity: 'error' });
     }
   };
 
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error: {error}</p>;
+  const getOrderLabel = (status) => {
+    switch (status) {
+      case 0:
+        return "Pending";
+      case 1:
+        return "Completed";
+      case 2:
+        return "Cancelled";
+      default:
+        return "Unknown Status";
+    }
+  };
   const getDeliveryLabel = (status) => {
     switch (status) {
       case 0:
@@ -81,14 +93,28 @@ const OrderPage = ({ token }) => {
       case 3:
         return "Cancelled";
       default:
-        return "Unknown Status";
+        return "Unknown Delivery Status";
     }
   };
+  const handleFilterChange = (status) => {
+    setFilterStatus(status);
+  };
+  const filteredOrders = filterStatus === null
+  ? orders
+  : orders.filter(order => order.status === filterStatus);
+
   return (
     <div>
-      <h1>Your Order History</h1>
+      <Typography variant="h4" align="center" gutterBottom>Your Order History</Typography>
+
+      <ButtonGroup variant="outlined" aria-label="filter button group" sx={{ mb: 2, justifyContent: 'center', display: 'flex' }}>
+        <Button size="small" onClick={() => handleFilterChange(null)}>All</Button>
+        <Button size="small" onClick={() => handleFilterChange(0)}>Pending</Button>
+        <Button size="small" onClick={() => handleFilterChange(1)}>Completed</Button>
+        <Button size="small" onClick={() => handleFilterChange(2)}>Cancelled</Button>
+      </ButtonGroup>
       <div>
-        {orders.map(order => (
+        {filteredOrders.map(order => (
           <Card key={order.orderID} sx={{ marginBottom: 2 }}>
             <CardContent>
               <Typography variant="h6">Order ID: {order.orderID}</Typography>
@@ -96,14 +122,31 @@ const OrderPage = ({ token }) => {
               <Typography variant="body2">Created At: {new Date(order.createAt).toLocaleString()}</Typography>
               <Typography variant="body2">Customer ID: {order.customerID}</Typography> {/* Display customerID */}
 
-              {/* Display Delivery Status */}
-              <Typography variant="body2">Delivery Status: {getDeliveryLabel(order.status)}</Typography>
+              {/* Display Delivery Status if delivery information is available */}
+              {order.delivery ? (
+                <>
+                  <Typography variant="body2">
+                    Delivery Status: {getDeliveryLabel(order.delivery.status)}
+                  </Typography>
+                  <Typography variant="body2">
+                    Start Delivery Day: {new Date(order.delivery.startDeliDay).toLocaleString()}
+                  </Typography>
+                  <Typography variant="body2">
+                    End Delivery Day: {order.delivery.endDeliDay ? new Date(order.delivery.endDeliDay).toLocaleString() : 'Not Available'}
+                  </Typography>
+                </>
+              ) : (
+                <Typography variant="body2">Delivery information not available</Typography>
+              )}
+
+              {/* Display Order Status */}
+              <Typography variant="body2">Order Status: {getOrderLabel(order.status)}</Typography>
               {order.status === 1 && (
                 <>
                   {/* Feedback Section */}
                   <Rating
                     name={`rating-${order.orderID}`}
-                    value={ratings[order.orderID] || 5}
+                    value={rating[order.orderID] || 5}
                     onChange={(event, newValue) => handleRatingChange(order.orderID, newValue)}
                     sx={{ marginTop: 2 }}
                   />
@@ -136,10 +179,7 @@ const OrderPage = ({ token }) => {
                   {notification.message}
                 </Alert>
               </Snackbar>
-              {/* Delivery Details Section */}
-              <Typography variant="h6" sx={{ marginTop: 2 }}>Delivery Details</Typography>
-              <Typography variant="body2">Start Delivery Day: {new Date(order.startDeliDay).toLocaleString()}</Typography>
-              <Typography variant="body2">End Delivery Day: {order.endDeliDay ? new Date(order.endDeliDay).toLocaleString() : 'Not Available'}</Typography>
+              
             </CardContent>
           </Card>
         ))}
