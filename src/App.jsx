@@ -21,7 +21,7 @@ import OrderPage from './pages/OrderPage';
 import NotFoundPage from './pages/NotFound/NotFoundPage';
 import RoleBasedRoutes from './Routes/AdminRoute';
 import PaymentSuccess from './pages/ShopPage/PaymentSuccess';
-import ConsignmentDetailPage from './pages/Consignment/ConsignmentDetail';
+import UserConsignmentsDetailPage from './pages/ConsignPage';
 function App() {
   const location = useLocation();
   const shouldRenderHeaderFooter = !(
@@ -53,7 +53,7 @@ function App() {
           <Route path="/koiBatch" element={<KoiBatchPage />} />
           <Route path="/order" element={<OrderPage />} />
           <Route path="/paymentSuccess" element={<PaymentSuccess />} />        
-          <Route path="/user/:userId/consignments" element={<ConsignmentDetailPage />} />    
+          <Route path="/consigned" element={<UserConsignmentsDetailPage />} />    
           <Route path="/*" element={<RoleBasedRoutes />} />
           <Route path="*" element={<NotFoundPage />} />
         </Routes>

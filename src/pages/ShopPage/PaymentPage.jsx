@@ -18,7 +18,6 @@ const PaymentPage = () => {
 
     try {
       const orderData = {
-        consignmentKois: [0],
         promotionID: parseInt(promotionID, 10) || 0,
         paymentMethod: paymentMethod === 'VNPay' ? 0 : 1,
         ...(batch && { batchs: [[batch.batchID, batch.quantityPerBatch]] }),

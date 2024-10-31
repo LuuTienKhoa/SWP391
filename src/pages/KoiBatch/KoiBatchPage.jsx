@@ -146,8 +146,8 @@ const KoiBatchPage = () => {
               <h2 className="text-xl font-semibold mb-2">Batch: {batch.name}</h2>
               <p className="mb-2"><strong>Price:</strong> ${batch.pricePerBatch}</p>
               <p className="mb-2"><strong>Description:</strong> {batch.description}</p>
-              <p className="mb-2"><strong>Quantity Available:</strong> {batch.quantityPerBatch}</p>
-              <p className="mb-2"><strong>Remaining Batch:</strong> {batch.remainBatch}</p>
+              <p className="mb-2"><strong>Quantity Per Batch:</strong> {batch.quantityPerBatch}</p>
+              <p className="mb-2"><strong>Remaining Per Batch:</strong> {batch.remainBatch}</p>
               <p className="mb-4"><strong>Species:</strong> {batch.species}</p>
               <button 
               onClick={() => handleNavigateToPayment(batch)}

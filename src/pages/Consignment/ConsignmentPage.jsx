@@ -97,7 +97,7 @@ function ConsignmentPage() {
         { label: 'Daily Feed Amount (grams)', name: 'dailyFeedAmount', type: 'number' },
         { label: 'Foster Personality', name: 'personality', type: 'text' },
         { label: 'Foster Origin', name: 'origin', type: 'text' },
-        { label: 'Foster Species', name: 'species', type: 'text' },
+        { label: 'Foster Species', name: 'species', type: 'text' ,required: true},
         { label: 'Fostering Days', name: 'fosteringDays', type: 'number' },
         { label: 'Upload Image', name: 'image', type: 'file', accept: 'image/*' },
         { label: 'Origin Certificate', name: 'originCertificate', type: 'file', accept: 'image/*' },

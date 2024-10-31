@@ -20,7 +20,7 @@ const EditBatchForm = ({ newBatch, handleChange, handleSave }) => {
         name="remainBatch"
         value={newBatch.remainBatch}
         onChange={handleChange}
-        placeholder="Species"
+        placeholder="Remain Batch"
       />
       <input
         type="number"

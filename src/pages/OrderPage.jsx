@@ -67,7 +67,20 @@ const OrderPage = ({ token }) => {
 
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error: {error}</p>;
-
+  const getDeliveryLabel = (status) => {
+    switch (status) {
+      case 0:
+        return "Delivering";
+      case 1:
+        return "Delivered";
+      case 2:
+        return "Failed";
+      case 3:
+        return "Cancelled";
+      default:
+        return "Unknown Status";
+    }
+  };
   return (
     <div>
       <h1>Your Order History</h1>
@@ -79,33 +92,37 @@ const OrderPage = ({ token }) => {
               <Typography variant="body1">Total Amount: {order.totalAmount}</Typography>
               <Typography variant="body2">Created At: {new Date(order.createAt).toLocaleString()}</Typography>
               <Typography variant="body2">Customer ID: {order.customerID}</Typography> {/* Display customerID */}
-              
-              {/* Display Delivery Status */}
-              <Typography variant="body2">Delivery Status: {order.deliveryStatus || 'Not Available'}</Typography> {/* Display delivery status */}
 
-              {/* Feedback Section */}
-              <Rating
-                name={`rating-${order.orderID}`}
-                value={ratings[order.orderID] || 5}
-                onChange={(event, newValue) => handleRatingChange(order.orderID, newValue)}
-                sx={{ marginTop: 2 }}
-              />
-              <TextField
-                label="Your Feedback"
-                variant="outlined"
-                fullWidth
-                value={feedback[order.orderID] || ''}
-                onChange={(e) => handleFeedbackChange(order.orderID, e.target.value)}
-                sx={{ marginTop: 2 }}
-              />
-              <Button
-                variant="contained"
-                color="primary"
-                onClick={() => submitFeedback(order.orderID, order.customerID)}
-                sx={{ marginTop: 1 }}
-              >
-                Submit Feedback
-              </Button>
+              {/* Display Delivery Status */}
+              <Typography variant="body2">Delivery Status: {getDeliveryLabel(order.status)}</Typography>
+              {order.status === 1 && (
+                <>  
+                  {/* Feedback Section */}
+                  <Rating
+                    name={`rating-${order.orderID}`}
+                    value={ratings[order.orderID] || 5}
+                    onChange={(event, newValue) => handleRatingChange(order.orderID, newValue)}
+                    sx={{ marginTop: 2 }}
+                  />
+                  <TextField
+                    label="Your Feedback"
+                    variant="outlined"
+                    fullWidth
+                    value={feedback[order.orderID] || ''}
+                    onChange={(e) => handleFeedbackChange(order.orderID, e.target.value)}
+                    sx={{ marginTop: 2 }}
+                  />
+                  <Button
+                    variant="contained"
+                    color="primary"
+                    onClick={() => submitFeedback(order.orderID, order.customerID)}
+                    sx={{ marginTop: 1 }}
+                  >
+                    Submit Feedback
+                  </Button>
+
+                </>
+              )}
 
               {/* Delivery Details Section */}
               <Typography variant="h6" sx={{ marginTop: 2 }}>Delivery Details</Typography>

@@ -76,10 +76,10 @@ function Header() {
               <Link to="/order" className="text-white hover:underline">Your Order</Link>
             </li>
         )}
-               {isLoggedIn && role === '2' && userId && (
+               {isLoggedIn && role === '2' &&  (
           <li>
-            <Link to={`/user/${userId}/consignments`} className="text-white hover:underline">
-              Your Consignments
+            <Link to="consigned" className="text-white hover:underline">
+              Your Consign
             </Link>
           </li>
         )}
