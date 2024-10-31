@@ -8,6 +8,7 @@ const PaymentPage = () => {
   const [paymentMethod, setPaymentMethod] = useState('VNPay'); // Default to VNPay
   const [promotionID, setPromotionID] = useState('');
   const [address, setAddress] = useState(''); // State to store the address
+  const [buyingAmount, setBuyingAmount] = useState(0);
   const navigate = useNavigate();
 
   // Payment processing function
@@ -21,7 +22,7 @@ const PaymentPage = () => {
       const orderData = {
         promotionID: parseInt(promotionID, 10) || 0,
         paymentMethod: paymentMethod === 'VNPay' ? 0 : 1,
-        ...(batch && { batchs: [[batch.batchID, batch.quantityPerBatch]] }),
+        ...(batch && { batchs: [[batch.batchID, buyingAmount]] }),
         ...(koiFish && { kois: [koiFish.koiID] }),
       };
 
@@ -118,11 +119,24 @@ const PaymentPage = () => {
               />
             </div>
           )}
+          
+          {/* Buy Batch Amount */}
+          <div className="mb-6">
+            <label className="block text-lg font-medium mb-2">Amount</label>
+            <input
+              type="number"
+              name="amount"
+              className="w-full p-3 bg-gray-700 rounded-lg"
+              placeholder="Amount of Batch to Buy"
+              value={buyingAmount}
+              onChange={(e) => setBuyingAmount(parseInt(e.target.value))}
+            />
+          </div>
 
           {/* Price */}
           <div className="bg-gray-700 p-6 rounded-lg mb-6">
             <p className="text-4xl font-bold">
-              {batch ? `$${batch.pricePerBatch?.toFixed(2)}` : `$${koiFish?.price?.toFixed(2)}`}
+              {batch ? `$${(batch.pricePerBatch * buyingAmount)?.toFixed(2)}` : `$${koiFish?.price?.toFixed(2)}`}
             </p>
             <p className="text-sm mt-2">
               We will save all details of your payment. You may stop future automatic payments anytime.
