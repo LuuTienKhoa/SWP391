@@ -50,16 +50,13 @@ const UpdateKoi = ({ onUpdateSuccess }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
-  
+
     // Initialize FormData
     const data = new FormData();
-  
+
     // Append form data, stringifying objects as needed
     Object.entries(formData).forEach(([key, value]) => {
-      if (key === "addOn") {
-        // Stringify the addOn object if it’s expected as a JSON string
-        data.append("addOn", JSON.stringify(value));
-      } else if (value !== null && value !== undefined) {
+      if (value !== null && value !== undefined) {
         data.append(key, value);
       }
     });
@@ -84,22 +81,135 @@ const UpdateKoi = ({ onUpdateSuccess }) => {
   return (
     <form onSubmit={handleSubmit} className="bg-white p-4 rounded shadow-md">
       <h2 className="text-xl font-bold mb-4">Update Koi Fish</h2>
-      {Object.keys(formData).map((key) => (
-        <div className="mb-2" key={key}>
-          <label className="block text-sm font-medium">{key}</label>
-          <input
-            type={["age", "price"].includes(key) ? "number" : isFileField(key) ? "file" : "text"}
-            name={key}
-            value={isFileField(key) ? undefined : formData[key]} // Prevent showing file input value
-            onChange={handleChange}
-            className="w-full p-2 border rounded"
-            required={!isFileField(key)} // Adjust required as needed
-          />
-          {isFileField(key) && formData[key] && (
-            <p className="text-sm text-gray-00 mt-1">Selected file: {formData[key].name}</p>
-          )}
-        </div>
-      ))}
+      <div className="mb-2">
+        <label className="block text-sm font-medium">Name</label>
+        <input
+          type="text"
+          name="name"
+          value={formData.name}
+          onChange={handleChange}
+          className="w-full p-2 border rounded"
+        />
+      </div>
+      <div className="mb-2">
+        <label className="block text-sm font-medium">Gender</label>
+        <input
+          type="text"
+          name="gender"
+          value={formData.gender}
+          onChange={handleChange}
+          className="w-full p-2 border rounded"
+        />
+      </div>
+      <div className="mb-2">
+        <label className="block text-sm font-medium">Age</label>
+        <input
+          type="number"
+          name="age"
+          value={formData.age}
+          onChange={handleChange}
+          className="w-full p-2 border rounded"
+        />
+      </div>
+      <div className="mb-2">
+        <label className="block text-sm font-medium">Size</label>
+        <input
+          type="text"
+          name="size"
+          value={formData.size}
+          onChange={handleChange}
+          className="w-full p-2 border rounded"
+        />
+      </div>
+      <div className="mb-2">
+        <label className="block text-sm font-medium">Color</label>
+        <input
+          type="text"
+          name="color"
+          value={formData.color}
+          onChange={handleChange}
+          className="w-full p-2 border rounded"
+        />
+      </div>
+      <div className="mb-2">
+        <label className="block text-sm font-medium">Daily Feed Amount</label>
+        <input
+          type="text"
+          name="dailyFeedAmount"
+          value={formData.dailyFeedAmount}
+          onChange={handleChange}
+          className="w-full p-2 border rounded"
+        />
+      </div>
+      <div className="mb-2">
+        <label className="block text-sm font-medium">Price</label>
+        <input
+          type="number"
+          name="price"
+          value={formData.price}
+          onChange={handleChange}
+          className="w-full p-2 border rounded"
+        />
+      </div>
+      <div className="mb-2">
+        <label className="block text-sm font-medium">Personality</label>
+        <input
+          type="text"
+          name="personality"
+          value={formData.personality}
+          onChange={handleChange}
+          className="w-full p-2 border rounded"
+        />
+      </div>
+      <div className="mb-2">
+        <label className="block text-sm font-medium">Origin</label>
+        <input
+          type="text"
+          name="origin"
+          value={formData.origin}
+          onChange={handleChange}
+          className="w-full p-2 border rounded"
+        />
+      </div>
+      <div className="mb-2">
+        <label className="block text-sm font-medium">Selection Rate</label>
+        <input
+          type="text"
+          name="selectionRate"
+          value={formData.selectionRate}
+          onChange={handleChange}
+          className="w-full p-2 border rounded"
+        />
+      </div>
+      <div className="mb-2">
+        <label className="block text-sm font-medium">Species</label>
+        <input
+          type="text"
+          name="species"
+          value={formData.species}
+          onChange={handleChange}
+          className="w-full p-2 border rounded"
+        />
+      </div>
+      <div className="mb-2">
+        <label className="block text-sm font-medium">Status</label>
+        <input
+          type="number"
+          name="status"
+          value={formData.status}
+          onChange={handleChange}
+          className="w-full p-2 border rounded"
+        />
+      </div>
+      <div className="mb-2">
+        <label className="block text-sm font-medium">Image</label>
+        <input
+          type="file"
+          name="image"
+          onChange={handleChange}
+          className="w-full p-2 border rounded"
+        />
+      </div>
       <div className="mb-2">
         <label className="block text-sm font-medium">Origin Certificate</label>
         <input
