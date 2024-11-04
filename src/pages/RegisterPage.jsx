@@ -1,12 +1,12 @@
 import api from "../config/axios";
 import { useNavigate } from "react-router-dom";
 import Cover_Image from "../assets/bg.jpg";
-import { Form, Input } from "antd";
+import { Form, Input,message } from "antd";
 import { Link } from "react-router-dom";
 
 const RegisterPage = () => {
   const navigate = useNavigate();
-
+  const [form] = Form.useForm();
   // Handle the form submission for registering a user
   const handleRegister = async (values) => {
     try {
@@ -38,7 +38,15 @@ const RegisterPage = () => {
 
     } catch (error) {
       console.error("Registration failed:", error);
-    }};
+
+      // Display error message from backend if available
+      if (error.response && error.response.data && error.response.data.message) {
+        message.error(error.response.data.message); // Show error message to the user
+      } else {
+        message.error("Registration failed. Please try again."); // Fallback message
+      }
+    }
+  };
   return (
     <>
       <div className="w-full h-screen flex items-start">
@@ -61,6 +69,7 @@ const RegisterPage = () => {
 
             <div className="w-full flex flex-col">
               <Form
+                form ={form}
                 className="w-full"
                 labelCol={{ span: 24 }}
                 onFinish={handleRegister} // Updated to use handleRegister

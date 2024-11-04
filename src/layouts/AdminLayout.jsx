@@ -1,11 +1,11 @@
-import React from 'react';
 import { Link } from 'react-router-dom';
-import { Card, Button, Avatar } from '@mui/material';
+import {  Button, Avatar } from '@mui/material';
 import { MdDashboard } from 'react-icons/md';
 import { FaFish, FaShoppingCart, } from 'react-icons/fa';
 import { FaUsers } from 'react-icons/fa'
-import { FaBox, FaTags, FaComments, FaTruck,FaArrowLeft } from 'react-icons/fa';
+import { FaBox, FaTags, FaComments, FaTruck, FaArrowLeft } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom'; // Đảm bảo đã import useNavigate
+import PropTypes from 'prop-types';
 
 const AdminLayout = ({ children }) => {
   const navigate = useNavigate(); // Khởi tạo navigate
@@ -17,17 +17,16 @@ const AdminLayout = ({ children }) => {
         <ul>
           {[
             { label: 'Dashboard', icon: <MdDashboard size={24} />, link: '/admin' },
-            { label: 'Manage User', icon: <FaUsers size={24} />, link: '/admin/manage-user' },
-            { label: 'Manage Orders', icon: <FaShoppingCart size={24} />, link: '/admin/manageOrder' },
-            { label: 'Manage Koi', icon: <FaFish size={24} />, link: '/admin/manageKoi' },
-            { label: 'Manage Batch', icon: <FaBox size={24} />, link: '/admin/manageKoiBatch' }, 
-            { label: 'Manage Promotion', icon: <FaTags size={24} />, link: '/admin/managePromotion' }, 
-            { label: 'Manage Feedback', icon: <FaComments size={24} />, link: '/admin/manageFeedback' },  
-            { label: 'Manage Consign', icon: <FaTruck size={24} />, link: '/admin/manageConsign' },  
-            { label: 'Manage Delivery', icon: <FaTruck size={24} />, link: '/admin/manageDelivery' },  
-            { label: 'Manage Consign Koi', icon: <FaTruck size={24} />, link: '/admin/manageConsignKoi' },  
-            { label: 'Manage Feedback', icon: <FaTruck size={24} />, link: '/admin/manageFeedback' } , 
-            { label: 'Manage Trans', icon: <FaTruck size={24} />, link: '/admin/manageTrans' }  
+            { label: 'Users', icon: <FaUsers size={24} />, link: '/admin/manage-user' },
+            { label: 'Orders', icon: <FaShoppingCart size={24} />, link: '/admin/manageOrder' },
+            { label: 'Koi Inventory', icon: <FaFish size={24} />, link: '/admin/manageKoi' },
+            { label: 'Batches', icon: <FaBox size={24} />, link: '/admin/manageKoiBatch' },
+            { label: 'Promotions', icon: <FaTags size={24} />, link: '/admin/managePromotion' },
+            { label: 'Feedback', icon: <FaComments size={24} />, link: '/admin/manageFeedback' },
+            { label: 'Consignments', icon: <FaTruck size={24} />, link: '/admin/manageConsign' },
+            { label: 'Deliveries', icon: <FaTruck size={24} />, link: '/admin/manageDelivery' },
+            { label: 'Consigned Koi', icon: <FaFish size={24} />, link: '/admin/manageConsignKoi' },
+            { label: 'Transactions', icon: <FaTruck size={24} />, link: '/admin/manageTrans' }
 
           ].map((item, index) => (
             <li key={index} className="mb-4">
@@ -62,7 +61,7 @@ const AdminLayout = ({ children }) => {
                   width: 48,
                 }}
               >
-                <FaArrowLeft size={24} color="white" /> 
+                <FaArrowLeft size={24} color="white" />
               </Avatar>
             }
             className="mt-4"
@@ -80,5 +79,8 @@ const AdminLayout = ({ children }) => {
     </div>
   );
 };
-
+// Required that AdminLayout should have a prop children that can be rendered
+AdminLayout.propTypes = {
+  children: PropTypes.node.isRequired,
+};
 export default AdminLayout;

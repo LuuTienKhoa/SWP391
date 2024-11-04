@@ -34,6 +34,7 @@ const ManageFeedbackPage = () => {
     } catch (err) {
       setSnackbarMessage('Failed to delete feedback');
       setSnackbarOpen(true);
+      console.log("Can not fetch feedback"+ err);
     }
   };
 

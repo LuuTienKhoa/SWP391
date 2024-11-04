@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import  { useEffect, useState } from 'react';
 import api from '../../config/axios';
 import BlogCard from './BlogCard'; 
 
@@ -9,11 +9,9 @@ const UserBlogPage = () => {
       try {
         const response = await api.get('/Blog'); 
           setBlogs(response.data); 
-          setError('Unexpected data format from API');
-         setLoading(false);
+
       } catch (error) {
-        setError('Failed to load blogs');
-        setLoading(false);
+        console.log('Can not fetch api blog' , error);
       }
     };
 

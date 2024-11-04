@@ -1,6 +1,6 @@
-import React from 'react';
+import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
-import { Card, Button, Avatar } from '@mui/material';
+import { Button, Avatar } from '@mui/material';
 import { MdDashboard } from 'react-icons/md';
 import { FaFish, FaShoppingCart } from 'react-icons/fa';
 import { FaUsers } from 'react-icons/fa';
@@ -21,13 +21,13 @@ const StaffLayout = ({ children }) => {
             { label: 'Manage User', icon: <FaUsers size={24} />, link: '/staff/manage-user' },
             { label: 'Manage Orders', icon: <FaShoppingCart size={24} />, link: '/staff/manageOrder' },
             { label: 'Manage Koi', icon: <FaFish size={24} />, link: '/staff/manageKoi' },
-            { label: 'Manage Batch', icon: <FaBox size={24} />, link: '/staff/manageKoiBatch' },  // Changed to FaBox
-            { label: 'Manage Promotion', icon: <FaTags size={24} />, link: '/staff/managePromotion' },  // Changed to FaTags
-            { label: 'Manage Feedback', icon: <FaComments size={24} />, link: '/staff/manageFeedback' },  // Changed to FaComments
-            { label: 'Manage Consign', icon: <FaTruck size={24} />, link: '/staff/manageConsign' },  // Changed to FaTruck
-            { label: 'Manage Delivery', icon: <FaTruck size={24} />, link: '/staff/manageDelivery' },  // Changed to FaTruck
-            { label: 'Manage Consign Koi', icon: <FaTruck size={24} />, link: '/staff/manageConsignKoi' }, // Changed to FaTruck
-            { label: 'Manage Trans', icon: <FaTruck size={24} />, link: '/staff/manageTrans' }  // Changed to FaTruck
+            { label: 'Manage Batch', icon: <FaBox size={24} />, link: '/staff/manageKoiBatch' },  
+            { label: 'Manage Promotion', icon: <FaTags size={24} />, link: '/staff/managePromotion' },  
+            { label: 'Manage Feedback', icon: <FaComments size={24} />, link: '/staff/manageFeedback' },  
+            { label: 'Manage Consign', icon: <FaTruck size={24} />, link: '/staff/manageConsign' },  
+            { label: 'Manage Delivery', icon: <FaTruck size={24} />, link: '/staff/manageDelivery' },  
+            { label: 'Manage Consign Koi', icon: <FaTruck size={24} />, link: '/staff/manageConsignKoi' }, 
+            { label: 'Manage Trans', icon: <FaTruck size={24} />, link: '/staff/manageTrans' }  
           ].map((item, index) => (
             <li key={index} className="mb-4">
               <Link to={item.link}>
@@ -81,5 +81,7 @@ const StaffLayout = ({ children }) => {
     </div>
   );
 };
-
+StaffLayout.propTypes = {
+  children: PropTypes.node.isRequired,
+};
 export default StaffLayout;
