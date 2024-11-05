@@ -11,7 +11,7 @@ const PreKoiInfoLayout = () => {
         <div className="relative w-full max-w-lg h-64 bg-gray-200 rounded-md overflow-hidden">
           <iframe
             className="w-full h-full"
-            src="https://www.youtube.com/embed/Y_LqUwfpLjg?start=6"  
+            src=""  
             allowFullScreen
             title="F Koi Video"
           ></iframe>

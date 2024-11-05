@@ -1,11 +1,14 @@
-import React, { useState, useEffect } from 'react'
+import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom';
 import api from '../../config/axios';
 import Pagination from '../../components/Pagination';
 import Button from "../../components/button/Button";
+import { Modal } from 'antd';
 
+const placeholderImage = "https://via.placeholder.com/300x200?text=No+Image+Available";
 const KoiBatchPage = () => {
   const [batches, setBatches] = useState([]);
+  const [selectedBatch, setSelectedBatch] = useState(null);
   const navigate = useNavigate();
   const [species, setSpecies] = useState('');
   const [name, setName] = useState('');
@@ -21,6 +24,8 @@ const KoiBatchPage = () => {
   const currentPosts = batches.slice(firstPostIndex, lastPostIndex);
 
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
+
+
 
   useEffect(() => {
     const fetchBatches = async () => {
@@ -62,11 +67,20 @@ const KoiBatchPage = () => {
     } catch (error) {
       console.error('Error fetching filtered batches:', error);
     }
-    
+
   };
   //Navigate toi payment
   const handleNavigateToPayment = (batch) => {
     navigate(`/payment/${batch.batchID}`, { state: { batch } });
+  };
+
+  //Open form Modal from antd
+  const handleImageClick = (batch) => {
+    setSelectedBatch(batch); // Set selected batch to show in modal
+  };
+
+  const closeModal = () => {
+    setSelectedBatch(null); // Close modal
   };
 
   return (
@@ -75,8 +89,8 @@ const KoiBatchPage = () => {
       <h1 className="text-4xl font-bold mb-6 text-center text-gray-800">Koi Batches Available</h1>
 
       <div className="text-center mb-6">
-      <div className="flex justify-between items-center mb-8 p-4">
-      <div className="flex-1 mr-4">
+        <div className="flex justify-between items-center mb-8 p-4">
+          <div className="flex-1 mr-4">
             <input
               type="text"
               placeholder="Search Name of Batch"
@@ -85,21 +99,20 @@ const KoiBatchPage = () => {
               className="w-full p-2 border border-gray-300 rounded"
             />
           </div>
-      <Button
-              onClick={() => setFilterVisible(!filterVisible)}
-              className={`px-4 py-2 rounded ${
-                filterVisible ? 'Close' : 'What are you looking for'
+          <Button
+            onClick={() => setFilterVisible(!filterVisible)}
+            className={`px-4 py-2 rounded ${filterVisible ? 'Close' : 'What are you looking for'
               }`}
-            >
-              What are you looking for
-      </Button>
-      </div>
-        
+          >
+            What are you looking for
+          </Button>
+        </div>
+
       </div>
       {filterVisible && (
         <div className="mb-6 bg-gray-100 p-4 rounded-lg shadow-md">
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
-            
+
             <div>
               <label className="block mb-2 text-sm font-medium">Min Price</label>
               <input
@@ -131,7 +144,7 @@ const KoiBatchPage = () => {
               />
             </div>
           </div>
-         
+
         </div>
       )}
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
@@ -141,19 +154,21 @@ const KoiBatchPage = () => {
           currentPosts.map((batch) => (
             <div
               key={batch.batchID}
-              className="border rounded-lg shadow-lg p-6 text-center bg-white"
+              className=" p-6 text-center bg-white"
+              onClick={() => handleImageClick(batch)}
+              
             >
-              <h2 className="text-xl font-semibold mb-2">Batch: {batch.name}</h2>
-              <p className="mb-2"><strong>Price:</strong> ${batch.pricePerBatch}</p>
-              <p className="mb-2"><strong>Description:</strong> {batch.description}</p>
-              <p className="mb-2"><strong>Quantity Per Batch:</strong> {batch.quantityPerBatch}</p>
-              <p className="mb-2"><strong>Remaining Per Batch:</strong> {batch.remainBatch}</p>
-              <p className="mb-4"><strong>Species:</strong> {batch.species}</p>
-              <button 
-              onClick={() => handleNavigateToPayment(batch)}
-              className="bg-green-500 text-white py-2 px-4 rounded hover:bg-green-600">
-                Buy Now
-              </button>
+              <div className="border rounded-lg shadow-md p-4 bg-white w-56 h-80 mx-auto">
+                <div className="relative">
+                  <img
+                    src={batch.image || placeholderImage}
+                    alt={batch.name}
+                    className="w-full h-48 object-cover"
+                  />
+                </div>
+                <h2 className="text-lg font-semibold mt-4 text-center">{batch.name}</h2>
+                <p className="text-gray-600 text-center mt-2">Price: ${batch.pricePerBatch}</p>
+              </div>
             </div>
           ))
         )}
@@ -164,6 +179,29 @@ const KoiBatchPage = () => {
         postPerPage={postsPerPage}
         paginate={paginate}
       />
+      {selectedBatch && (
+        <Modal
+          open={!!selectedBatch}
+          onCancel={closeModal}
+          footer={null}
+          title={selectedBatch?.name}
+        >
+          <div className="text-center">
+            <img src={selectedBatch.image} alt={selectedBatch.name} className="w-full h-48 object-cover mb-4" />
+            <p><strong>Price:</strong> ${selectedBatch.pricePerBatch}</p>
+            <p><strong>Description:</strong> {selectedBatch.description}</p>
+            <p><strong>Quantity Per Batch:</strong> {selectedBatch.quantityPerBatch}</p>
+            <p><strong>Remaining Per Batch:</strong> {selectedBatch.remainBatch}</p>
+            <p><strong>Species:</strong> {selectedBatch.species}</p>
+            <button
+              onClick={() => handleNavigateToPayment(selectedBatch)}
+              className="bg-green-500 text-white py-2 px-4 rounded hover:bg-green-600 mt-4"
+            >
+              Buy Now
+            </button>
+          </div>
+        </Modal>
+      )}
     </div>
   );
 };
