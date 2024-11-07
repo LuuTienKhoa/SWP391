@@ -10,6 +10,8 @@
       localStorage.removeItem('refreshToken');
       localStorage.removeItem('userRole');
       localStorage.removeItem('userName');
+      localStorage.removeItem('userAddress');
+      localStorage.removeItem('userPhone');
       return <Navigate to="/login" />;
     }
 

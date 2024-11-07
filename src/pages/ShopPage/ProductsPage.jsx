@@ -6,7 +6,7 @@ import ShoppingCart from "../../components/ShoppingCart";
 import { ShoppingCartIcon } from "@heroicons/react/24/outline";
 import { ShoppingBagIcon } from "lucide-react";
 import ComparisonCart from "../../components/Comparison";
-import Pagination from '../../components/Pagination';
+import Pagination from "../../components/Pagination";
 
 const ProductsPage = () => {
   const [koiFishs, setKoiFishs] = useState([]);
@@ -18,11 +18,11 @@ const ProductsPage = () => {
     const savedCompare = localStorage.getItem("compareItems");
     return savedCompare ? JSON.parse(savedCompare) : [];
   });
-  const [sortOrder, setSortOrder] = useState("asc");
+  const [sortOrder, setSortOrder] = useState("normal");
   const [cartOpen, setCartOpen] = useState(false);
   const [isCartVisible, setIsCartVisible] = useState(false);
 
-  // Pagination 
+  // Pagination
   const [currentPage, setCurrentPage] = useState(1);
   const [postsPerPage] = useState(8);
   const lastPostIndex = currentPage * postsPerPage;
@@ -46,7 +46,9 @@ const ProductsPage = () => {
       setKoiFishs(sortedData);
     } catch (error) {
       console.error("Error fetching koi fish:", error);
-      alert("Failed to fetch koi fish. Please check the console for more details.");
+      alert(
+        "Failed to fetch koi fish. Please check the console for more details."
+      );
     }
   }, [sortOrder]);
 
@@ -114,22 +116,38 @@ const ProductsPage = () => {
 
         {/* Sort and Compare */}
         <div className="flex justify-between items-center mb-4 p-4">
+          {/* Compare Button on the left */}
           <button
             onClick={toggleCartVisibility}
             className="flex items-center justify-center bg-gradient-to-r from-orange-400 to-orange-600 text-white border-none rounded-full px-6 py-3 shadow-lg hover:from-orange-500 hover:to-orange-700 transition duration-300 transform hover:scale-105"
           >
             <span className="mr-2">🔄</span> So sánh ({compareItems.length})
           </button>
-          <div className="flex justify-end ">
-            <select
-              value={sortOrder}
-              onChange={(e) => setSortOrder(e.target.value)}
-              className="p-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-orange-500 transition duration-300"
+
+          {/* Sort and Cart Buttons on the right */}
+          <div className="flex justify-end items-center">
+            <div>
+              <select
+                value={sortOrder}
+                onChange={(e) => setSortOrder(e.target.value)}
+                className="p-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-orange-500 transition duration-300"
+              >
+                <option value="normal">Price</option>
+                <option value="asc">Price: Ascending</option>
+                <option value="desc">Price: Descending</option>
+              </select>
+            </div>
+            <button
+              onClick={() => setCartOpen(true)}
+              className="relative flex items-center justify-center text-gray-700 px-4 py-2 rounded hover:bg-gray-100 transition duration-300"
             >
-              <option value="normal">Price</option>
-              <option value="asc">Price: Ascending</option>
-              <option value="desc">Price: Descending</option>
-            </select>
+              <ShoppingCartIcon className="h-6 w-6" aria-hidden="true" />
+              {cartItems.length > 0 && (
+                <span className="absolute top-0 right-0 inline-flex items-center justify-center px-2 py-1 text-xs font-bold leading-none text-red-100 bg-red-600 rounded-full">
+                  {cartItems.length}
+                </span>
+              )}
+            </button>
           </div>
         </div>
 
@@ -140,7 +158,8 @@ const ProductsPage = () => {
               <Link to={`/view-details/${koiFish.koiID}`}>
                 <img
                   src={
-                    koiFish.image ?? "https://www.kodamakoifarm.com/wp-content/uploads/2024/05/w0503s054-re-260x421.jpg"
+                    koiFish.image ??
+                    "https://www.kodamakoifarm.com/wp-content/uploads/2024/05/w0503s054-re-260x421.jpg"
                   }
                   alt={koiFish.name}
                   className="w-full h-100 object-cover"
@@ -188,10 +207,11 @@ const ProductsPage = () => {
 
                   <button
                     onClick={() => handleCompare(koiFish)}
-                    className={`px-3 py-1 rounded-lg font-medium text-sm transition duration-300 ${compareItems.find((item) => item.koiID === koiFish.koiID)
+                    className={`px-3 py-1 rounded-lg font-medium text-sm transition duration-300 ${
+                      compareItems.find((item) => item.koiID === koiFish.koiID)
                         ? "bg-blue-600 text-white hover:bg-blue-700"
                         : "bg-blue-400 text-white hover:bg-blue-500"
-                      }`}
+                    }`}
                   >
                     {compareItems.find((item) => item.koiID === koiFish.koiID)
                       ? "Remove from Compare"

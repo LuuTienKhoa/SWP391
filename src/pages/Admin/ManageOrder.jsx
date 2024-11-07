@@ -1,11 +1,12 @@
-import React, { useState, useEffect } from 'react';
-import api from '../../config/axios';
-import { useNavigate } from 'react-router-dom';
+import React, { useState, useEffect } from "react";
+import api from "../../config/axios";
+import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 const ManageOrder = () => {
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [selectedStatus, setSelectedStatus] = useState('All');
+  const [selectedStatus, setSelectedStatus] = useState("All");
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -14,24 +15,26 @@ const ManageOrder = () => {
 
   const fetchOrders = async () => {
     try {
-      const response = await api.get('/Order');
+      const response = await api.get("/Order");
       setOrders(response.data);
       setLoading(false);
     } catch (error) {
-      console.error('Error fetching orders:', error);
+      console.error("Error fetching orders:", error);
       setLoading(false);
     }
   };
 
   const deleteOrder = async (id) => {
-    const confirmDelete = window.confirm("Are you sure you want to delete this order?");
+    const confirmDelete = window.confirm(
+      "Are you sure you want to delete this order?"
+    );
     if (!confirmDelete) return;
 
     try {
       await api.delete(`/Order/${id}`);
       fetchOrders(); // Refresh the order list
     } catch (error) {
-      console.error('Error deleting order:', error);
+      console.error("Error deleting order:", error);
     }
   };
 
@@ -51,9 +54,12 @@ const ManageOrder = () => {
     }
   };
 
-  const filteredOrders = selectedStatus === 'All'
-    ? orders
-    : orders.filter(order => getStatusLabel(order.status) === selectedStatus);
+  const filteredOrders =
+    selectedStatus === "All"
+      ? orders
+      : orders.filter(
+          (order) => getStatusLabel(order.status) === selectedStatus
+        );
 
   if (loading) return <div>Loading...</div>;
 
@@ -61,10 +67,30 @@ const ManageOrder = () => {
     <div className="p-6">
       <h1 className="text-3xl font-bold mb-6 text-center">Manage Orders</h1>
       <div className="mb-4 text-center">
-        <button onClick={() => setSelectedStatus('All')} className="bg--500 text-white px-4 py-1 rounded mr-2">All</button>
-        <button onClick={() => setSelectedStatus('Pending')} className="bg-yellow-500 text-white px-4 py-1 rounded mr-2">Pending</button>
-        <button onClick={() => setSelectedStatus('Completed')} className="bg-green-500 text-white px-4 py-1 rounded mr-2">Completed</button>
-        <button onClick={() => setSelectedStatus('Cancelled')} className="bg-red-500 text-white px-4 py-1 rounded mr-2">Cancelled</button>
+        <button
+          onClick={() => setSelectedStatus("All")}
+          className="bg--500 text-white px-4 py-1 rounded mr-2"
+        >
+          All
+        </button>
+        <button
+          onClick={() => setSelectedStatus("Pending")}
+          className="bg-yellow-500 text-white px-4 py-1 rounded mr-2"
+        >
+          Pending
+        </button>
+        <button
+          onClick={() => setSelectedStatus("Completed")}
+          className="bg-green-500 text-white px-4 py-1 rounded mr-2"
+        >
+          Completed
+        </button>
+        <button
+          onClick={() => setSelectedStatus("Cancelled")}
+          className="bg-red-500 text-white px-4 py-1 rounded mr-2"
+        >
+          Cancelled
+        </button>
       </div>
       <div className="overflow-x-auto">
         <table className="min-w-full bg-white border border-gray-300">
@@ -79,13 +105,25 @@ const ManageOrder = () => {
               <th className="py-2 px-4 border">Total Amount</th>
               <th className="py-2 px-4 border">Type</th>
               <th className="py-2 px-4 border">Status</th>
-              <th className="py-2 px-4 border">Actions</th>
             </tr>
           </thead>
           <tbody>
             {filteredOrders.map((order) => (
               <tr key={order.orderID} className="text-center border-b">
-                <td className="py-2 px-4 border">{order.orderID}</td>
+                <td className="py-2 px-4 border">
+                  <Link
+                    to={`/admin/manageOrder/orderDetail/${order.orderID}`}
+                    className="text-blue-500 underline"
+                    onClick={() => {
+                      console.log("Navigating to OrderDetail with ID:", order.orderID);
+                      if (!order.orderID) {
+                        console.error("Order ID is undefined");
+                      }
+                    }}
+                  >
+                    {order.orderID}
+                  </Link>
+                </td>
                 <td className="py-2 px-4 border">{order.customerID}</td>
                 <td className="py-2 px-4 border">{order.staffID}</td>
                 <td className="py-2 px-4 border">{order.createAt}</td>
@@ -93,27 +131,10 @@ const ManageOrder = () => {
                 <td className="py-2 px-4 border">{order.promotionID}</td>
                 <td className="py-2 px-4 border">{order.totalAmount}</td>
                 <td className="py-2 px-4 border">{getTypeLabel(order.type)}</td>
-                <td className="py-2 px-4 border">{getStatusLabel(order.status)}</td>
                 <td className="py-2 px-4 border">
-                  <button
-                    className="bg-red-500 text-white px-4 py-1 rounded mr-2"
-                    onClick={() => deleteOrder(order.orderID)}
-                  >
-                    Delete
-                  </button>
-                  <button
-                    className="bg-blue-500 text-white px-4 py-1 rounded"
-                    onClick={() => {
-                      if (localStorage.getItem('userRole') === '0') {
-                        navigate(`/admin/manageOrder/updateOrder/${order.orderID}`)
-                      } else if (localStorage.getItem('userRole') === '1') {
-                        navigate(`/staff/manageOrder/updateOrder/${order.orderID}`)
-                      }
-                    }}
-                  >
-                    Update
-                  </button>
+                  {getStatusLabel(order.status)}
                 </td>
+               
               </tr>
             ))}
           </tbody>
