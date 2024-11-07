@@ -190,7 +190,6 @@ const KoiBatchPage = () => {
             <img src={selectedBatch.image} alt={selectedBatch.name} className="w-full h-48 object-cover mb-4" />
             <p><strong>Price:</strong> ${selectedBatch.pricePerBatch}</p>
             <p><strong>Description:</strong> {selectedBatch.description}</p>
-            <p><strong>Quantity Per Batch:</strong> {selectedBatch.quantityPerBatch}</p>
             <p><strong>Remaining Per Batch:</strong> {selectedBatch.remainBatch}</p>
             <p><strong>Species:</strong> {selectedBatch.species}</p>
             <button

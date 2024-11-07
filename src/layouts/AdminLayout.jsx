@@ -1,9 +1,7 @@
 import { Link } from 'react-router-dom';
 import {  Button, Avatar } from '@mui/material';
 import { MdDashboard } from 'react-icons/md';
-import { FaFish, FaShoppingCart, } from 'react-icons/fa';
-import { FaUsers } from 'react-icons/fa'
-import { FaBox, FaTags, FaComments, FaTruck, FaArrowLeft } from 'react-icons/fa';
+import { FaBox, FaTags, FaComments, FaTruck,FaUsers,FaFish, FaHome, FaShoppingCart } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom'; // Đảm bảo đã import useNavigate
 import PropTypes from 'prop-types';
 
@@ -61,7 +59,7 @@ const AdminLayout = ({ children }) => {
                   width: 48,
                 }}
               >
-                <FaArrowLeft size={24} color="white" />
+                <FaHome size={24} color="white" />
               </Avatar>
             }
             className="mt-4"

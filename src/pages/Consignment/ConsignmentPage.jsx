@@ -1,162 +1,203 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
+import { Form, Input, Button, Select, Radio, Upload, InputNumber, message, DatePicker } from 'antd';
+import { UploadOutlined } from '@ant-design/icons';
 import api from '../../config/axios';
 
-function ConsignmentPage() {
+const ConsignmentPage = () => {
     const [loading, setLoading] = useState(false);
-    const [successMessage, setSuccessMessage] = useState('');
-    const [errorMessage, setErrorMessage] = useState('');
-    const [formData, setFormData] = useState({
-        type: '',
-        name: '',
-        gender: '',
-        age: '',
-        size: '',
-        color: '',
-        dailyFeedAmount: '',
-        personality: '',
-        origin: '',
-        selectionRate: '',
-        species: '',
-        fosteringDays: '',
-        image: null,
-        originCertificate: null,
-        healthCertificate: null,
-        ownershipCertificate: null,
-    });
-
-    const handleChange = (e) => {
-        const { name, value, files } = e.target;
-        setFormData((prevData) => ({
-            ...prevData,
-            [name]: files ? files[0] : value,
-        }));
+    const [totalCost, setTotalCost] = useState(0);
+    const dailyCostOptions = {
+        1: 150000,
+        2: 200000,
+        3: 500000
     };
 
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-        setLoading(true);
-        setSuccessMessage('');
-        setErrorMessage('');
+    const formatCurrency = (value) => {
+        return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(value);
+    };
+    const [selectedPricePerDay, setSelectedPricePerDay] = useState(0);
+    const [startDate, setStartDate] = useState(null);
+    const [endDate, setEndDate] = useState(null);
 
+    const calculateTotalCost = (start, end, pricePerDay) => {
+        if (start && end && pricePerDay) {
+            const days = end.diff(start, 'days');
+            setTotalCost(days * pricePerDay);
+        } else {
+            setTotalCost(0);
+        }
+    };
+    const handlePriceListChange = (value) => {
+        const pricePerDay = dailyCostOptions[value] || 0;
+        setSelectedPricePerDay(pricePerDay);
+        calculateTotalCost(startDate, endDate, pricePerDay);
+    };
+
+    const handleStartDateChange = (date) => {
+        setStartDate(date);
+    };
+
+    const handleEndDateChange = (date) => {
+        if (startDate && date.isBefore(startDate)) {
+            message.error('End date cannot be earlier than the start date');
+        } else {
+            setEndDate(date);
+        }
+    };
+
+
+    const handleSubmit = async (values) => {
+        if (startDate && endDate && endDate.isBefore(startDate)) {
+            message.error('End date cannot be earlier than the start date');
+            return; // Prevent submission
+        }
+        setLoading(true);
+        const formData = new FormData();
+        Object.entries(values).forEach(([key, value]) => {
+            if (key === 'image' || key === 'originCertificate' || key === 'healthCertificate' || key === 'ownershipCertificate') {
+                formData.append(key, value?.file);
+            } else {
+                formData.append(key, value);
+            }
+        });
+
+        formData.append('priceListId', 1);
+        formData.append('startDate', startDate ? startDate.toISOString() : '');
+        formData.append('endDate', endDate ? endDate.toISOString() : '');
         try {
             const token = localStorage.getItem('accessToken');
             if (!token) {
-                setErrorMessage('You must be logged in to consign.');
+                message.error('You must be logged in to consign.');
                 return;
             }
 
-            // Create FormData object for file upload
-            const formDataObj = new FormData();
-            Object.entries(formData).forEach(([key, value]) => {
-                formDataObj.append(key, value);
-            });
-
-            const response = await api.post('/Consignment/pending', formDataObj, {
+            await api.post('/Consignment/pending', formData, {
                 headers: {
                     Authorization: `Bearer ${token}`,
                     'Content-Type': 'multipart/form-data',
                 },
             });
 
-            if (response.status === 200) {
-                setSuccessMessage('Consignment submitted successfully and is pending approval.');
-                setFormData({
-                    type: '',
-                    name: '',
-                    gender: '',
-                    age: '',
-                    size: '',
-                    color: '',
-                    dailyFeedAmount: '',
-                    personality: '',
-                    origin: '',
-                    selectionRate: '',
-                    species: '',
-                    fosteringDays: '',
-                    image: null,
-                    originCertificate: null,
-                    healthCertificate: null,
-                    ownershipCertificate: null,
-                });
-            }
+            message.success('Consignment submitted successfully and is pending approval.');
+            setTotalCost(0); // Reset total cost
         } catch (error) {
-            console.error('Error consigning fish:', error);
-            setErrorMessage('Failed to consign fish. Please try again.');
+            console.log(error)
+            message.error('Failed to consign fish. Please try again.');
         } finally {
             setLoading(false);
         }
     };
 
-    const formFields = [
-        { label: 'Type', name: 'type', type: 'select', options: [{ value: 0, label: 'Sell' }, { value: 1, label: 'Foster' }], required: true },
-        { label: 'Foster Name', name: 'name', type: 'text', required: true },
-        { label: 'Foster Gender', name: 'gender', type: 'text', required: true },
-        { label: 'Foster Age', name: 'age', type: 'number', required: true },
-        { label: 'Foster Size (cm)', name: 'size', type: 'number' },
-        { label: 'Foster Color', name: 'color', type: 'text' },
-        { label: 'Daily Feed Amount (grams)', name: 'dailyFeedAmount', type: 'number' },
-        { label: 'Foster Personality', name: 'personality', type: 'text' },
-        { label: 'Foster Origin', name: 'origin', type: 'text' },
-        { label: 'Foster Species', name: 'species', type: 'text' ,required: true},
-        { label: 'Fostering Days', name: 'fosteringDays', type: 'number' },
-        { label: 'Upload Image', name: 'image', type: 'file', accept: 'image/*' },
-        { label: 'Origin Certificate', name: 'originCertificate', type: 'file', accept: 'image/*' },
-        { label: 'Health Certificate', name: 'healthCertificate', type: 'file', accept: 'image/*' },
-        { label: 'Ownership Certificate', name: 'ownershipCertificate', type: 'file', accept: 'image/*' },
-    ];
-
     return (
-        <>
-            <h1 className="text-5xl font-bold text-center text-gray-800 bg-gray-100">Consign Koi</h1>
-            <div className="flex justify-center items-center min-h-screen bg-gray-100">
-                <div className="w-full max-w-md bg-white p-8 shadow-lg rounded-lg">
-                    <form onSubmit={handleSubmit} className="space-y-6">
-                        {formFields.map((field) => (
-                            <div key={field.name}>
-                                <label className="block text-left text-gray-700 font-medium mb-2">{field.label}:</label>
-                                {field.type === 'select' ? (
-                                    <select
-                                        name={field.name}
-                                        value={formData[field.name]}
-                                        onChange={handleChange}
-                                        className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                        required={field.required}
-                                    >
-                                        <option value="">Select {field.label}</option>
-                                        {field.options.map((option) => (
-                                            <option key={option.value} value={option.value}>
-                                                {option.label}
-                                            </option>
-                                        ))}
-                                    </select>
-                                ) : (
-                                    <input
-                                        name={field.name}
-                                        type={field.type}
-                                        value={field.type === 'file' ? undefined : formData[field.name]}
-                                        onChange={handleChange}
-                                        className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                        required={field.required}
-                                        accept={field.accept}
-                                    />
-                                )}
-                            </div>
-                        ))}
-                        <button
-                            type="submit"
-                            className="w-full py-2 px-4 bg-blue-500 text-white font-semibold rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                            disabled={loading}
-                        >
-                            {loading ? 'Consigning...' : 'Submit Consignment'}
-                        </button>
-                    </form>
+        <div style={{ display: 'flex', justifyContent: 'center', minHeight: '100vh', padding: '2rem' }}>
+            <Form
+                onFinish={handleSubmit}
+                layout="vertical"
+                style={{ width: '100%', maxWidth: 600 }}
+            >
+                <Form.Item label="Type" name="type" >
+                    <Select placeholder="Select type">
+                        <Select.Option value={0}>Sell</Select.Option>
+                        <Select.Option value={1}>Foster</Select.Option>
+                    </Select>
+                </Form.Item>
 
-                    {successMessage && <p className="mt-4 text-green-600">{successMessage}</p>}
-                    {errorMessage && <p className="mt-4 text-red-600">{errorMessage}</p>}
-                </div>
-            </div>
-        </>
+                <Form.Item label="Foster Name" name="name" rules={[{ required: true }]}>
+                    <Input placeholder="Enter name" />
+                </Form.Item>
+
+                <Form.Item label="Foster Gender" name="gender" rules={[{ required: true }]}>
+                    <Input placeholder="Enter gender" />
+                </Form.Item>
+
+                <Form.Item label="Foster Age" name="age" rules={[{ required: true, type: 'number' }]}>
+                    <InputNumber placeholder="Enter age" style={{ width: '100%' }} />
+                </Form.Item>
+
+                <Form.Item label="Foster Size (cm)" name="size">
+                    <InputNumber placeholder="Enter size" style={{ width: '100%' }} />
+                </Form.Item>
+
+                <Form.Item label="Daily Feed Amount (grams)" name="dailyFeedAmount">
+                    <InputNumber placeholder="Enter daily feed amount" style={{ width: '100%' }} />
+                </Form.Item>
+
+                <Form.Item label="Foster Personality" name="personality">
+                    <Input placeholder="Enter personality" />
+                </Form.Item>
+
+                <Form.Item label="Foster Origin" name="origin">
+                    <Input placeholder="Enter origin" />
+                </Form.Item>
+
+                <Form.Item label="Foster Species" name="species" rules={[{ required: true }]}>
+                    <Input placeholder="Enter species" />
+                </Form.Item>
+
+                <Form.Item label="Foster Color" name="color" >
+                    <Input placeholder="Enter color" />
+                </Form.Item>
+
+                <Form.Item label="Foster Selection Rate" name="selectionRate" >
+                    <Input placeholder="Enter rate" />
+                </Form.Item>
+
+                <Form.Item label="Foster Price" name="price" >
+                    <Input placeholder="Enter price" />
+                </Form.Item>
+
+                <Form.Item label="Price Per Day Option" name="priceListId" rules={[{ required: true }]}>
+                    <Select placeholder="Select price per day option" onChange={handlePriceListChange}>
+                        <Select.Option value={1}>Option 1 - 150,000 VND/day</Select.Option>
+                        <Select.Option value={2}>Option 2 - 200,000 VND/day</Select.Option>
+                        <Select.Option value={3}>Option 3 - 500,000 VND/day</Select.Option>
+                    </Select>
+                </Form.Item>
+
+                <Form.Item label="Start Date" name="startDate" rules={[{ required: true, message: 'Please select a start date' }]}>
+                    <DatePicker onChange={handleStartDateChange} style={{ width: '100%' }} />
+                </Form.Item>
+
+                <Form.Item label="End Date" name="endDate" rules={[{ required: true, message: 'Please select an end date' }]}>
+                    <DatePicker onChange={handleEndDateChange} style={{ width: '100%' }} />
+                </Form.Item>
+
+                <Form.Item label="Estimated Total Cost" colon={false}>
+                    <span>{formatCurrency(totalCost)}</span>
+                </Form.Item>
+
+                <Form.Item label="Upload Image" name="image" valuePropName="file">
+                    <Upload beforeUpload={() => false}>
+                        <Button icon={<UploadOutlined />}>Click to Upload</Button>
+                    </Upload>
+                </Form.Item>
+
+                <Form.Item label="Origin Certificate" name="originCertificate" valuePropName="file">
+                    <Upload beforeUpload={() => false}>
+                        <Button icon={<UploadOutlined />}>Click to Upload</Button>
+                    </Upload>
+                </Form.Item>
+
+                <Form.Item label="Health Certificate" name="healthCertificate" valuePropName="file">
+                    <Upload beforeUpload={() => false}>
+                        <Button icon={<UploadOutlined />}>Click to Upload</Button>
+                    </Upload>
+                </Form.Item>
+
+                <Form.Item label="Ownership Certificate" name="ownershipCertificate" valuePropName="file">
+                    <Upload beforeUpload={() => false}>
+                        <Button icon={<UploadOutlined />}>Click to Upload</Button>
+                    </Upload>
+                </Form.Item>
+
+                <Form.Item>
+                    <Button type="primary" htmlType="submit" loading={loading} block>
+                        Submit Consignment
+                    </Button>
+                </Form.Item>
+            </Form>
+        </div>
     );
-}
+};
 
 export default ConsignmentPage;

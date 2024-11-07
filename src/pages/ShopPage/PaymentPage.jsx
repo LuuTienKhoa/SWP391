@@ -7,6 +7,7 @@ const PaymentPage = () => {
   const { koiFish, batch, consignment, promotion, customerId = 0 } = location.state || {};
   const [paymentMethod, setPaymentMethod] = useState('VNPay'); // Default to VNPay
   const [promotionID, setPromotionID] = useState('');
+  const [buyingAmount, setBuyingAmount] = useState(0);
   const navigate = useNavigate();
 
   // Payment processing function
@@ -20,7 +21,7 @@ const PaymentPage = () => {
       const orderData = {
         promotionID: parseInt(promotionID, 10) || 0,
         paymentMethod: paymentMethod === 'VNPay' ? 0 : 1,
-        ...(batch && { batchs: [[batch.batchID, batch.quantityPerBatch]] }),
+        ...(batch && { batchs: [[batch.batchID, buyingAmount]] }),
         ...(koiFish && { kois: [koiFish.koiID] }),
       };
 
@@ -105,6 +106,18 @@ const PaymentPage = () => {
             </select>
           </div>
 
+           {/* Buy Batch Amount */}
+           <div className="mb-6">
+            <label className="block text-lg font-medium mb-2">Quantity</label>
+            <input
+              type="number"
+              name="quantity"
+              className="w-full p-3 bg-gray-700 rounded-lg"
+              placeholder="0"
+              value={buyingAmount}
+              onChange={(e) => setBuyingAmount(parseInt(e.target.value))}
+            />
+          </div>
           
 
           {/* Price */}

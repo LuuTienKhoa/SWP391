@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import  { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import api from '../../config/axios';
 import ConsignmentTable from '../Consignment/ConsignTable';
@@ -12,7 +12,10 @@ const ManageConsignmentPage = () => {
     customerID: '',
     type: 0,
     fosterPrice: '',
-    status: 0
+    status: 0,
+    priceListId: 0,
+    startDate: '',
+    endDate: ''
   });
   const [showCreateForm, setShowCreateForm] = useState(false);
   const [showEditForm, setShowEditForm] = useState(false);
@@ -28,7 +31,8 @@ const ManageConsignmentPage = () => {
     try {
       const response = await api.get('/Consignment/');
       setConsignments(response.data);
-    } catch (error) {
+    } catch (err) {
+      console.log(err);
       setErrorMessage('Failed to fetch consignments');
     }
   };
@@ -62,6 +66,7 @@ const ManageConsignmentPage = () => {
         setErrorMessage("Consignment creation failed");
       }
     } catch (err) {
+      console.log(err);
       setErrorMessage("Failed to create consignment");
     }
   };
@@ -79,12 +84,15 @@ const ManageConsignmentPage = () => {
         customerID: newConsignment.customerID,
         type: parseInt(newConsignment.type, 10),
         fosterPrice: newConsignment.fosterPrice,
-        status: newConsignment.status
+        status: parseInt(newConsignment.status, 10),
+        startDate: newConsignment.startDate ? new Date(newConsignment.startDate).toISOString() : '',  
+        endDate: newConsignment.endDate ? new Date(newConsignment.endDate).toISOString() : '',
+        priceListId: newConsignment.priceListId || 1,
       };
-  
+      
       console.log("Payload for editing consignment:", payload);
   
-      const response = await api.put(`/Consignment/${editConsignmentId}`, payload, {
+      const response = await api.put(`/Consignment/Update`, payload, {
         headers: {
           Authorization: `Bearer ${token}`,
           'Content-Type': 'application/json'
@@ -97,9 +105,9 @@ const ManageConsignmentPage = () => {
         setConsignments(consignments.map((consignment) =>
           (consignment.consignmentID === editConsignmentId ? { ...newConsignment, consignmentID: editConsignmentId } : consignment)
         ));
+        await fetchConsignments();
         setShowEditForm(false);
         setEditConsignmentId(null);
-        fetchConsignments();
         setErrorMessage('');
       } else {
         console.error("Unexpected status:", response.status);
@@ -118,6 +126,8 @@ const ManageConsignmentPage = () => {
       fosterPrice: consignment.fosterPrice || '',
       status: consignment.status || 0,
       name: consignment.name  || '',
+      startDate: consignment.startDate || '', 
+      endDate: consignment.endDate || ''
     });
     setEditConsignmentId(consignment.consignmentID);
     setShowEditForm(true);
@@ -130,6 +140,7 @@ const ManageConsignmentPage = () => {
       await api.delete(`/Consignment/${id}`);
       setConsignments(consignments.filter((consignment) => consignment.consignmentID !== id));
     } catch (error) {
+      console.log(error);
       setErrorMessage('Failed to delete consignment');
     }
   };
@@ -187,6 +198,7 @@ const ManageConsignmentPage = () => {
             handleChange={handleChange}
             handleSave={handleCreateConsignment}
             isCreating={true}  // Pass a flag for conditional rendering
+            customerID={newConsignment.customerID}
           />
         </Modal>
       )}

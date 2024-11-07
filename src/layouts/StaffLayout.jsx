@@ -4,7 +4,7 @@ import { Button, Avatar } from '@mui/material';
 import { MdDashboard } from 'react-icons/md';
 import { FaFish, FaShoppingCart } from 'react-icons/fa';
 import { FaUsers } from 'react-icons/fa';
-import { FaBox, FaTags, FaComments, FaTruck,FaArrowLeft } from 'react-icons/fa'; 
+import { FaBox, FaTags, FaComments, FaTruck,FaHome } from 'react-icons/fa'; 
 import { useNavigate } from 'react-router-dom'; // Đảm bảo đã import useNavigate
 
 const StaffLayout = ({ children }) => {
@@ -18,16 +18,16 @@ const StaffLayout = ({ children }) => {
         <ul>
           {[
             { label: 'Dashboard', icon: <MdDashboard size={24} />, link: '/staff' },
-            { label: 'Manage User', icon: <FaUsers size={24} />, link: '/staff/manage-user' },
-            { label: 'Manage Orders', icon: <FaShoppingCart size={24} />, link: '/staff/manageOrder' },
-            { label: 'Manage Koi', icon: <FaFish size={24} />, link: '/staff/manageKoi' },
-            { label: 'Manage Batch', icon: <FaBox size={24} />, link: '/staff/manageKoiBatch' },  
-            { label: 'Manage Promotion', icon: <FaTags size={24} />, link: '/staff/managePromotion' },  
-            { label: 'Manage Feedback', icon: <FaComments size={24} />, link: '/staff/manageFeedback' },  
-            { label: 'Manage Consign', icon: <FaTruck size={24} />, link: '/staff/manageConsign' },  
-            { label: 'Manage Delivery', icon: <FaTruck size={24} />, link: '/staff/manageDelivery' },  
-            { label: 'Manage Consign Koi', icon: <FaTruck size={24} />, link: '/staff/manageConsignKoi' }, 
-            { label: 'Manage Trans', icon: <FaTruck size={24} />, link: '/staff/manageTrans' }  
+            { label: 'Users', icon: <FaUsers size={24} />, link: '/staff/manage-user' },
+            { label: 'Orders', icon: <FaShoppingCart size={24} />, link: '/staff/manageOrder' },
+            { label: 'Koi Inventory', icon: <FaFish size={24} />, link: '/staff/manageKoi' },
+            { label: 'Batches', icon: <FaBox size={24} />, link: '/staff/manageKoiBatch' },  
+            { label: 'Promotions', icon: <FaTags size={24} />, link: '/staff/managePromotion' },  
+            { label: 'Feedback', icon: <FaComments size={24} />, link: '/staff/manageFeedback' },  
+            { label: 'Consignments', icon: <FaTruck size={24} />, link: '/staff/manageConsign' },  
+            { label: 'Deliveries', icon: <FaTruck size={24} />, link: '/staff/manageDelivery' },  
+            { label: 'Consigned Koi', icon: <FaFish size={24} />, link: '/staff/manageConsignKoi' }, 
+            { label: 'Transactions', icon: <FaTruck size={24} />, link: '/staff/manageTrans' }  
           ].map((item, index) => (
             <li key={index} className="mb-4">
               <Link to={item.link}>
@@ -61,7 +61,7 @@ const StaffLayout = ({ children }) => {
                   width: 48,
                 }}
               >
-                <FaArrowLeft size={24} color="white" /> 
+                <FaHome size={24} color="white" /> 
               </Avatar>
             }
             className="mt-4"

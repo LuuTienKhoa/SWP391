@@ -21,7 +21,7 @@ function ConsignmentDetailPage() {
                 }
 
                 // Fetch consignment details by ID
-                const response = await api.get(`/Consignment/`, {
+                const response = await api.get(`/Consignment/CustomerConsignment`, {
                     headers: {
                         Authorization: `Bearer ${token}`,
                     },

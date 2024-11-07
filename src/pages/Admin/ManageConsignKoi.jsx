@@ -20,7 +20,6 @@ const ManageConsignKoi = () => {
     selectionRate: '',
     species: '',
     price: '',
-    fosteringDays: '',
     consignmentID: '',
     image: '',
   });

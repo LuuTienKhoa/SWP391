@@ -1,4 +1,3 @@
-import React from 'react';
 import { Route, Routes } from 'react-router-dom';
 import ProtectedRoute from "./ProtectedRoute"; // Unified protected route
 import AdminLayout from "../layouts/AdminLayout";

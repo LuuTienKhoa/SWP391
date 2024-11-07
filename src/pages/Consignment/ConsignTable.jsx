@@ -1,6 +1,9 @@
 import React from 'react';
 
 const ConsignmentTable = ({ consignments, startEditing, handleDelete }) => {
+  const formatCurrency = (value) => {
+    return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(value);
+};
   // Function to map status code to a descriptive label
   const getStatusLabel = (status) => {
     switch (status) {
@@ -13,7 +16,12 @@ const ConsignmentTable = ({ consignments, startEditing, handleDelete }) => {
       default: return 'Unknown';
     }
   };
-
+  // Function to format date
+  const formatDate = (dateString) => {
+    if (!dateString) return 'N/A';
+    const date = new Date(dateString);
+    return date.toLocaleDateString(); // You can customize the locale as needed
+  };
   return (
     <table className="w-full table-auto border-collapse bg-white shadow-md rounded-lg">
       <thead>
@@ -23,7 +31,9 @@ const ConsignmentTable = ({ consignments, startEditing, handleDelete }) => {
           <th className="p-2 border">Consignment Koi ID</th>
           <th className="p-2 border">Type</th>
           <th className="p-2 border">Foster Price</th>
-          <th className="p-2 border">Status</th>
+          <th className="p-2 border">Status</th>         
+          <th className="p-2 border">Start Day</th>
+          <th className="p-2 border">End Day</th>
           <th className="p-2 border">Actions</th>
         </tr>
       </thead>
@@ -34,8 +44,10 @@ const ConsignmentTable = ({ consignments, startEditing, handleDelete }) => {
             <td className="p-2 border">{consignment.customerID || 'Unknown'}</td>
             <td className="p-2 border">{consignment.consignmentKois?.[0]?.consignmentKoiID || 'Unknown'}</td>
             <td className="p-2 border">{consignment.type === 0 ? 'Sell' : 'Foster'}</td>
-            <td className="p-2 border">{consignment.fosterPrice || 'Unknown'}</td>
+            <td className="p-2 border">{formatCurrency(consignment.fosterPrice) || 'Unknown'}</td>
             <td className="p-2 border">{getStatusLabel(consignment.status)}</td>
+            <td className="p-2 border">{formatDate(consignment.startDate)}</td>
+            <td className="p-2 border">{formatDate(consignment.endDate)}</td>
             <td className="p-2 border">
               <button onClick={() => startEditing(consignment)} className="bg-blue-500 text-white px-2 py-1 rounded mr-2">Edit</button>
               <button onClick={() => handleDelete(consignment.consignmentID)} className="bg-red-500 text-white px-2 py-1 rounded">Delete</button>
