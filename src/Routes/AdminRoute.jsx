@@ -22,6 +22,7 @@ import ManageConsignKoi from "../pages/Admin/ManageConsignKoi"
 import ManageFeedbackPage from "../pages/Admin/ManageFeedBack"
 import CreateTransactionPage from '../pages/CreateTransactionPage'
 import OrderDetail from '../pages/ManageOrder/OrderDetail';
+import DeliveryDetail from '../pages/ManageDelivery/DeliveryDetail';
 function RoleBasedRoutes() {
   return (
     <Routes>
@@ -172,6 +173,16 @@ function RoleBasedRoutes() {
           <ProtectedRoute requiredRole="0">
             <AdminLayout>
               <ManageDelivery />
+            </AdminLayout>
+          </ProtectedRoute>
+        }
+      />
+         <Route
+        path="/admin/manageDelivery/DeliveryDetail/:id"
+        element={
+          <ProtectedRoute requiredRole="0">
+            <AdminLayout>
+              <DeliveryDetail />
             </AdminLayout>
           </ProtectedRoute>
         }

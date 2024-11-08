@@ -10,6 +10,7 @@ import UserContext from '../context/userContext';
 const LoginPage = () => {
   const navigate = useNavigate();
   const { setIsLoggedIn, setRole } = useContext(UserContext);
+  
 
   const handleLogin = async (values) => {
     try {
@@ -17,18 +18,23 @@ const LoginPage = () => {
         username: values.username,
         password: values.password,
         name: values.username,
+       
       });
       const { accessToken, refreshToken } = response.data.token;
-      const { role, name } = response.data;
+      const { role, name, phone, address } = response.data;
 
       localStorage.setItem("accessToken", accessToken);
       localStorage.setItem("refreshToken", refreshToken);
       localStorage.setItem('userRole', role.toString());
       localStorage.setItem('userName', name);
+      localStorage.setItem('userPhone', phone);
+      localStorage.setItem('userAddress', address);
 
       setIsLoggedIn(true);
-      setRole(role.toString());
+      setRole(role.toString());   
 
+
+     
       if (role === 0) {
         navigate('/');
       } else if (role === 1) {

@@ -65,7 +65,7 @@ const OrderDetail = () => {
         <p><strong>Staff ID:</strong> {order?.staffID || 'N/A'}</p>
         <p><strong>Date of Purchase:</strong> {order ? new Date(order.createAt).toLocaleDateString() : 'N/A'}</p>
         <p><strong>Last Updated:</strong> {order ? new Date(order.updateAt).toLocaleDateString() : 'N/A'}</p>
-        <p><strong>Total Amount:</strong> ${order ? order.totalAmount.toLocaleString() : 'N/A'}</p>
+        <p><strong>Total Amount:</strong> {order ? order.totalAmount.toLocaleString() : 'N/A'} VND</p>
         <p><strong>Type:</strong> {order?.type === 0 ? "Online" : "Offline"}</p>
         <p><strong>Status:</strong> {order ? steps[order.status] : 'N/A'}</p>
         <p><strong>Reason:</strong> {order?.reason || 'N/A'}</p>

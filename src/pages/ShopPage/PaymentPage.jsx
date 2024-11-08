@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import api from '../../config/axios';
 
@@ -9,10 +9,35 @@ const PaymentPage = () => {
   const [promotionID, setPromotionID] = useState('');
   const [buyingAmount, setBuyingAmount] = useState(0);
   const navigate = useNavigate();
+  const [user, setUser] = useState({ address: '', phone: '' });
+
+  useEffect(() => {
+    const fetchUserData = async () => {
+      try {
+        const token = localStorage.getItem('accessToken');
+        if (!token) {
+          navigate('/login');
+          return;
+        }
+
+        const response = await api.get('/User/profile/', {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        setUser(response.data);
+      } catch (error) {
+        console.error('Error fetching user data:', error);
+      }
+    };
+
+    fetchUserData();
+  }, [navigate]);
 
   // Payment processing function
   const handlePayment = async () => {
-    if (!koiFish && !batch && !consignment) {
+    if (!koiFish && !batch ) {
       alert("Koi data or batch data is missing!");
       return;
     }
@@ -64,6 +89,22 @@ const PaymentPage = () => {
   };
   
 
+  // Calculate today's date and delivery date
+  const today = new Date();
+  const deliveryDate = new Date(today);
+  const packDate = new Date(today)
+  deliveryDate.setDate(today.getDate() + 10);
+  packDate.setDate(today.getDate() + 3);
+
+
+  const formatDate = (date) => {
+    return date.toLocaleDateString('en-GB', {
+      day: '2-digit',
+      month: '2-digit',
+      year: 'numeric',
+    });
+  };
+
   return (
     <div className="min-h-screen bg-white p-10 text-white flex justify-center items-center">
       <div className="flex flex-col lg:flex-row w-full max-w-6xl bg-gray-800 p-8 rounded-lg shadow-lg">
@@ -93,6 +134,8 @@ const PaymentPage = () => {
         <div className="lg:w-1/2 lg:ml-8">
           <h2 className="text-3xl font-semibold mb-6">Payment</h2>
 
+          
+
           {/* Payment Method Selection */}
           <div className="mb-6">
             <label className="block text-lg font-medium mb-2">Select Payment Method</label>
@@ -107,27 +150,65 @@ const PaymentPage = () => {
           </div>
 
            {/* Buy Batch Amount */}
-           <div className="mb-6">
-            <label className="block text-lg font-medium mb-2">Quantity</label>
-            <input
-              type="number"
-              name="quantity"
-              className="w-full p-3 bg-gray-700 rounded-lg"
-              placeholder="0"
-              value={buyingAmount}
-              onChange={(e) => setBuyingAmount(parseInt(e.target.value))}
-            />
-          </div>
+           {batch && (
+             <div className="mb-6">
+               <label className="block text-lg font-medium mb-2">Quantity</label>
+               <input
+                 type="number"
+                 name="quantity"
+                 className="w-full p-3 bg-gray-700 rounded-lg"
+                 placeholder="0"
+                 value={buyingAmount}
+                 onChange={(e) => setBuyingAmount(parseInt(e.target.value))}
+               />
+             </div>
+           )}
           
 
           {/* Price */}
           <div className="bg-gray-700 p-6 rounded-lg mb-6">
             <p className="text-4xl font-bold">
-              {batch ? `$${batch.pricePerBatch?.toFixed(2)}` : `$${koiFish?.price?.toFixed(2)}`}
+              {batch 
+                ? `$${(batch.pricePerBatch * (paymentMethod === 'Direct-Payment' ? 0.5 : 1)).toFixed(2)}` 
+                : `$${(koiFish?.price * (paymentMethod === 'Direct-Payment' ? 0.5 : 1)).toFixed(2)}`}
             </p>
             <p className="text-sm mt-2">
-              We will save all details of your payment. You may stop future automatic payments anytime.
+              {paymentMethod === 'Direct-Payment' 
+                ? "Please pay 50% of the product value."
+                : "This is just the original amount of the product. It does not include the discount code."}
             </p>
+          </div>
+          {/* Address and Phone */}
+          <div className="bg-gray-700 p-6 rounded-lg mb-6">
+            {paymentMethod === 'Direct-Payment' ? (
+              <>
+                <p className="text-sm mt-2">Shop's Address:</p>
+                <p className="text-2xl font-bold">123 Pham The Hien, Quan 8</p>
+                <p className="text-sm mt-2">Shop's Phone:</p>
+                <p className="text-2xl font-bold">0908228121</p>
+                <p className="text-xl mt-2">Packed Date: {formatDate(packDate)}</p>
+                <p className="text-xl mt-2">Expected Pickup Date: {formatDate(packDate)} to {formatDate(deliveryDate)}</p>
+                <p className="text-sm mt-2">
+                - The product will be packed within 3 days from the time the customer deposits.                </p>
+                <p className="text-sm mt-2">
+                - Please come at the right time after 3 days of packing and within 7 days to pick up the product.                </p>
+                <p className="text-sm mt-2">
+                - If the time is exceeded, the order will be canceled and we will not return the deposit to you                </p>
+
+              </>
+            ) : (
+              <>
+                <p className="text-sm mt-2">Your Address:</p>
+                <p className="text-2xl font-bold">{user.address}</p>
+                <p className="text-sm mt-2">Your Phone:</p>
+                <p className="text-2xl font-bold">{user.phone}</p>
+                <p className="text-xl mt-2">Estimated delivery date: {formatDate(deliveryDate)}</p>
+                <p className="text-sm mt-2">
+                  We will deliver to you based on the address you provided when registering. Any changes to the delivery address please change in 
+                  <a href="http://localhost:5173/profile" className="text-blue-500 underline"> your information here</a>.
+                </p>
+              </>
+            )}
           </div>
 
           {/* Discount Code */}

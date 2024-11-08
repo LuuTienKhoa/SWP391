@@ -4,6 +4,10 @@
   // Protected route for admin
   const AdminProtectedRoute = ({ children , requiredRole}) => {
     const userRole = localStorage.getItem('userRole'); 
+    const userAddress = localStorage.getItem('userAddress'); 
+
+    const userPhone = localStorage.getItem('userAddress'); 
+
 
     if (userRole !== requiredRole) {  
       localStorage.removeItem('accessToken');

@@ -92,38 +92,27 @@ const ManageDelivery = () => {
             <th className="p-2 border">Address</th>
             <th className="p-2 border">Total Amount</th>
             <th className="p-2 border">Status</th>
-            <th className="p-2 border">Actions</th>
           </tr>
         </thead>
         <tbody>
           {filteredDeliveries.map((delivery) => (
             <tr key={delivery.deliveryID} className="text-center border-b">
-              <td className="p-2 border">{delivery.deliveryID}</td>
+              <td className="p-2 border">
+                <button
+                  onClick={() => navigate(`/admin/managedelivery/deliveryDetail/${delivery.deliveryID}`)}
+                  className="text-blue-500 underline"
+                >
+                  {delivery.deliveryID}
+                </button>
+              </td>
               <td className="p-2 border">{delivery.orderID}</td>
               <td className="p-2 border">{delivery.customerID}</td>
               <td className="p-2 border">{new Date(delivery.startDeliDay).toLocaleString()}</td>
               <td className="p-2 border">{new Date(delivery.endDeliDay).toLocaleString()}</td>
               <td className="p-2 border">{delivery.address}</td>
-              <td className="p-2 border">${delivery.order.totalAmount}</td>
+              <td className="p-2 border">{delivery.order.totalAmount} VND</td>
               <td className="p-2 border">{getStatusLabel(delivery.status)}</td>
-              <td className="p-2 border">
-                <button
-                  onClick={() =>
-                    navigate(
-                      `/admin/managedelivery/updateDelivery/${delivery.deliveryID}`
-                    )
-                  }
-                  className="bg-blue-500 text-white px-4 py-1 rounded"
-                >
-                  Update
-                </button>
-                <button
-                  onClick={() => handleDeleteDelivery(delivery.deliveryID)}
-                  className="bg-red-500 text-white px-2 py-1 rounded"
-                >
-                  Delete
-                </button>
-              </td>
+             
             </tr>
           ))}
         </tbody>

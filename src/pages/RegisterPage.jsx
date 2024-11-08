@@ -24,15 +24,15 @@ const RegisterPage = () => {
 
       // Extract the tokens from the response
       const { accessToken, refreshToken } = response.data.token;
-      const { role, name, address, phone } = response.data;
+      const { role, name, phone, address } = response.data;
 
       // Store the tokens in localStorage
       localStorage.setItem("accessToken", accessToken);
       localStorage.setItem("refreshToken", refreshToken);
       localStorage.setItem("userRole", role);
       localStorage.setItem("userName", name);
-      localStorage.setItem("userAddress", address);
       localStorage.setItem("userPhone", phone);
+      localStorage.setItem("userAddress", address);
 
       navigate("/");
 
