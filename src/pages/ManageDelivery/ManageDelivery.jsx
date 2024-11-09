@@ -18,7 +18,8 @@ const ManageDelivery = () => {
   const fetchDeliveries = async () => {
     try {
       const response = await api.get("/koi/Delivery");
-      setDeliveries(response.data);
+      const sortedDeliveries = response.data.sort((a, b) => b.deliveryID - a.deliveryID);
+      setDeliveries(sortedDeliveries);
     } catch (err) {
       setError("Failed to fetch deliveries");
     } finally {

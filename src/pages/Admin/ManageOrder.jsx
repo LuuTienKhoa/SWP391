@@ -17,7 +17,8 @@ const ManageOrder = () => {
   const fetchOrders = async () => {
     try {
       const response = await api.get("/Order");
-      setOrders(response.data);
+      const sortedOrders = response.data.sort((a, b) => b.orderID - a.orderID);
+      setOrders(sortedOrders);
       setLoading(false);
     } catch (error) {
       console.error("Error fetching orders:", error);

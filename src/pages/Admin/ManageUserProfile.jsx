@@ -32,7 +32,9 @@ const ManageUserProfiles = () => {
         },
       });
 
-      setUsers(response.data);
+      // Sort users by userID in descending order
+      const sortedUsers = response.data.sort((a, b) => b.userID - a.userID);
+      setUsers(sortedUsers);
     } catch (error) {
       console.error('Error fetching users:', error);
     }

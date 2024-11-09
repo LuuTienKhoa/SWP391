@@ -26,7 +26,8 @@ const ManageKoiBatch = () => {
     const fetchBatches = async () => {
       try {
         const response = await api.get('/batch');
-        setBatches(response.data);
+        const sortedBatches = response.data.sort((a, b) => b.batchID - a.batchID);
+        setBatches(sortedBatches);
       } catch (error) {
         console.error('Error fetching batches:', error);
       }

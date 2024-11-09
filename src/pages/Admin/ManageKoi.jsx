@@ -55,6 +55,9 @@ const ProductsPage = () => {
       const response = await api.get(`${endpoint}?${params.toString()}`);
       let sortedData = response.data;
 
+      // Sort by koiID in descending order
+      sortedData = sortedData.sort((a, b) => b.koiID - a.koiID);
+
       if (sortOrder !== "normal") {
         sortedData = sortedData.sort((a, b) => {
           return sortOrder === "asc" ? a.price - b.price : b.price - a.price;
