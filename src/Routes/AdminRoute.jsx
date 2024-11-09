@@ -178,7 +178,7 @@ function RoleBasedRoutes() {
         }
       />
          <Route
-        path="/admin/manageDelivery/DeliveryDetail/:id"
+        path="/admin/manageDelivery/deliveryDetail/:id"
         element={
           <ProtectedRoute requiredRole="0">
             <AdminLayout>
@@ -249,12 +249,33 @@ function RoleBasedRoutes() {
           </ProtectedRoute>
         }
       />
+
       <Route
         path="/staff/manageDelivery"
         element={
           <ProtectedRoute requiredRole="1">
             <StaffLayout>
               <ManageDelivery />
+            </StaffLayout>
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/staff/manageDelivery/DeliveryDetail/:id"
+        element={
+          <ProtectedRoute requiredRole="1">
+            <StaffLayout>
+              <DeliveryDetail />
+            </StaffLayout>
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/staff/manageDelivery/updateDelivery/:id"
+        element={
+          <ProtectedRoute requiredRole="1">
+            <StaffLayout>
+              <UpdateDelivery />
             </StaffLayout>
           </ProtectedRoute>
         }
@@ -315,6 +336,17 @@ function RoleBasedRoutes() {
           <ProtectedRoute requiredRole="1">
             <StaffLayout>
               <ManageOrder />
+            </StaffLayout>
+          </ProtectedRoute>
+        }
+      />
+
+<Route
+        path="/staff/manageOrder/orderDetail/:id"
+        element={
+          <ProtectedRoute requiredRole="1">
+            <StaffLayout>
+              <OrderDetail />
             </StaffLayout>
           </ProtectedRoute>
         }

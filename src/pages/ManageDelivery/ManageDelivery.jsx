@@ -9,6 +9,8 @@ const ManageDelivery = () => {
   const [newDelivery, setNewDelivery] = useState({});
   const navigate = useNavigate();
   const [selectedStatus, setSelectedStatus] = useState('All');
+  const userRole = 1; // Assuming you have a way to get the user's role
+
   useEffect(() => {
     fetchDeliveries();
   }, []);
@@ -99,7 +101,12 @@ const ManageDelivery = () => {
             <tr key={delivery.deliveryID} className="text-center border-b">
               <td className="p-2 border">
                 <button
-                  onClick={() => navigate(`/admin/managedelivery/deliveryDetail/${delivery.deliveryID}`)}
+                  onClick={() => {
+                    const path = userRole === 1 
+                      ? `/staff/manageDelivery/deliveryDetail/${delivery.deliveryID}`
+                      : `/admin/managedelivery/deliveryDetail/${delivery.deliveryID}`;
+                    navigate(path);
+                  }}
                   className="text-blue-500 underline"
                 >
                   {delivery.deliveryID}
@@ -116,6 +123,7 @@ const ManageDelivery = () => {
             </tr>
           ))}
         </tbody>
+        
       </table>
     </div>
   );

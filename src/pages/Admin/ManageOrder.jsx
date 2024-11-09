@@ -8,6 +8,7 @@ const ManageOrder = () => {
   const [loading, setLoading] = useState(true);
   const [selectedStatus, setSelectedStatus] = useState("All");
   const navigate = useNavigate();
+  const userRole = 1;
 
   useEffect(() => {
     fetchOrders();
@@ -111,18 +112,17 @@ const ManageOrder = () => {
             {filteredOrders.map((order) => (
               <tr key={order.orderID} className="text-center border-b">
                 <td className="py-2 px-4 border">
-                  <Link
-                    to={`/admin/manageOrder/orderDetail/${order.orderID}`}
-                    className="text-blue-500 underline"
-                    onClick={() => {
-                      console.log("Navigating to OrderDetail with ID:", order.orderID);
-                      if (!order.orderID) {
-                        console.error("Order ID is undefined");
-                      }
-                    }}
-                  >
-                    {order.orderID}
-                  </Link>
+                <button
+                  onClick={() => {
+                    const path = userRole === 1 
+                      ? `/staff/manageOrder/orderDetail/${order.orderID}`
+                      : `/admin/manageOrder/orderDetail/${order.orderID}`;
+                    navigate(path);
+                  }}
+                  className="text-blue-500 underline"
+                >
+                  {order.orderID}
+                </button>
                 </td>
                 <td className="py-2 px-4 border">{order.customerID}</td>
                 <td className="py-2 px-4 border">{order.staffID}</td>

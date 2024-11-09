@@ -1,6 +1,6 @@
 import React from 'react';
 
-const EditOrderForm = ({ order, handleChange, handleSave }) => {
+const EditOrderForm = ({ order, handleChange, handleSave, handleFileChange }) => {
   return (
     <div className="p-4">
       <h2 className="text-xl font-bold mb-4">Edit Order</h2>
@@ -48,6 +48,26 @@ const EditOrderForm = ({ order, handleChange, handleSave }) => {
             <option value="2">Cancelled</option>
           </select>
         </div>
+        <div className="mb-4">
+          <label className="block text-sm font-medium">Reason</label>
+          <input
+            type="text"
+            name="reason"
+            value={order.reason || ''}
+            onChange={handleChange}
+            className="mt-1 block w-full border border-gray-300 rounded-md"
+          />
+        </div>
+        <div className="mb-4">
+          <label className="block text-sm font-medium">Reason Image</label>
+          <input
+            type="file"
+            name="reasonImage"
+            onChange={handleFileChange}
+            className="mt-1 block w-full border border-gray-300 rounded-md"
+          />
+        </div>
+
         <button
           type="button"
           onClick={handleSave}
