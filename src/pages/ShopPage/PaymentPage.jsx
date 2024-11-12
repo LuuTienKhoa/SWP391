@@ -37,7 +37,7 @@ const PaymentPage = () => {
 
   // Payment processing function
   const handlePayment = async () => {
-    if (!koiFish && !batch ) {
+    if (!koiFish && !batch  ) {
       alert("Koi data or batch data is missing!");
       return;
     }
@@ -47,7 +47,8 @@ const PaymentPage = () => {
         promotionID: parseInt(promotionID, 10) || 0,
         paymentMethod: paymentMethod === 'VNPay' ? 0 : 1,
         ...(batch && { batchs: [[batch.batchID, buyingAmount]] }),
-        ...(koiFish && { kois: [koiFish.koiID] }),
+        ...(koiFish?.consignmentKoiID && { consignmentKois: [koiFish.consignmentKoiID] }),
+        ...(koiFish?.koiID && { kois: [koiFish.koiID] }),
       };
 
       // 1. Send payment request to the backend
@@ -123,7 +124,7 @@ const PaymentPage = () => {
                 alt={koiFish?.name}
                 className="h-auto max-w-xs flex flex-col justify-center items-center"
               />
-              <h2 className="text-2xl font-semibold mb-2 mt-2">{koiFish?.name} # {koiFish?.koiID}</h2>
+              <h2 className="text-2xl font-semibold mb-2 mt-2">{koiFish?.name} # {koiFish?.koiID || koiFish.consignmentKoiID}</h2>
               <p className="text-gray-400 mb-4">{koiFish?.species}</p>
               <p className="text-4xl font-bold text-blue-500">${koiFish?.price?.toFixed(2)}</p>
             </>
