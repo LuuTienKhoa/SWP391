@@ -1,7 +1,7 @@
 import React from "react";
 import KoiImage1 from "../assets/Koi4.png"; 
 import KoiImage2 from "../assets/koi2.png"; 
-import KoiImage3 from "../assets/koi3.png"; 
+import KoiImage3 from "../assets/Koi3.png"; 
 import KoiImage4 from "../assets/koi1.jpg"; 
 import Testinominals from '../components/Testinominals';
 function LandingPage() {
