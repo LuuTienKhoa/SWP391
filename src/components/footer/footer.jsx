@@ -4,7 +4,7 @@ import { FaFacebook, FaInstagram, FaTwitter, FaPhoneAlt, FaEnvelope } from 'reac
 function Footer() {
   return (
     <>
-      <div className="bg-orange-200 ">
+      <div className="bg-[#FFA07A]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
             {/* About Us Section */}
@@ -55,16 +55,16 @@ function Footer() {
         </div>
       </div>
 
-      <div className="border-t bg-zinc-800 border-orange-300  text-center text-white">
+      <div className="border-t bg-black border-orange-300  text-center text-white">
         <p>© 2024 FKoi Farm. All rights reserved.</p>
         <div className="flex justify-center mt-4 space-x-4">
-          <a href="https://facebook.com" className="text-orange-600 hover:text-orange-800">
+          <a href="https://facebook.com" className="text-white hover:text-orange-800">
             <FaFacebook size={24} />
           </a>
-          <a href="https://instagram.com" className="text-orange-600 hover:text-orange-800">
+          <a href="https://instagram.com" className="text-white hover:text-orange-800">
             <FaInstagram size={24} />
           </a>
-          <a href="https://twitter.com" className="text-orange-600 hover:text-orange-800">
+          <a href="https://twitter.com" className="text-white hover:text-orange-800">
             <FaTwitter size={24} />
           </a>
         </div>

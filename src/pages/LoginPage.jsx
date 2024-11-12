@@ -32,16 +32,7 @@ const LoginPage = () => {
 
       setIsLoggedIn(true);
       setRole(role.toString());   
-
-
-     
-      if (role === 0) {
-        navigate('/');
-      } else if (role === 1) {
-        navigate('/');
-      } else {
-        navigate('/');
-      }
+      navigate("/");
     } catch (e) {
       console.log('Login failed', e);
     }
