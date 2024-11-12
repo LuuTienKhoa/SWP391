@@ -22,6 +22,7 @@
     "antd": "^5.20.6",
     "axios": "^1.7.7",
     "chart.js": "^4.4.4",
+    "date-fns": "^4.1.0",
     "fe-koi": "file:",
     "html-react-parser": "^5.1.18",
     "lucide-react": "^0.446.0",

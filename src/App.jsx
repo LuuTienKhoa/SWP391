@@ -23,6 +23,7 @@ import RoleBasedRoutes from './Routes/AdminRoute';
 import PaymentSuccess from './pages/ShopPage/PaymentSuccess';
 import UserConsignmentsDetailPage from './pages/ConsignPage';
 import FeedBackPage from './pages/Feedback/FeedbackPage'
+import LandingPage from './pages/LandingPage';
 function App() {
   const location = useLocation();
   const shouldRenderHeaderFooter = !(
@@ -37,7 +38,7 @@ function App() {
       )}
       <main>
         <Routes>
-          <Route path="/" element={<HomePage />} />
+          <Route path="/" element={<LandingPage />} />
           <Route path="/home" element={<Navigate to="/" />} />
           <Route path="/about" element={<AboutPage />} />
           <Route path="/products" element={<ProductsPage />} />
