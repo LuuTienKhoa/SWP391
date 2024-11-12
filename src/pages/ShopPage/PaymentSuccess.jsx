@@ -39,7 +39,7 @@ const PaymentSuccess = () => {
 
           <div className="space-y-4">
             <button
-              onClick={() => navigate('/orders')}
+              onClick={() => navigate('/order')}
               className="bg-blue-600 w-full py-3 rounded-lg hover:bg-blue-700 transition"
             >
               View Orders
