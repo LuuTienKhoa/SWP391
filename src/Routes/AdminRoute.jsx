@@ -19,7 +19,6 @@ import CreatePromotion from "../pages/ManagePromotion/CreatePromotion";
 import UpdateOrder from "../pages/ManageOrder/UpdateOrder";
 import UpdateDelivery from "../pages/ManageDelivery/UpdateDelivery";
 import ManageConsignKoi from "../pages/Admin/ManageConsignKoi"
-import ManageFeedbackPage from "../pages/Admin/ManageFeedBack"
 import CreateTransactionPage from '../pages/CreateTransactionPage'
 import OrderDetail from '../pages/ManageOrder/OrderDetail';
 import DeliveryDetail from '../pages/ManageDelivery/DeliveryDetail';
@@ -212,7 +211,7 @@ function RoleBasedRoutes() {
         element={
           <ProtectedRoute requiredRole="0">
             <AdminLayout>
-              <ManageFeedbackPage />
+              <ManageFeedback />
             </AdminLayout>
           </ProtectedRoute>
         }
