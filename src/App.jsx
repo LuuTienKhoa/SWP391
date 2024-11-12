@@ -50,7 +50,8 @@ function App() {
           <Route path="/consign" element={<ConsignmentPage />} />
           <Route path="/profile" element={<UserProfilePage />} />
           <Route path="/user/edit/:id" element={<EditUserPage />} />
-          <Route path="/view-details/:id" element={<ViewDetailsPage />} />
+          <Route path="/view-detail/consignmentKoi/:id" element={<ViewDetailsPage />} />
+          <Route path="/view-detail/koi/:id" element={<ViewDetailsPage />} />
           <Route path="/payment/:id" element={<PaymentPage />} />
           <Route path="/koiBatch" element={<KoiBatchPage />} />
           <Route path="/order" element={<OrderPage />} />

@@ -104,7 +104,8 @@ const ProductsPage = () => {
   };
 
   const handleNavigateToPayment = (koiFish) => {
-    navigate(`/payment/${koiFish.koiID}`, { state: { koiFish } });
+    const id = koiFish.consignmentKoiID || koiFish.koiID;
+    navigate(`/payment/${id}`, { state: { koiFish } });
   };
 
   return (
@@ -155,7 +156,13 @@ const ProductsPage = () => {
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
           {currentPosts.map((koiFish) => (
             <div key={koiFish.koiID} className="max-w-xs overflow-hidden">
-              <Link to={`/view-details/${koiFish.koiID || koiFish.consignmentKoiID}`}>
+              <Link
+                to={
+                  koiFish.consignmentKoiID
+                    ? `/view-detail/consignmentKoi/${koiFish.consignmentKoiID}`
+                    : `/view-detail/koi/${koiFish.koiID}`
+                }
+              >
                 <img
                   src={
                     koiFish.image ??
@@ -167,7 +174,7 @@ const ProductsPage = () => {
               </Link>
               <div className="p-4">
                 <h1 className="text-lg font-semibold">{koiFish.name}</h1>
-                <p className="text-sm text-gray-500">#{koiFish.koiID}</p>
+                <p className="text-sm text-gray-500">#{koiFish.koiID || koiFish.consignmentKoiID}</p>
                 <p className="text-red-500 font-bold mt-2">
                   Price: ${koiFish.price.toFixed(2) || "N/A"}
                 </p>
