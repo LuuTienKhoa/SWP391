@@ -155,7 +155,7 @@ const ProductsPage = () => {
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
           {currentPosts.map((koiFish) => (
             <div key={koiFish.koiID} className="max-w-xs overflow-hidden">
-              <Link to={`/view-details/${koiFish.koiID}`}>
+              <Link to={`/view-details/${koiFish.koiID || koiFish.consignmentKoiID}`}>
                 <img
                   src={
                     koiFish.image ??

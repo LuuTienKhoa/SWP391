@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import api from '../config/axios';
-import { Button, Card, CardContent, Typography, TextField, Rating,Snackbar,Alert,ButtonGroup } from '@mui/material';
+import { Tab, Tabs, Table, TableBody, TableRow, TableCell, Typography, Box, Button, Rating, TextField, Snackbar, Alert, Card, CardContent } from '@mui/material';
 
 const OrderPage = ({ token }) => {
   const [orders, setOrders] = useState([]);
@@ -48,13 +48,13 @@ const OrderPage = ({ token }) => {
 
   const submitFeedback = async (orderID, customerID) => {
     const feedbackData = {
-      CustomerID: customerID, 
-      OrderID: orderID,       
+      CustomerID: customerID,
+      OrderID: orderID,
       Rating: rating[orderID] || 5,
       Comment: feedback[orderID] || '',
     };
-    
-    
+
+
 
     try {
       await api.post('/Feedback/CreateFeedback', feedbackData, {
@@ -100,91 +100,118 @@ const OrderPage = ({ token }) => {
     setFilterStatus(status);
   };
   const filteredOrders = filterStatus === null
-  ? orders
-  : orders.filter(order => order.status === filterStatus);
+    ? orders
+    : orders.filter(order => order.status === filterStatus);
 
   return (
-    <div>
-      <Typography variant="h4" align="center" gutterBottom>Your Order History</Typography>
-
-      <ButtonGroup variant="outlined" aria-label="filter button group" sx={{ mb: 2, justifyContent: 'center', display: 'flex' }}>
-        <Button size="small" onClick={() => handleFilterChange(null)}>All</Button>
-        <Button size="small" onClick={() => handleFilterChange(0)}>Pending</Button>
-        <Button size="small" onClick={() => handleFilterChange(1)}>Completed</Button>
-        <Button size="small" onClick={() => handleFilterChange(2)}>Cancelled</Button>
-      </ButtonGroup>
+    <Box sx={{ maxWidth: 900, margin: "0 auto", padding: 4 }}>
       <div>
-        {filteredOrders.map(order => (
-          <Card key={order.orderID} sx={{ marginBottom: 2 }}>
-            <CardContent>
-              <Typography variant="h6">Order ID: {order.orderID}</Typography>
-              <Typography variant="body1">Total Amount: {order.totalAmount}</Typography>
-              <Typography variant="body2">Created At: {new Date(order.createAt).toLocaleString()}</Typography>
-              <Typography variant="body2">Customer ID: {order.customerID}</Typography> {/* Display customerID */}
+        <Typography variant="h4" align="center" gutterBottom>Your Order History</Typography>
+        <Tabs
+          value={filterStatus}
+          onChange={(e, newValue) => handleFilterChange(newValue)}
+          indicatorColor="primary"
+          textColor="primary"
+          variant="fullWidth"
+          sx={{ mb: 3 }}
+        >
+          <Tab label="All" value={null} />
+          <Tab label="Pending" value={0} />
+          <Tab label="Completed" value={1} />
+          <Tab label="Cancelled" value={2} />
+        </Tabs>
+        <div>
+          {filteredOrders.map(order => (
+            <Card key={order.orderID} sx={{ marginBottom: 2, boxShadow: 3, borderRadius: 2, backgroundColor: "#f9f9f9" }}>
+              <CardContent>
+                <Table>
+                  <TableBody>
+                    <TableRow>
+                      <TableCell><strong>Order ID:</strong></TableCell>
+                      <TableCell>{order.orderID}</TableCell>
+                    </TableRow>
+                    <TableRow>
+                      <TableCell><strong>Total Amount:</strong></TableCell>
+                      <TableCell>{order.totalAmount}</TableCell>
+                    </TableRow>
+                    <TableRow>
+                      <TableCell><strong>Created At:</strong></TableCell>
+                      <TableCell>{new Date(order.createAt).toLocaleString()}</TableCell>
+                    </TableRow>
+                    <TableRow>
+                      <TableCell><strong>Customer ID:</strong></TableCell>
+                      <TableCell>{order.customerID}</TableCell>
+                    </TableRow>
+                    <TableRow>
+                      <TableCell><strong>Order Status:</strong></TableCell>
+                      <TableCell>{getOrderLabel(order.status)}</TableCell>
+                    </TableRow>
+                    {order.delivery ? (
+                      <>
+                        <TableRow>
+                          <TableCell><strong>Delivery Status:</strong></TableCell>
+                          <TableCell>{getDeliveryLabel(order.delivery.status)}</TableCell>
+                        </TableRow>
+                        <TableRow>
+                          <TableCell><strong>Start Delivery Day:</strong></TableCell>
+                          <TableCell>{new Date(order.delivery.startDeliDay).toLocaleString()}</TableCell>
+                        </TableRow>
+                        <TableRow>
+                          <TableCell><strong>End Delivery Day:</strong></TableCell>
+                          <TableCell>{order.delivery.endDeliDay ? new Date(order.delivery.endDeliDay).toLocaleString() : 'Not Available'}</TableCell>
+                        </TableRow>
+                      </>
+                    ) : (
+                      <TableRow>
+                        <TableCell><strong>Delivery Information:</strong></TableCell>
+                        <TableCell>Not available</TableCell>
+                      </TableRow>
+                    )}
+                  </TableBody>
+                </Table>
 
-              {/* Display Delivery Status if delivery information is available */}
-              {order.delivery ? (
-                <>
-                  <Typography variant="body2">
-                    Delivery Status: {getDeliveryLabel(order.delivery.status)}
-                  </Typography>
-                  <Typography variant="body2">
-                    Start Delivery Day: {new Date(order.delivery.startDeliDay).toLocaleString()}
-                  </Typography>
-                  <Typography variant="body2">
-                    End Delivery Day: {order.delivery.endDeliDay ? new Date(order.delivery.endDeliDay).toLocaleString() : 'Not Available'}
-                  </Typography>
-                </>
-              ) : (
-                <Typography variant="body2">Delivery information not available</Typography>
-              )}
 
-              {/* Display Order Status */}
-              <Typography variant="body2">Order Status: {getOrderLabel(order.status)}</Typography>
-              {order.status === 1 && (
-                <>
-                  {/* Feedback Section */}
-                  <Rating
-                    name={`rating-${order.orderID}`}
-                    value={rating[order.orderID] || 5}
-                    onChange={(event, newValue) => handleRatingChange(order.orderID, newValue)}
-                    sx={{ marginTop: 2 }}
-                  />
-                  <TextField
-                    label="Your Feedback"
-                    variant="outlined"
-                    fullWidth
-                    value={feedback[order.orderID] || ''}
-                    onChange={(e) => handleFeedbackChange(order.orderID, e.target.value)}
-                    sx={{ marginTop: 2 }}
-                  />
-                  <Button
-                    variant="contained"
-                    color="primary"
-                    onClick={() => submitFeedback(order.orderID, order.customerID)}
-                    sx={{ marginTop: 1 }}
-                  >
-                    Submit Feedback
-                  </Button>
-
-                </>
-              )}
-              {/* Snackar use to display a brief messages and fades out*/}
-              <Snackbar
-                open={notification.open}
-                autoHideDuration={3000}
-                onClose={() => setNotification({ ...notification, open: false })}
-              >
-                <Alert onClose={() => setNotification({ ...notification, open: false })} severity={notification.severity} sx={{ width: '100%' }}>
-                  {notification.message}
-                </Alert>
-              </Snackbar>
-              
-            </CardContent>
-          </Card>
-        ))}
+                {order.status === 1 && (
+                  <Box sx={{ mt: 2 }}>
+                    <Rating
+                      name={`rating-${order.orderID}`}
+                      value={rating[order.orderID] || 5}
+                      onChange={(event, newValue) => handleRatingChange(order.orderID, newValue)}
+                      sx={{ marginBottom: 2 }}
+                    />
+                    <TextField
+                      label="Your Feedback"
+                      variant="outlined"
+                      fullWidth
+                      value={feedback[order.orderID] || ''}
+                      onChange={(e) => handleFeedbackChange(order.orderID, e.target.value)}
+                      sx={{ marginBottom: 2 }}
+                    />
+                    <Button
+                      variant="contained"
+                      color="primary"
+                      onClick={() => submitFeedback(order.orderID, order.customerID)}
+                    >
+                      Submit Feedback
+                    </Button>
+                  </Box>
+                )}
+                {/* Snackar use to display a brief messages and fades out*/}
+                <Snackbar
+                  open={notification.open}
+                  autoHideDuration={3000}
+                  onClose={() => setNotification({ ...notification, open: false })}
+                >
+                  <Alert onClose={() => setNotification({ ...notification, open: false })} severity={notification.severity} sx={{ width: '100%' }}>
+                    {notification.message}
+                  </Alert>
+                </Snackbar>
+              </CardContent>
+            </Card>
+          ))}
+        </div>
       </div>
-    </div>
+    </Box>
   );
 };
 

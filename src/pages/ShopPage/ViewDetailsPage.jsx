@@ -13,6 +13,12 @@ const ViewDetailsPage = () => {
         setKoiFish(response.data);
       } catch (error) {
         console.error("Error fetching koi fish details:", error);
+        try {
+          const response = await api.get(`/ConsignmentKoi/${id}`);
+          setKoiFish(response.data);
+        } catch (error) {
+          console.error("Error fetching koi fish details:", error);
+        }
       }
     };
 
@@ -32,7 +38,7 @@ const ViewDetailsPage = () => {
           />
         </div>
         <div className="w-full md:w-1/2">
-          <h1 className="text-4xl font-bold mb-4 text-gray-800">{koiFish.name} - #{koiFish.koiID}</h1>
+          <h1 className="text-4xl font-bold mb-4 text-gray-800">{koiFish.name} - #{koiFish.koiID || koiFish.consignmentKoiID}</h1>
           <p className="text-3xl text-red-600 mb-4">${koiFish.price.toFixed(2)}</p>
           <div className="space-y-2">
             <p className="text-lg"><strong>Gender:</strong> {koiFish.gender}</p>

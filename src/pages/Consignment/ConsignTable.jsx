@@ -31,9 +31,10 @@ const ConsignmentTable = ({ consignments, startEditing, handleDelete }) => {
           <th className="p-2 border">Consignment Koi ID</th>
           <th className="p-2 border">Type</th>
           <th className="p-2 border">Foster Price</th>
-          <th className="p-2 border">Status</th>         
+          <th className="p-2 border">Price Per Day</th>         
           <th className="p-2 border">Start Day</th>
           <th className="p-2 border">End Day</th>
+          <th className="p-2 border">Status</th>
           <th className="p-2 border">Actions</th>
         </tr>
       </thead>
@@ -43,14 +44,22 @@ const ConsignmentTable = ({ consignments, startEditing, handleDelete }) => {
             <td className="p-2 border">{consignment.consignmentID}</td>
             <td className="p-2 border">{consignment.customerID || 'Unknown'}</td>
             <td className="p-2 border">{consignment.consignmentKois?.[0]?.consignmentKoiID || 'Unknown'}</td>
-            <td className="p-2 border">{consignment.type === 0 ? 'Sell' : 'Foster'}</td>
+            <td className="p-2 border">
+          {consignment.type === 0 ? <span title="Sell">🛒</span> : <span title="Foster">🤝</span>}
+           </td>
             <td className="p-2 border">{formatCurrency(consignment.fosterPrice) || 'Unknown'}</td>
-            <td className="p-2 border">{getStatusLabel(consignment.status)}</td>
+           
+            <td className="p-2 border">{formatCurrency(consignment.consignmentPriceList.pricePerDay)}</td>
             <td className="p-2 border">{formatDate(consignment.startDate)}</td>
             <td className="p-2 border">{formatDate(consignment.endDate)}</td>
+            <td className="p-2 border">{getStatusLabel(consignment.status)}</td>
             <td className="p-2 border">
-              <button onClick={() => startEditing(consignment)} className="bg-blue-500 text-white px-2 py-1 rounded mr-2">Edit</button>
-              <button onClick={() => handleDelete(consignment.consignmentID)} className="bg-red-500 text-white px-2 py-1 rounded">Delete</button>
+            <button onClick={() => startEditing(consignment)} className="bg-blue-500 text-white px-2 py-1 rounded-full hover:bg-blue-600">
+            ✏️
+          </button>
+          <button onClick={() => handleDelete(consignment.consignmentID)} className="bg-red-500 text-white px-2 py-1 rounded-full hover:bg-red-600">
+            🗑️
+          </button>
             </td>
           </tr>
         ))}

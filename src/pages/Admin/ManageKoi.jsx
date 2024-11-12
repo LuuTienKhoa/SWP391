@@ -17,7 +17,12 @@ const ProductsPage = () => {
   const [species, setSpecies] = useState("");
   const [filterVisible, setFilterVisible] = useState(false);
   const navigate = useNavigate();
-
+  
+  const getStatusLabel ={
+    0: "Available",
+    1: "In Order",
+    2: "Sold"
+  }
   const fetchKoiFish = useCallback(async () => {
     setLoading(true);
     try {
@@ -249,7 +254,7 @@ const ProductsPage = () => {
                   <td className="py-2 px-4 border">{koiFish.gender}</td>
                   <td className="py-2 px-4 border">{koiFish.color}</td>
                   <td className="py-2 px-4 border">{koiFish.size}</td>
-                  <td className="py-2 px-4 border">{koiFish.status}</td>
+                  <td className="py-2 px-4 border">{getStatusLabel[koiFish.status]}</td>
                   <td className="py-2 px-4 border">${koiFish.price}</td>
                   <td className="py-2 px-4 border">
                     <button

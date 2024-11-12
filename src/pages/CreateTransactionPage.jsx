@@ -22,35 +22,9 @@ const CreateTransactionPage = ({ token }) => {
   };
 
   return (
-    <div style={{ padding: '20px', maxWidth: '400px', margin: '0 auto', textAlign: 'center' }}>
-      <h2>Create Off Transaction</h2>
-      <TextField
-        label="Order ID"
-        variant="outlined"
-        value={orderID}
-        onChange={(e) => setOrderID(parseInt(e.target.value))}
-        fullWidth
-        sx={{ marginBottom: '20px' }}
-      />
-      <Button
-        variant="contained"
-        color="primary"
-        onClick={handleSubmit}
-        disabled={!orderID} // Disable button if orderID is empty
-      >
-        Submit
-      </Button>
+    <>
 
-      <Snackbar
-        open={notification.open}
-        autoHideDuration={3000}
-        onClose={() => setNotification({ ...notification, open: false })}
-      >
-        <Alert onClose={() => setNotification({ ...notification, open: false })} severity={notification.severity} sx={{ width: '100%' }}>
-          {notification.message}
-        </Alert>
-      </Snackbar>
-    </div>
+    </>
   );
 };
 
