@@ -15,7 +15,7 @@ import ManageFeedback from "../pages/Admin/ManageFeedBack";
 import UpdateKoi from "../pages/ManageKoi/UpdateKoi";
 import CreateKoi from "../pages/ManageKoi/CreateKoi";
 import UpdatePromotion from "../pages/ManagePromotion/UpdatePromotion";
-import CreatePromotion from "../pages/Admin/CreatePromotion";
+import CreatePromotion from "../pages/ManagePromotion/CreatePromotion";
 import UpdateOrder from "../pages/ManageOrder/UpdateOrder";
 import UpdateDelivery from "../pages/ManageDelivery/UpdateDelivery";
 import ManageConsignKoi from "../pages/Admin/ManageConsignKoi"
