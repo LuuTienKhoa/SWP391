@@ -11,11 +11,11 @@ import ManagePromotion from "../pages/Admin/ManagePromotion";
 import ManageKoi from "../pages/Admin/ManageKoi";
 import ManageKoiBatch from "../pages/Admin/ManageKoiBatch";
 import ManageOrder from "../pages/Admin/ManageOrder";
-import ManageFeedback from "../pages/ManageFeedback/ManageFeedback";
+import ManageFeedback from "../pages/Admin/ManageFeedBack";
 import UpdateKoi from "../pages/ManageKoi/UpdateKoi";
 import CreateKoi from "../pages/ManageKoi/CreateKoi";
 import UpdatePromotion from "../pages/ManagePromotion/UpdatePromotion";
-import CreatePromotion from "../pages/ManagePromotion/CreatePromotion";
+import CreatePromotion from "../pages/Admin/CreatePromotion";
 import UpdateOrder from "../pages/ManageOrder/UpdateOrder";
 import UpdateDelivery from "../pages/ManageDelivery/UpdateDelivery";
 import ManageConsignKoi from "../pages/Admin/ManageConsignKoi"
