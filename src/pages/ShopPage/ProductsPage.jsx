@@ -1,13 +1,12 @@
 import React, { useState, useEffect, useCallback } from "react";
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import api from "../../config/axios";
-import Button from "../../components/button/Button";
 import ShoppingCart from "../../components/ShoppingCart";
 import { ShoppingCartIcon } from "@heroicons/react/24/outline";
 import { ShoppingBagIcon } from "lucide-react";
 import ComparisonCart from "../../components/Comparison";
 import Pagination from "../../components/Pagination";
-
+import { FiRefreshCw } from "react-icons/fi";
 const ProductsPage = () => {
   const [koiFishs, setKoiFishs] = useState([]);
   const [cartItems, setCartItems] = useState(() => {
@@ -46,9 +45,7 @@ const ProductsPage = () => {
       setKoiFishs(sortedData);
     } catch (error) {
       console.error("Error fetching koi fish:", error);
-      alert(
-        "Failed to fetch koi fish. Please check the console for more details."
-      );
+      alert("Failed to fetch koi fish. Please check the console for more details.");
     }
   }, [sortOrder]);
 
@@ -70,9 +67,7 @@ const ProductsPage = () => {
   };
 
   const handleRemoveFromCart = (koiFishId) => {
-    setCartItems((prevItems) =>
-      prevItems.filter((item) => item.koiID !== koiFishId)
-    );
+    setCartItems((prevItems) => prevItems.filter((item) => item.koiID !== koiFishId));
   };
 
   const handleCompare = (koiFish) => {
@@ -87,9 +82,7 @@ const ProductsPage = () => {
   };
 
   const handleRemoveFromCompare = (koiFishId) => {
-    setCompareItems((prevItems) =>
-      prevItems.filter((item) => item.koiID !== koiFishId)
-    );
+    setCompareItems((prevItems) => prevItems.filter((item) => item.koiID !== koiFishId));
   };
 
   const handleCompareNow = () => {
@@ -109,29 +102,28 @@ const ProductsPage = () => {
   };
 
   return (
-    <div className="bg-orange-100 min-h-screen">
+    <div className="bg-white min-h-screen text-black">
       <div className="container mx-auto px-4 py-7">
-        <div className="text-4xl font-bold mb-6 text-center text-gray-800">
+        <div className="text-4xl font-bold mb-6 text-center">
           <h1>F Koi Shop</h1>
         </div>
 
         {/* Sort and Compare */}
         <div className="flex justify-between items-center mb-4 p-4">
-          {/* Compare Button on the left */}
           <button
             onClick={toggleCartVisibility}
-            className="flex items-center justify-center bg-gradient-to-r from-orange-400 to-orange-600 text-white border-none rounded-full px-6 py-3 shadow-lg hover:from-orange-500 hover:to-orange-700 transition duration-300 transform hover:scale-105"
+            className="flex items-center justify-center bg-black text-white border-none rounded-full px-6 py-3 shadow-lg hover:bg-gray-900 transition duration-300 transform hover:scale-105"
           >
-            <span className="mr-2">🔄</span> So sánh ({compareItems.length})
+            <FiRefreshCw className="mr-2 text-white" size={20} /> 
+            Compare ({compareItems.length})
           </button>
 
-          {/* Sort and Cart Buttons on the right */}
           <div className="flex justify-end items-center">
             <div>
               <select
                 value={sortOrder}
                 onChange={(e) => setSortOrder(e.target.value)}
-                className="p-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-orange-500 transition duration-300"
+                className="p-3 border border-gray-400 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-gray-500 transition duration-300 bg-white"
               >
                 <option value="normal">Price</option>
                 <option value="asc">Price: Ascending</option>
@@ -140,11 +132,11 @@ const ProductsPage = () => {
             </div>
             <button
               onClick={() => setCartOpen(true)}
-              className="relative flex items-center justify-center text-gray-700 px-4 py-2 rounded hover:bg-gray-100 transition duration-300"
+              className="relative flex items-center justify-center text-black px-4 py-2 rounded hover:bg-gray-100 transition duration-300"
             >
               <ShoppingCartIcon className="h-6 w-6" aria-hidden="true" />
               {cartItems.length > 0 && (
-                <span className="absolute top-0 right-0 inline-flex items-center justify-center px-2 py-1 text-xs font-bold leading-none text-red-100 bg-red-600 rounded-full">
+                <span className="absolute top-0 right-0 inline-flex items-center justify-center px-2 py-1 text-xs font-bold leading-none text-white bg-black rounded-full">
                   {cartItems.length}
                 </span>
               )}
@@ -153,9 +145,12 @@ const ProductsPage = () => {
         </div>
 
         {/* Product Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
           {currentPosts.map((koiFish) => (
-            <div key={koiFish.koiID} className="max-w-xs overflow-hidden">
+            <div
+              key={koiFish.koiID}
+              className="max-w-xs overflow-hidden border border-black rounded-lg shadow-lg"
+            >
               <Link
                 to={
                   koiFish.consignmentKoiID
@@ -169,56 +164,45 @@ const ProductsPage = () => {
                     "https://www.kodamakoifarm.com/wp-content/uploads/2024/05/w0503s054-re-260x421.jpg"
                   }
                   alt={koiFish.name}
-                  className="w-full h-100 object-cover"
+                  className="w-full h-auto max-h-80 object-contain border-b border-black"
                 />
               </Link>
               <div className="p-4">
-                <h1 className="text-lg font-semibold">{koiFish.name}</h1>
+                <h1 className="text-lg font-semibold text-black">{koiFish.name}</h1>
                 <p className="text-sm text-gray-500">#{koiFish.koiID || koiFish.consignmentKoiID}</p>
-                <p className="text-red-500 font-bold mt-2">
-                  Price: ${koiFish.price.toFixed(2) || "N/A"}
-                </p>
+                <p className="text-gray-700 font-bold mt-2">Price: ${koiFish.price.toFixed(2) || "N/A"}</p>
 
-                <div className="mt-4">
-                  <p className="text-sm">
-                    <strong>Age:</strong> {koiFish.age || "Unknown"}
-                  </p>
-                  <p className="text-sm">
-                    <strong>Sex:</strong> {koiFish.gender || "Unknown"}
-                  </p>
-                  <p className="text-sm">
-                    <strong>Size:</strong> {koiFish.size || "Unknown"}
-                  </p>
-                  <p className="text-sm">
-                    <strong>Color:</strong> {koiFish.color || "Unknown"}
-                  </p>
-                  <p className="text-red-500 text-sm">
-                    <strong>Species:</strong> {koiFish.species || "Unknown"}
-                  </p>
+                <div className="mt-4 space-y-1">
+                  <p className="text-sm"><strong>Age:</strong> {koiFish.age || "Unknown"}</p>
+                  <p className="text-sm"><strong>Sex:</strong> {koiFish.gender || "Unknown"}</p>
+                  <p className="text-sm"><strong>Size:</strong> {koiFish.size || "Unknown"}</p>
+                  <p className="text-sm"><strong>Color:</strong> {koiFish.color || "Unknown"}</p>
+                  <p className="text-sm"><strong>Species:</strong> {koiFish.species || "Unknown"}</p>
                 </div>
-                <div className="flex justify-between items-center mt-4 space-x-2">
+
+                {/* Button Group */}
+                <div className="flex flex-col space-y-2 mt-4">
                   <button
                     onClick={() => handleAddToCart(koiFish)}
-                    className="bg-green-500 text-white px-3 py-1 rounded-lg hover:bg-green-600 transition duration-300 flex items-center font-medium text-sm"
+                    className="bg-black text-white px-4 py-2 rounded-lg hover:bg-gray-800 transition duration-300 flex items-center justify-center font-medium"
                   >
-                    <ShoppingBagIcon className="mr-1 h-4 w-4" />
+                    <ShoppingBagIcon className="mr-2 h-5 w-5" />
                     Add to Cart
                   </button>
 
                   <button
                     onClick={() => handleNavigateToPayment(koiFish)}
-                    className="bg-white text-red-500 border border-red-500 px-3 py-1 rounded-lg hover:bg-red-100 transition duration-300 font-medium text-sm"
+                    className="bg-white text-black border border-black px-4 py-2 rounded-lg hover:bg-gray-200 transition duration-300 font-medium"
                   >
                     Pay Now
                   </button>
 
                   <button
                     onClick={() => handleCompare(koiFish)}
-                    className={`px-3 py-1 rounded-lg font-medium text-sm transition duration-300 ${
-                      compareItems.find((item) => item.koiID === koiFish.koiID)
-                        ? "bg-blue-600 text-white hover:bg-blue-700"
-                        : "bg-blue-400 text-white hover:bg-blue-500"
-                    }`}
+                    className={`px-4 py-2 rounded-lg font-medium transition duration-300 ${compareItems.find((item) => item.koiID === koiFish.koiID)
+                        ? "bg-gray-800 text-white hover:bg-gray-900"
+                        : "bg-gray-500 text-white hover:bg-gray-600"
+                      }`}
                   >
                     {compareItems.find((item) => item.koiID === koiFish.koiID)
                       ? "Remove from Compare"
@@ -248,11 +232,7 @@ const ProductsPage = () => {
         />
       </div>
 
-      <Pagination
-        totalPosts={koiFishs.length}
-        postPerPage={postsPerPage}
-        paginate={paginate}
-      />
+      <Pagination totalPosts={koiFishs.length} postPerPage={postsPerPage} paginate={paginate} />
     </div>
   );
 };
