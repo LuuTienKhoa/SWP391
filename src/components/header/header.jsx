@@ -105,11 +105,11 @@ function Header() {
               )}
               { role === "0" &&(
                 <Link
-                to="/staff"
+                to="/admin"
                 className="block px-4 py-2 text-gray-700 hover:bg-gray-100"
                 onClick={() => setDropdownOpen(false)}
               >
-                Staff
+                Admin
               </Link>
               )}
               <button

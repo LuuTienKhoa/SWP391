@@ -136,7 +136,7 @@ function RoleBasedRoutes() {
           </ProtectedRoute>
         }
       />
-      <Route
+    <Route
         path="/admin/manageOrder/orderDetail/:id"
         element={
           <ProtectedRoute requiredRole="0">
