@@ -23,7 +23,7 @@ const ProductsPage = () => {
 
   // Pagination
   const [currentPage, setCurrentPage] = useState(1);
-  const [postsPerPage] = useState(8);
+  const [postsPerPage] = useState(9);
   const lastPostIndex = currentPage * postsPerPage;
   const firstPostIndex = lastPostIndex - postsPerPage;
   const currentPosts = koiFishs.slice(firstPostIndex, lastPostIndex);
@@ -100,6 +100,9 @@ const ProductsPage = () => {
     const id = koiFish.consignmentKoiID || koiFish.koiID;
     navigate(`/payment/${id}`, { state: { koiFish } });
   };
+  const formatCurrency = (value) => {
+    return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(value);
+};
 
   return (
     <div className="bg-white min-h-screen text-black">
@@ -170,12 +173,12 @@ const ProductsPage = () => {
               <div className="p-4">
                 <h1 className="text-lg font-semibold text-black">{koiFish.name}</h1>
                 <p className="text-sm text-gray-500">#{koiFish.koiID || koiFish.consignmentKoiID}</p>
-                <p className="text-gray-700 font-bold mt-2">Price: ${koiFish.price.toFixed(2) || "N/A"}</p>
+                <p className="text-gray-700 font-bold mt-2">Price: {formatCurrency(koiFish.price)}</p>
 
                 <div className="mt-4 space-y-1">
                   <p className="text-sm"><strong>Age:</strong> {koiFish.age || "Unknown"}</p>
                   <p className="text-sm"><strong>Sex:</strong> {koiFish.gender || "Unknown"}</p>
-                  <p className="text-sm"><strong>Size:</strong> {koiFish.size || "Unknown"}</p>
+                  <p className="text-sm"><strong>Size:</strong> {koiFish.size || "Unknown"}cm</p>
                   <p className="text-sm"><strong>Color:</strong> {koiFish.color || "Unknown"}</p>
                   <p className="text-sm"><strong>Species:</strong> {koiFish.species || "Unknown"}</p>
                 </div>

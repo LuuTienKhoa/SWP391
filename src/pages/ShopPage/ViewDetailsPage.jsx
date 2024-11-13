@@ -36,7 +36,9 @@ const ViewDetailsPage = () => {
     setIsModalOpen(false);
     setSelectedImage("");
   };
-
+  const formatCurrency = (value) => {
+    return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(value);
+};
   if (!koiFish) return <div className="text-center text-xl text-gray-800">Loading...</div>;
 
   // Prepare images: main image + certificates
@@ -75,13 +77,14 @@ const ViewDetailsPage = () => {
           {/* Fish Details */}
           <div className="w-full md:w-1/2 space-y-4">
             <h1 className="text-4xl font-bold text-black">{koiFish.name} - #{koiFish.koiID || koiFish.consignmentKoiID}</h1>
-            <p className="text-3xl font-semibold text-gray-800">${koiFish.price.toFixed(2)}</p>
+            <h1 className="text-4xl font-bold text-black">{koiFish.name} </h1>
+            <p className="text-3xl font-semibold text-gray-800">{formatCurrency(koiFish.price)}</p>
             <div className="space-y-2 text-gray-700">
               <p className="text-lg"><strong>Gender:</strong> {koiFish.gender}</p>
               <p className="text-lg"><strong>Age:</strong> {koiFish.age} years</p>
-              <p className="text-lg"><strong>Size:</strong> {koiFish.size}</p>
+              <p className="text-lg"><strong>Size:</strong> {koiFish.size} cm</p>
               <p className="text-lg"><strong>Color:</strong> {koiFish.color}</p>
-              <p className="text-lg"><strong>Daily Feed Amount:</strong> {koiFish.dailyFeedAmount}</p>
+              <p className="text-lg"><strong>Daily Feed Amount:</strong> {koiFish.dailyFeedAmount}g</p>
               <p className="text-lg"><strong>Personality:</strong> {koiFish.personality}</p>
               <p className="text-lg"><strong>Origin:</strong> {koiFish.origin}</p>
               <p className="text-lg"><strong>Selection Rate:</strong> {koiFish.selectionRate}</p>
