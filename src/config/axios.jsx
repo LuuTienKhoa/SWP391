@@ -1,7 +1,7 @@
 import axios from "axios";
 
 // Set up the base URL for the API (pointing to your ASP.NET Core backend)
-const baseUrl = "http://localhost:5213/api/";
+const baseUrl = "https://koishop.amayakuro.id.vn/api";
 
 // Create an Axios instance with default configurations
 const api = axios.create({

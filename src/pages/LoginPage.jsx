@@ -1,4 +1,4 @@
-import  { useContext } from 'react';
+import  { useContext, useState, useEffect } from 'react';
 import api from "../config/axios";
 import { useNavigate } from "react-router-dom";
 import Cover_Image from "../assets/bg.jpg";
@@ -10,7 +10,18 @@ import UserContext from '../context/userContext';
 const LoginPage = () => {
   const navigate = useNavigate();
   const { setIsLoggedIn, setRole } = useContext(UserContext);
-  
+  const [errorMessage, setErrorMessage] = useState('');
+  const [rememberMe, setRememberMe] = useState(false);
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+
+  useEffect(() => {
+    const rememberedUsername = localStorage.getItem('rememberedUsername');
+    if (rememberedUsername) {
+      setUsername(rememberedUsername);
+      setRememberMe(true);
+    }
+  }, []);
 
   const handleLogin = async (values) => {
     try {
@@ -18,7 +29,6 @@ const LoginPage = () => {
         username: values.username,
         password: values.password,
         name: values.username,
-       
       });
       const { accessToken, refreshToken } = response.data.token;
       const { role, name, phone, address } = response.data;
@@ -30,11 +40,19 @@ const LoginPage = () => {
       localStorage.setItem('userPhone', phone);
       localStorage.setItem('userAddress', address);
 
+      if (rememberMe) {
+        localStorage.setItem('rememberedUsername', values.username);
+      } else {
+        localStorage.removeItem('rememberedUsername');
+      }
+
       setIsLoggedIn(true);
       setRole(role.toString());   
       navigate("/");
     } catch (e) {
       console.log('Login failed', e);
+      const message = e.response?.data?.message || 'Đã xảy ra lỗi!';
+      alert(message);
     }
   }
 
@@ -78,6 +96,8 @@ const LoginPage = () => {
                     type=""
                     placeholder="Username"
                     className="w-full text-black py-2 my-2 bg-transparent border-b border-black outline-none focus:outline-none"
+                    value={username}
+                    onChange={(e) => setUsername(e.target.value)}
                   />
                 </Form.Item>
                 <Form.Item
@@ -93,17 +113,19 @@ const LoginPage = () => {
                     type="password"
                     placeholder="Password"
                     className="w-full text-black py-2 my-2 bg-transparent border-b border-black outline-none focus:outline-none"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
                   />
                 </Form.Item>
                 <Form.Item>
-                  <div className="w-full flex item-center justify-between">
-                    <div className="w-ful flex item-center">
-                      <input type="checkbox" className="w-4 h-4 mr-2" />
-                      <p className="text-sm">Remeberme</p>
-                    </div>
-                    <p className="text-sm font-medium whitespace-nowrap cursor-pointer hover:underline">
-                      Forgot Passowrd ?
-                    </p>
+                  <div className="w-full flex items-center">
+                    <input
+                      type="checkbox"
+                      className="w-4 h-4 mr-2"
+                      checked={rememberMe}
+                      onChange={(e) => setRememberMe(e.target.checked)}
+                    />
+                    <p className="text-sm">Remember me</p>
                   </div>
                 </Form.Item>
                 <Form.Item>
@@ -146,6 +168,9 @@ const LoginPage = () => {
           </div>
         </div>
       </div>
+      {errorMessage && (
+        <div className="text-red-500 mb-4">{errorMessage}</div>
+      )}
     </>
   );
 };

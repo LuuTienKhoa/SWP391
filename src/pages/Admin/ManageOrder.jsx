@@ -14,7 +14,7 @@ const ManageOrder = () => {
     fetchOrders();
   }, []);
 
-  const fetchOrders = async () => {
+  const fetchOrders = async () => {s
     try {
       const response = await api.get("/Order");
       const sortedOrders = response.data.sort((a, b) => b.orderID - a.orderID);
@@ -54,6 +54,16 @@ const ManageOrder = () => {
       default:
         return "Unknown";
     }
+  };
+
+  const formatDate = (dateString) => {
+    const date = new Date(dateString);
+    const day = String(date.getDate()).padStart(2, '0');
+    const month = String(date.getMonth() + 1).padStart(2, '0'); // Months are zero-based
+    const year = date.getFullYear();
+    const hours = String(date.getHours()).padStart(2, '0');
+    const minutes = String(date.getMinutes()).padStart(2, '0');
+    return `${day}/${month}/${year}, ${hours}:${minutes}`;
   };
 
   const filteredOrders =
@@ -136,8 +146,8 @@ const ManageOrder = () => {
                 </td>
                 <td className="py-2 px-4 border">{order.customerID}</td>
                 <td className="py-2 px-4 border">{order.staffID}</td>
-                <td className="py-2 px-4 border">{order.createAt}</td>
-                <td className="py-2 px-4 border">{order.updateAt}</td>
+                <td className="py-2 px-4 border">{formatDate(order.createAt)}</td>
+                <td className="py-2 px-4 border">{formatDate(order.updateAt)}</td>
                 <td className="py-2 px-4 border">{order.promotionID}</td>
                 <td className="py-2 px-4 border">{order.totalAmount}</td>
                 <td className="py-2 px-4 border">{getTypeLabel(order.type)}</td>
