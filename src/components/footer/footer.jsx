@@ -4,7 +4,7 @@ import { FaFacebook, FaInstagram, FaTwitter, FaPhoneAlt, FaEnvelope } from 'reac
 function Footer() {
   return (
     <>
-      <div className="bg-[#2D2D2D] text-gray-300">
+      <div className="bg-[#2D2D2D] text-gray-300 ">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
             {/* About Us Section */}

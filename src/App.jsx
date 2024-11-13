@@ -38,7 +38,7 @@ function App() {
       {shouldRenderHeaderFooter && (
         <Header  />
       )}
-      <main>
+      <main className="min-h-screen">
         <Routes>
           <Route path="/" element={<LandingPage />} />
           <Route path="/home" element={<Navigate to="/" />} />

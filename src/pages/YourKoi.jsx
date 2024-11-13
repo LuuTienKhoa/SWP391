@@ -54,6 +54,20 @@ const YourKoi = () => {
     fetchUserKois();
   }, []);
 
+  const handleConsignKoi = async (koiId) => {
+    try {
+      const token = localStorage.getItem("accessToken");
+      await api.post(`/Consignment/pending`, { koiId }, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      alert("Koi consignment request has been submitted!");
+    } catch (err) {
+      alert("Failed to consign koi: " + (err.response ? err.response.data.message : err.message));
+    }
+  };
+
   const handleTabChange = (event, newValue) => {
     setSelectedTab(newValue);
     if (newValue === 0) {
@@ -141,6 +155,13 @@ const YourKoi = () => {
                 sx={{ mt: 2, color: "#fff", backgroundColor: "#000" }}
               >
                 View Details
+              </Button>
+              <Button
+              variant="contained"
+              onClick={() => handleConsignKoi(koi.koiInventoryID)}
+              sx={{ mt: 2, color: "#fff", backgroundColor: "#000000", ml: 2 }}
+              >
+                Consign
               </Button>
             </CardContent>
           </Card>
