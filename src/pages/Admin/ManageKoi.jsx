@@ -241,7 +241,7 @@ const ProductsPage = () => {
               {koiFishs.map((koiFish) => (
                 <tr key={koiFish.koiID} className="text-center border-b">
                   <td className="py-2 px-4 border">
-                    <Link to={`/view-details/${koiFish.koiID}`}>
+                    <Link to={`/view-detail/koi/${koiFish.koiID}`}>
                       <img
                         src={koiFish.image ?? "https://www.kodamakoifarm.com/wp-content/uploads/2024/05/w0503s3v1.png"}
                         alt={koiFish.name}

@@ -107,23 +107,32 @@ const ManageOrder = () => {
               <th className="py-2 px-4 border">Total Amount</th>
               <th className="py-2 px-4 border">Type</th>
               <th className="py-2 px-4 border">Status</th>
+              {userRole === 0 ? (
+            <th className="p-2 border"></th>
+            ) : null}
             </tr>
           </thead>
           <tbody>
             {filteredOrders.map((order) => (
               <tr key={order.orderID} className="text-center border-b">
                 <td className="py-2 px-4 border">
-                <button
-                  onClick={() => {
-                    const path = userRole === 1 
-                      ? `/staff/manageOrder/orderDetail/${order.orderID}`
-                      : `/admin/manageOrder/orderDetail/${order.orderID}`;
-                    navigate(path);
-                  }}
-                  className="text-blue-500 underline"
-                >
-                  {order.orderID}
-                </button>
+                  <button
+                    onClick={() => {
+                      const path = userRole === 0 
+                        ? navigate("/admin/manageOrder/orderDetail/${order.orderID}")
+                        : userRole === 1 
+                        ? `/staff/manageOrder/orderDetail/${order.orderID}`
+                        : null;
+                      if (path) {
+                        navigate(path);
+                      } else {
+                        alert("You do not have permission to access this page.");
+                      }
+                    }}
+                    className="text-blue-500 underline"
+                  >
+                    {order.orderID}
+                  </button>
                 </td>
                 <td className="py-2 px-4 border">{order.customerID}</td>
                 <td className="py-2 px-4 border">{order.staffID}</td>
@@ -135,7 +144,18 @@ const ManageOrder = () => {
                 <td className="py-2 px-4 border">
                   {getStatusLabel(order.status)}
                 </td>
-               
+                {order.status === 1 || order.status === 2 ? ( // Completed, Cancelled
+                  userRole === 0 ? ( // Only show delete button for admin
+                    <td className="p-2 border">
+                      <button
+                        onClick={() => deleteOrder(order.orderID)}
+                        className="bg-red-500 text-white px-4 py-1 rounded"
+                      >
+                        Delete
+                      </button>
+                    </td>
+                  ) : null
+                ) : null}
               </tr>
             ))}
           </tbody>
