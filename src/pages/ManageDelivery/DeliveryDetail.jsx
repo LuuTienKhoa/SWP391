@@ -1,7 +1,6 @@
-import React, { useEffect, useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import api from "../../config/axios";
-import EditDeliveryForm from "./EditDeliveryForm";
 import Modal from "../../components/Modal/Modal";
 import Stepper from "../../components/Stepper";
 
@@ -9,123 +8,112 @@ const DeliveryDetail = () => {
   const { id } = useParams();
   const [delivery, setDelivery] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-  const [showEditForm, setShowEditForm] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
+  const [reason, setReason] = useState("");
+  const [reasonImage, setReasonImage] = useState(null);
   const [showReasonModal, setShowReasonModal] = useState(false);
-  const [reason, setReason] = useState('');
-  const [reasonImage, setReasonImage] = useState('');
   const [newStatus, setNewStatus] = useState(null);
 
+  const steps = ["Delivering", "Delivered", "Cancelled", "Failed"];
+
   useEffect(() => {
-    const fetchDeliveryDetail = async () => {
+    const fetchDeliveryDetails = async () => {
       try {
         const response = await api.get(`/koi/Delivery/${id}`);
         setDelivery(response.data);
-      } catch (err) {
-        setError("Failed to fetch delivery details");
+      } catch (error) {
+        console.error("Error fetching delivery details:", error);
+        setErrorMessage("Failed to fetch delivery details.");
       } finally {
         setLoading(false);
       }
     };
 
-    fetchDeliveryDetail();
+    fetchDeliveryDetails();
   }, [id]);
-
-  const handleSave = () => {
-    setShowEditForm(false);
-    window.location.reload();
-  };
 
   const handleStatusChange = (status) => {
     setNewStatus(status);
     setShowReasonModal(true);
   };
 
-  const updateDeliveryStatus = async (newStatus) => {
-    const updatedDelivery = {
-      ...delivery,
-      status: newStatus,
-      reason,
-      reasonImage,
-    };
+  const updateDeliveryStatus = async () => {
+    const today = new Date().toISOString().split("T")[0]; // Format today's date as YYYY-MM-DD
+    const formData = new FormData();
+    formData.append("DeliveryID", delivery.deliveryID);
+    formData.append("OrderID", delivery.orderID);
+    formData.append("CustomerID", delivery.customerID);
+    formData.append("Status", newStatus);
+    formData.append("StartDeliDay", delivery.startDeliDay);
+    formData.append("EndDeliDay", today); // Set EndDeliDay to today's date
+    formData.append("Address", delivery.address);
+    formData.append("Reason", reason);
+    if (reasonImage) formData.append("ReasonImage", reasonImage);
+  
     try {
-      await api.put(`/koi/Delivery/${id}`, updatedDelivery);
-      setDelivery(updatedDelivery);
-      alert(`Delivery status updated to ${getStatusLabel(newStatus)}!`);
+      await api.put(`/koi/Delivery/${id}`, formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+      alert(`Delivery status updated to ${steps[newStatus]}!`);
+      setDelivery((prev) => ({ ...prev, status: newStatus, reason, endDeliDay: today }));
+      
+      // Reload the page after successful update
+      window.location.reload();
     } catch (error) {
-      console.error('Error updating delivery status:', error);
+      console.error("Error updating delivery status:", error);
+      setErrorMessage("Failed to update delivery status.");
     }
   };
-
-  const steps = ["Delivering", "Delivered", "Failed", "Cancelled"];
-  const currentStep = delivery ? delivery.status : 0;
-
-  if (loading) return <div>Loading...</div>;
-  if (error) return <div>Error: {error}</div>;
+  
+  if (loading) return <div className="text-center text-xl">Loading...</div>;
 
   return (
     <div className="p-6">
-      <h1 className="text-3xl font-bold mb-6 text-center">
-        Delivery Details
-      </h1>
-      {delivery ? (
-        <div className="bg-white shadow-md rounded-lg p-4">
-          <Stepper steps={steps} currentStep={currentStep} />
-          <div>
-            <p><strong>Delivery ID:</strong> {delivery.deliveryID}</p>
-            <p><strong>Order ID:</strong> {delivery.orderID}</p>
-            <p><strong>Customer ID:</strong> {delivery.customerID}</p>
-            <p><strong>Start Delivery Day:</strong> {new Date(delivery.startDeliDay).toLocaleString()}</p>
-            <p><strong>End Delivery Day:</strong> {new Date(delivery.endDeliDay).toLocaleString()}</p>
-            <p><strong>Address:</strong> {delivery.address}</p>
-            <p><strong>Total Amount:</strong> {delivery.order.totalAmount} VND</p>
-            <p><strong>Status:</strong> {getStatusLabel(delivery.status)}</p>
-            <p><strong>Reason:</strong> {delivery.reason || 'N/A'}</p>
-            {delivery.reasonImage && <img src={delivery.reasonImage} alt="Reason" className="mt-2" />}
+      <h1 className="text-3xl font-bold mb-4 text-center">Delivery Details</h1>
 
-            <div className="flex space-x-4 mt-4">
-              {delivery.status === 0 && (
-                <>
-                  <button
-                    onClick={() => handleStatusChange(1)} // Delivered
-                    className="bg-green-500 text-white px-4 py-2 rounded"
-                  >
-                    Delivered
-                  </button>
-                  <button
-                    onClick={() => handleStatusChange(2)} // Failed
-                    className="bg-red-500 text-white px-4 py-2 rounded"
-                  >
-                    Failed
-                  </button>
-                  <button
-                    onClick={() => handleStatusChange(3)} // Cancelled
-                    className="bg-yellow-500 text-white px-4 py-2 rounded"
-                  >
-                    Cancelled
-                  </button>
-                </>
-              )}
-            </div>
+      <Stepper steps={steps} currentStep={delivery ? delivery.status : 0} />
 
-            <button onClick={() => setShowEditForm(true)} className="bg-blue-500 text-white p-2 mt-2">
-              Edit
+      <section className="mb-6">
+        <h2 className="text-2xl font-semibold mb-2">Basic Delivery Information</h2>
+        <p><strong>Delivery ID:</strong> {delivery?.deliveryID}</p>
+        <p><strong>Order ID:</strong> {delivery?.orderID}</p>
+        <p><strong>Customer ID:</strong> {delivery?.customerID}</p>
+        <p><strong>Start Delivery Day:</strong> {delivery?.startDeliDay}</p>
+        <p><strong>End Delivery Day:</strong> {delivery?.endDeliDay}</p>
+        <p><strong>Address:</strong> {delivery?.address}</p>
+        <p><strong>Status:</strong> {steps[delivery?.status]}</p>
+        <p><strong>Reason:</strong> {delivery?.reason || "N/A"}</p>
+        {delivery?.reasonImage && (
+          <img src={delivery.reasonImage} alt="Reason" className="mt-2" />
+        )}
+      </section>
+
+      <div className="flex space-x-4 mb-4">
+        {delivery?.status === 0 && (
+          <>
+            <button
+              onClick={() => handleStatusChange(1)} // Delivered
+              className="bg-green-500 text-white px-4 py-2 rounded"
+            >
+              Mark as Delivered
             </button>
-          </div>
-        </div>
-      ) : (
-        <div>No delivery details available.</div>
-      )}
-
-      {showEditForm && (
-        <Modal onClose={() => setShowEditForm(false)}>
-          <EditDeliveryForm
-            delivery={delivery}
-            onSave={handleSave}
-            onCancel={() => setShowEditForm(false)}
-          />
-        </Modal>
-      )}
+            <button
+              onClick={() => handleStatusChange(2)} // Cancelled
+              className="bg-red-500 text-white px-4 py-2 rounded"
+            >
+              Cancel
+            </button>
+            <button
+              onClick={() => handleStatusChange(3)} // Failed
+              className="bg-yellow-500 text-white px-4 py-2 rounded"
+            >
+              Mark as Failed
+            </button>
+          </>
+        )}
+      </div>
 
       {showReasonModal && (
         <Modal onClose={() => setShowReasonModal(false)}>
@@ -144,20 +132,13 @@ const DeliveryDetail = () => {
               <label className="block text-sm font-medium">Reason Image</label>
               <input
                 type="file"
-                onChange={(e) => {
-                  const file = e.target.files[0];
-                  if (file) {
-                    const reader = new FileReader();
-                    reader.onloadend = () => setReasonImage(reader.result);
-                    reader.readAsDataURL(file);
-                  }
-                }}
+                onChange={(e) => setReasonImage(e.target.files[0])}
                 className="mt-1 block w-full border border-gray-300 rounded-md"
               />
             </div>
             <button
               onClick={() => {
-                updateDeliveryStatus(newStatus);
+                updateDeliveryStatus();
                 setShowReasonModal(false);
               }}
               className="bg-green-500 text-white px-4 py-2 rounded"
@@ -167,23 +148,12 @@ const DeliveryDetail = () => {
           </div>
         </Modal>
       )}
+
+      {errorMessage && (
+        <p className="text-red-500 text-center mt-4">{errorMessage}</p>
+      )}
     </div>
   );
-};
-
-const getStatusLabel = (status) => {
-  switch (status) {
-    case 0:
-      return "Delivering";
-    case 1:
-      return "Delivered";
-    case 2:
-      return "Failed";
-    case 3:
-      return "Cancelled";
-    default:
-      return "Unknown Status";
-  }
 };
 
 export default DeliveryDetail;
