@@ -1,7 +1,7 @@
 import React from 'react';
 import aboutBg from '../assets/about_bg.jpg';
 import fish from '../assets/koi1.jpg'; // Replace with your actual koi image path
-import FeedBackCard from '../components/feedBack/FeedBack';
+import Koi2 from '../assets/Koi7.png'
 
 function AboutPage() {
   return (
@@ -41,13 +41,11 @@ function AboutPage() {
           {/* Right side content with YouTube embed */}
           <div className="w-full lg:w-1/3 flex justify-center items-center">
             <div className="relative" style={{ paddingBottom: '56.25%', height: 0, overflow: 'hidden', width: '100%' }}>
-              <iframe
+              <img
                 className="absolute top-0 left-0 w-full h-full"
-                src="https://www.youtube.com/embed/TLccnKIMggA"
-                title="YouTube video player"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                allowFullScreen
-              ></iframe>
+                src={Koi2}
+              >              
+              </img>
             </div>
           </div>
         </div>
@@ -83,10 +81,9 @@ function AboutPage() {
             </button>
           </div>
 
-          {/* Right side content with image */}
           <div className="w-full lg:w-1/3 mt-6 lg:mt-0">
             <img
-              src={fish}  // Use an actual image here instead of lucide-react icon
+              src={fish}  
               alt="Beautiful Koi"
               className="w-full rounded-lg shadow-md"
             />
@@ -94,7 +91,7 @@ function AboutPage() {
         </div>
       </div>
 
-      <FeedBackCard />
+ 
     </div>
   );
 }

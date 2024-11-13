@@ -50,7 +50,6 @@ function Header() {
         <Link to="/about" className="hover:text-gray-800">About</Link>
         <Link to="/products" className="hover:text-gray-800">Fish</Link>
         <Link to="/koiBatch" className="hover:text-gray-800">Batch</Link>
-        <Link to="/question" className="hover:text-gray-800">FAQ</Link>
         <Link to="/Consign" className="hover:text-gray-800">Consign</Link>
       </nav>
 
@@ -86,6 +85,13 @@ function Header() {
                 onClick={() => setDropdownOpen(false)}
               >
                 Your Consign
+              </Link>
+              <Link
+                to="/your-koi"
+                className="block px-4 py-2 text-gray-700 hover:bg-gray-100"
+                onClick={() => setDropdownOpen(false)}
+              >
+                Your Koi
               </Link>
 
               {role === "1" &&(

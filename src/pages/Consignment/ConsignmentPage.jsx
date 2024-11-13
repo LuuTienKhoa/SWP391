@@ -7,15 +7,17 @@ const ConsignmentPage = () => {
     const [loading, setLoading] = useState(false);
     const [totalCost, setTotalCost] = useState(0);
     const dailyCostOptions = {
-        1: 150000,
-        2: 200000,
-        3: 500000
+        1: 100000,
+        2: 150000,
+        3: 250000,
+        5: 500000
     };
 
     const formatCurrency = (value) => {
         return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(value);
     };
     const [selectedPricePerDay, setSelectedPricePerDay] = useState(0);
+    const [selectedPriceListId, setSelectedPriceListId] = useState(null);
     const [startDate, setStartDate] = useState(null);
     const [endDate, setEndDate] = useState(null);
 
@@ -35,6 +37,7 @@ const ConsignmentPage = () => {
 
     const handleStartDateChange = (date) => {
         setStartDate(date);
+        calculateTotalCost(date, endDate, selectedPricePerDay);
     };
 
     const handleEndDateChange = (date) => {
@@ -42,6 +45,7 @@ const ConsignmentPage = () => {
             message.error('End date cannot be earlier than the start date');
         } else {
             setEndDate(date);
+            calculateTotalCost(startDate, date, selectedPricePerDay);
         }
     };
 
@@ -61,7 +65,7 @@ const ConsignmentPage = () => {
             }
         });
 
-        formData.append('priceListId', 1);
+        formData.append('priceListId', selectedPriceListId);
         formData.append('startDate', startDate ? startDate.toISOString() : '');
         formData.append('endDate', endDate ? endDate.toISOString() : '');
         try {
@@ -148,9 +152,10 @@ const ConsignmentPage = () => {
 
                 <Form.Item label="Price Per Day Option" name="priceListId" rules={[{ required: true }]}>
                     <Select placeholder="Select price per day option" onChange={handlePriceListChange}>
-                        <Select.Option value={1}>Option 1 - 150,000 VND/day</Select.Option>
-                        <Select.Option value={2}>Option 2 - 200,000 VND/day</Select.Option>
-                        <Select.Option value={3}>Option 3 - 500,000 VND/day</Select.Option>
+                        <Select.Option value={1}>Option 1 - 100,000 VND/day</Select.Option>
+                        <Select.Option value={2}>Option 2 - 150,000 VND/day</Select.Option>
+                        <Select.Option value={3}>Option 3 - 250,000 VND/day</Select.Option>
+                        <Select.Option value={5}>Option 4 - 500,000 VND/day</Select.Option>
                     </Select>
                 </Form.Item>
 

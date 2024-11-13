@@ -49,7 +49,7 @@ const ConsignmentTable = ({ consignments, startEditing, handleDelete }) => {
            </td>
             <td className="p-2 border">{formatCurrency(consignment.fosterPrice) || 'Unknown'}</td>
            
-            <td className="p-2 border">{formatCurrency(consignment.consignmentPriceList.pricePerDay)}</td>
+            <td className="p-2 border">{formatCurrency(consignment.consignmentPriceList?.pricePerDay)}</td>
             <td className="p-2 border">{formatDate(consignment.startDate)}</td>
             <td className="p-2 border">{formatDate(consignment.endDate)}</td>
             <td className="p-2 border">{getStatusLabel(consignment.status)}</td>
