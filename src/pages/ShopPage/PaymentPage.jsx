@@ -48,6 +48,8 @@ const PaymentPage = () => {
         ...(batch && { batchs: [[batch.batchID, buyingAmount]] }),
         ...(koiFish?.consignmentKoiID && { consignmentKois: [koiFish.consignmentKoiID] }),
         ...(koiFish?.koiID && { kois: [koiFish.koiID] }),
+        ...(consignment?.priceListId && { consignment: { endDate: consignment.endDate, priceListId: consignment.priceListId } }),
+
       };
 
       const response = await api.post('/Order/create', orderData);
