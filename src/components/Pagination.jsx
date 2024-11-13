@@ -22,30 +22,36 @@ const Pagination = ({ totalPosts, postPerPage, paginate }) => {
 const PaginationWrapper = styled.div`
   display: flex;
   justify-content: center; /* Center the buttons */
-  margin-top: 20px; /* Optional spacing above the buttons */
+  align-items: center;
+  margin-top: 20px;
 `;
 
-// Styled button component with the new color scheme
+// Styled button component with a more standard design
 const StyledButton = styled.button`
-  border: none;
+  border: 1px solid #ddd; /* Light gray border */
   outline: none;
-  background-color: #ff6600; /* Use your desired orange color */
-  padding: 10px 20px;
-  font-size: 12px;
-  font-weight: 700;
-  color: #fff;
+  background-color: #fff; /* White background */
+  padding: 8px 16px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #333; /* Dark text color */
   border-radius: 5px;
-  transition: all ease 0.1s;
-  box-shadow: 0px 5px 0px 0px #ff8533;
   margin: 0 5px;
+  cursor: pointer;
+  transition: all 0.3s ease;
 
   &:hover {
-    background-color: #e65c00; /* Darken on hover */
+    background-color: #f0f0f0; /* Light gray on hover */
   }
 
   &:active {
-    transform: translateY(5px);
-    box-shadow: 0px 0px 0px 0px #e65c00;
+    background-color: #ddd; /* Darker gray on click */
+    transform: translateY(2px);
+  }
+
+  &:disabled {
+    background-color: #e0e0e0; /* Disabled button */
+    cursor: not-allowed;
   }
 `;
 

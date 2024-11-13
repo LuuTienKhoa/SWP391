@@ -25,6 +25,8 @@ import UserConsignmentsDetailPage from './pages/ConsignPage';
 import FeedBackPage from './pages/Feedback/FeedbackPage'
 import LandingPage from './pages/LandingPage';
 import YourKoi from './pages/YourKoi';
+import RedeemLoyaltyPoints from './pages/RedeemLoyaltyPoints';
+
 
 function App() {
   const location = useLocation();
@@ -62,6 +64,7 @@ function App() {
           <Route path="/*" element={<RoleBasedRoutes />} />
           <Route path="/feedback" element={<FeedBackPage />} />
           <Route path="/your-koi" element={<YourKoi />} />
+          <Route path="/redeemLoyaltyPoints" element={<RedeemLoyaltyPoints />} />
           <Route path="*" element={<NotFoundPage />} />
         </Routes>
       </main>

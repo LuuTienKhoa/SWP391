@@ -81,7 +81,9 @@ const KoiBatchPage = () => {
   const closeModal = () => {
     setSelectedBatch(null);
   };
-
+  const formatCurrency = (value) => {
+    return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(value);
+};
   return (
     <div className="p-8">
       <h1 className="text-4xl font-bold mb-6 text-center text-gray-800">Koi Batches Available</h1>
@@ -160,7 +162,7 @@ const KoiBatchPage = () => {
                 className="w-full h-48 object-contain rounded-lg mb-4"
               />
               <h2 className="text-lg font-semibold text-center">{batch.name}</h2>
-              <p className="text-gray-600 text-center mt-2 font-medium">Price: ${batch.pricePerBatch}</p>
+              <p className="text-gray-600 text-center mt-2 font-medium">Price: {formatCurrency(batch.pricePerBatch)}</p>
             </div>
           ))
         )}

@@ -14,7 +14,7 @@ const ManageOrder = () => {
     fetchOrders();
   }, []);
 
-  const fetchOrders = async () => {s
+  const fetchOrders = async () => {
     try {
       const response = await api.get("/Order");
       const sortedOrders = response.data.sort((a, b) => b.orderID - a.orderID);

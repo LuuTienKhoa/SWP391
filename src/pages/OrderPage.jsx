@@ -1,6 +1,22 @@
-import React, { useEffect, useState } from 'react';
-import api from '../config/axios';
-import { Tab, Tabs, Table, TableBody, TableRow, TableCell, Typography, Box, Button, Rating, TextField, Snackbar, Alert, Card, CardContent } from '@mui/material';
+import React, { useEffect, useState } from "react";
+import api from "../config/axios";
+import {
+  Tab,
+  Tabs,
+  Table,
+  TableBody,
+  TableRow,
+  TableCell,
+  Typography,
+  Box,
+  Button,
+  Rating,
+  TextField,
+  Snackbar,
+  Alert,
+  Card,
+  CardContent,
+} from "@mui/material";
 
 const OrderPage = ({ token }) => {
   const [orders, setOrders] = useState([]);
@@ -8,25 +24,33 @@ const OrderPage = ({ token }) => {
   const [error, setError] = useState(null);
   const [feedback, setFeedback] = useState({}); // State to hold feedback for each order
   const [rating, setRating] = useState({}); // State to hold ratings for each order
-  const [notification, setNotification] = useState({ open: false, message: '', severity: 'success' });
+  const [notification, setNotification] = useState({
+    open: false,
+    message: "",
+    severity: "success",
+  });
   const [filterStatus, setFilterStatus] = useState(null);
   useEffect(() => {
     const fetchOrders = async () => {
       try {
-        const response = await api.get('/Order/list', {
+        const response = await api.get("/Order/list", {
           headers: {
             Authorization: `Bearer ${token}`,
           },
         });
 
         // Sort orders by creation date (most recent first)
-        const sortedOrders = response.data.sort((a, b) => new Date(b.createAt) - new Date(a.createAt));
+        const sortedOrders = response.data.sort(
+          (a, b) => new Date(b.createAt) - new Date(a.createAt)
+        );
         setOrders(sortedOrders);
       } catch (err) {
         if (err.response) {
-          setError(`API Error: ${err.response.status} - ${err.response.data.message}`);
+          setError(
+            `API Error: ${err.response.status} - ${err.response.data.message}`
+          );
         } else if (err.request) {
-          setError('No response received from API');
+          setError("No response received from API");
         } else {
           setError(err.message);
         }
@@ -39,11 +63,11 @@ const OrderPage = ({ token }) => {
   }, [token]);
 
   const handleFeedbackChange = (orderID, value) => {
-    setFeedback(prev => ({ ...prev, [orderID]: value }));
+    setFeedback((prev) => ({ ...prev, [orderID]: value }));
   };
 
   const handleRatingChange = (orderID, value) => {
-    setRating(prev => ({ ...prev, [orderID]: value }));
+    setRating((prev) => ({ ...prev, [orderID]: value }));
   };
 
   const submitFeedback = async (orderID, customerID) => {
@@ -51,20 +75,26 @@ const OrderPage = ({ token }) => {
       CustomerID: customerID,
       OrderID: orderID,
       Rating: rating[orderID] || 5,
-      Comment: feedback[orderID] || '',
+      Comment: feedback[orderID] || "",
     };
 
-
-
     try {
-      await api.post('/Feedback/CreateFeedback', feedbackData, {
+      await api.post("/Feedback/CreateFeedback", feedbackData, {
         headers: { Authorization: `Bearer ${token}` },
       });
-      setFeedback(prev => ({ ...prev, [orderID]: '' }));
-      setRating(prev => ({ ...prev, [orderID]: 5 }));
-      setNotification({ open: true, message: 'Feedback submitted successfully!', severity: 'success' });
+      setFeedback((prev) => ({ ...prev, [orderID]: "" }));
+      setRating((prev) => ({ ...prev, [orderID]: 5 }));
+      setNotification({
+        open: true,
+        message: "Feedback submitted successfully!",
+        severity: "success",
+      });
     } catch (err) {
-      setNotification({ open: true, message: 'Failed to submit feedback.', severity: 'error' });
+      setNotification({
+        open: true,
+        message: "Failed to submit feedback.",
+        severity: "error",
+      });
     }
   };
 
@@ -99,14 +129,17 @@ const OrderPage = ({ token }) => {
   const handleFilterChange = (status) => {
     setFilterStatus(status);
   };
-  const filteredOrders = filterStatus === null
-    ? orders
-    : orders.filter(order => order.status === filterStatus);
+  const filteredOrders =
+    filterStatus === null
+      ? orders
+      : orders.filter((order) => order.status === filterStatus);
 
   return (
     <Box sx={{ maxWidth: 900, margin: "0 auto", padding: 4 }}>
       <div>
-        <Typography variant="h4" align="center" gutterBottom>Your Order History</Typography>
+        <Typography variant="h4" align="center" gutterBottom>
+          Your Order History
+        </Typography>
         <Tabs
           value={filterStatus}
           onChange={(e, newValue) => handleFilterChange(newValue)}
@@ -121,76 +154,139 @@ const OrderPage = ({ token }) => {
           <Tab label="Cancelled" value={2} />
         </Tabs>
         <div>
-          {filteredOrders.map(order => (
-            <Card key={order.orderID} sx={{ marginBottom: 2, boxShadow: 3, borderRadius: 2, backgroundColor: "#f9f9f9" }}>
+          {filteredOrders.map((order) => (
+            <Card
+              key={order.orderID}
+              sx={{
+                marginBottom: 2,
+                boxShadow: 3,
+                borderRadius: 2,
+                backgroundColor: "#f9f9f9",
+              }}
+            >
               <CardContent>
                 <Table>
                   <TableBody>
+                  <TableRow>
+                      <TableCell>
+                        <strong></strong>
+                      </TableCell>
+                      <TableCell>
+                        <img
+                          src={order.orderDetails?.[0]?.koi?.image}
+                          alt={order.orderDetails?.[0]?.koi?.name}
+                          style={{ width: "100px", height: "auto" }}
+                        />
+                      </TableCell>
+                    </TableRow>
                     <TableRow>
-                      <TableCell><strong>Order ID:</strong></TableCell>
+                      <TableCell>
+                        <strong>Koi Name:</strong>
+                      </TableCell>
+                      <TableCell>
+                        {order.orderDetails?.[0]?.koi?.name}
+                      </TableCell>
+                    </TableRow>
+                   
+
+                    <TableRow>
+                      <TableCell>
+                        <strong>Order ID:</strong>
+                      </TableCell>
                       <TableCell>{order.orderID}</TableCell>
                     </TableRow>
                     <TableRow>
-                      <TableCell><strong>Total Amount:</strong></TableCell>
+                      <TableCell>
+                        <strong>Total Amount:</strong>
+                      </TableCell>
                       <TableCell>{order.totalAmount}</TableCell>
                     </TableRow>
                     <TableRow>
-                      <TableCell><strong>Created At:</strong></TableCell>
-                      <TableCell>{new Date(order.createAt).toLocaleString()}</TableCell>
+                      <TableCell>
+                        <strong>Created At:</strong>
+                      </TableCell>
+                      <TableCell>
+                        {new Date(order.createAt).toLocaleString()}
+                      </TableCell>
                     </TableRow>
+                   
+
                     <TableRow>
-                      <TableCell><strong>Customer ID:</strong></TableCell>
-                      <TableCell>{order.customerID}</TableCell>
-                    </TableRow>
-                    <TableRow>
-                      <TableCell><strong>Order Status:</strong></TableCell>
+                      <TableCell>
+                        <strong>Order Status:</strong>
+                      </TableCell>
                       <TableCell>{getOrderLabel(order.status)}</TableCell>
                     </TableRow>
-                    {order.delivery ? (
+                    {/* {order.delivery ? (
                       <>
                         <TableRow>
-                          <TableCell><strong>Delivery Status:</strong></TableCell>
-                          <TableCell>{getDeliveryLabel(order.delivery.status)}</TableCell>
+                          <TableCell>
+                            <strong>Delivery Status:</strong>
+                          </TableCell>
+                          <TableCell>
+                            {getDeliveryLabel(order.delivery.status)}
+                          </TableCell>
                         </TableRow>
                         <TableRow>
-                          <TableCell><strong>Start Delivery Day:</strong></TableCell>
-                          <TableCell>{new Date(order.delivery.startDeliDay).toLocaleString()}</TableCell>
+                          <TableCell>
+                            <strong>Start Delivery Day:</strong>
+                          </TableCell>
+                          <TableCell>
+                            {new Date(
+                              order.delivery.startDeliDay
+                            ).toLocaleString()}
+                          </TableCell>
                         </TableRow>
                         <TableRow>
-                          <TableCell><strong>End Delivery Day:</strong></TableCell>
-                          <TableCell>{order.delivery.endDeliDay ? new Date(order.delivery.endDeliDay).toLocaleString() : 'Not Available'}</TableCell>
+                          <TableCell>
+                            <strong>End Delivery Day:</strong>
+                          </TableCell>
+                          <TableCell>
+                            {order.delivery.endDeliDay
+                              ? new Date(
+                                  order.delivery.endDeliDay
+                                ).toLocaleString()
+                              : "Not Available"}
+                          </TableCell>
                         </TableRow>
                       </>
                     ) : (
                       <TableRow>
-                        <TableCell><strong>Delivery Information:</strong></TableCell>
+                        <TableCell>
+                          <strong>Delivery Information:</strong>
+                        </TableCell>
                         <TableCell>Not available</TableCell>
                       </TableRow>
-                    )}
+                    )} */}
                   </TableBody>
                 </Table>
-
 
                 {order.status === 1 && (
                   <Box sx={{ mt: 2 }}>
                     <Rating
                       name={`rating-${order.orderID}`}
                       value={rating[order.orderID] || 5}
-                      onChange={(event, newValue) => handleRatingChange(order.orderID, newValue)}
+                      onChange={(event, newValue) =>
+                        handleRatingChange(order.orderID, newValue)
+                      }
                       sx={{ marginBottom: 2 }}
                     />
                     <TextField
                       label="Your Feedback"
                       variant="outlined"
                       fullWidth
-                      value={feedback[order.orderID] || ''}
-                      onChange={(e) => handleFeedbackChange(order.orderID, e.target.value)}
+                      value={feedback[order.orderID] || ""}
+                      onChange={(e) =>
+                        handleFeedbackChange(order.orderID, e.target.value)
+                      }
                       sx={{ marginBottom: 2 }}
                     />
                     <Button
                       variant="contained"
                       color="primary"
-                      onClick={() => submitFeedback(order.orderID, order.customerID)}
+                      onClick={() =>
+                        submitFeedback(order.orderID, order.customerID)
+                      }
                     >
                       Submit Feedback
                     </Button>
@@ -200,9 +296,17 @@ const OrderPage = ({ token }) => {
                 <Snackbar
                   open={notification.open}
                   autoHideDuration={3000}
-                  onClose={() => setNotification({ ...notification, open: false })}
+                  onClose={() =>
+                    setNotification({ ...notification, open: false })
+                  }
                 >
-                  <Alert onClose={() => setNotification({ ...notification, open: false })} severity={notification.severity} sx={{ width: '100%' }}>
+                  <Alert
+                    onClose={() =>
+                      setNotification({ ...notification, open: false })
+                    }
+                    severity={notification.severity}
+                    sx={{ width: "100%" }}
+                  >
                     {notification.message}
                   </Alert>
                 </Snackbar>

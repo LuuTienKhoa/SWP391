@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import logo from "../../assets/logo.png";
 import { IoLogInOutline } from "react-icons/io5";
@@ -10,6 +10,23 @@ function Header() {
   const navigate = useNavigate();
   const { isLoggedIn, setIsLoggedIn, userId, role, setRole } = useContext(UserContext);
   const [isDropdownOpen, setDropdownOpen] = useState(false);
+  const [loyaltyPoints, setLoyaltyPoints] = useState(0);
+
+  // Fetch user profile data
+  useEffect(() => {
+    const fetchUserProfile = async () => {
+      if (isLoggedIn) {
+        try {
+          const response = await api.get("/User/CusProfile");
+          setLoyaltyPoints(response.data.loyaltyPoints);
+        } catch (error) {
+          console.error("Failed to fetch user profile:", error);
+        }
+      }
+    };
+
+    fetchUserProfile();
+  }, [isLoggedIn]);
 
   // Handle user logout
   const handleLogout = async () => {
@@ -51,6 +68,7 @@ function Header() {
         <Link to="/products" className="hover:text-gray-800">Fish</Link>
         <Link to="/koiBatch" className="hover:text-gray-800">Batch</Link>
         <Link to="/Consign" className="hover:text-gray-800">Consign</Link>
+        
       </nav>
 
       {/* Dropdown for Account Links */}
@@ -93,7 +111,7 @@ function Header() {
               >
                 Your Koi
               </Link>
-
+              <span className="block px-4 py-2 text-gray-700">Loyalty Points: {loyaltyPoints}</span>
               {role === "1" &&(
                 <Link
                 to="/staff"
