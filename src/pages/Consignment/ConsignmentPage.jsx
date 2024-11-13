@@ -1,11 +1,12 @@
 import { useState } from 'react';
-import { Form, Input, Button, Select, Radio, Upload, InputNumber, message, DatePicker } from 'antd';
+import { Form, Input, Button, Select, Upload, InputNumber, message, DatePicker } from 'antd';
 import { UploadOutlined } from '@ant-design/icons';
 import api from '../../config/axios';
 
 const ConsignmentPage = () => {
     const [loading, setLoading] = useState(false);
     const [totalCost, setTotalCost] = useState(0);
+    const [selectedType, setSelectedType] = useState(null); // State to track the selected type
     const dailyCostOptions = {
         1: 100000,
         2: 150000,
@@ -49,11 +50,17 @@ const ConsignmentPage = () => {
         }
     };
 
+    const handleTypeChange = (value) => {
+        setSelectedType(value);
+    };
 
     const handleSubmit = async (values) => {
         if (startDate && endDate && endDate.isBefore(startDate)) {
             message.error('End date cannot be earlier than the start date');
             return; // Prevent submission
+        }
+        if (selectedType === 1) { 
+            values.price = 0;
         }
         setLoading(true);
         const formData = new FormData();
@@ -100,7 +107,7 @@ const ConsignmentPage = () => {
                 style={{ width: '100%', maxWidth: 600 }}
             >
                 <Form.Item label="Type" name="type" >
-                    <Select placeholder="Select type">
+                    <Select placeholder="Select type" onChange={handleTypeChange}>
                         <Select.Option value={0}>Sell</Select.Option>
                         <Select.Option value={1}>Foster</Select.Option>
                     </Select>
@@ -146,7 +153,7 @@ const ConsignmentPage = () => {
                     <Input placeholder="Enter rate" />
                 </Form.Item>
 
-                <Form.Item label="Foster Price" name="price" >
+                <Form.Item label="Desired Price" name="price" hidden={selectedType !== 0}>
                     <Input placeholder="Enter price" />
                 </Form.Item>
 
