@@ -5,6 +5,7 @@ const RedeemLoyaltyPoints = () => {
   const [loyaltyPoints, setLoyaltyPoints] = useState(0);
   const [promotions, setPromotions] = useState([]);
   const [selectedPromotion, setSelectedPromotion] = useState(null);
+  const [hasCustomerID, setHasCustomerID] = useState(false);
 
   useEffect(() => {
     const fetchUserProfile = async () => {
@@ -18,8 +19,9 @@ const RedeemLoyaltyPoints = () => {
 
     const fetchPromotions = async () => {
       try {
-        const response = await api.get('/Promotion');
+        const response = await api.get('/Promotion/UserAvailable');
         setPromotions(response.data);
+        setHasCustomerID(response.data.some(promo => promo.customerID !== null && promo.customerID !== 0));
       } catch (error) {
         console.error("Failed to fetch promotions:", error);
       }
@@ -49,18 +51,71 @@ const RedeemLoyaltyPoints = () => {
       <h1 className="text-3xl font-bold mb-6">Redeem Loyalty Points</h1>
       <p className="mb-4">Your Loyalty Points: {loyaltyPoints}</p>
 
-      <h2 className="text-xl font-semibold mb-4">Available Promotions</h2>
-      <select
-        onChange={(e) => setSelectedPromotion(e.target.value)}
-        className="mb-4 p-2 border rounded"
-      >
-        <option value="">Select a promotion</option>
-        {promotions.map((promotion) => (
-          <option key={promotion.promotionID} value={promotion.promotionID}>
-            {promotion.description} - {promotion.discountRate}% off
-          </option>
-        ))}
-      </select>
+      <h2 className="text-xl font-semibold mb-4">Your Promotions</h2>
+      <table className="table-auto w-full mb-4">
+        <thead>
+          <tr>
+            <th className="px-4 py-2">Promotion ID</th>
+            <th className="px-4 py-2">Customer ID</th>
+            <th className="px-4 py-2">Code</th>
+            <th className="px-4 py-2">Description</th>
+            <th className="px-4 py-2">Discount Rate</th>
+            <th className="px-4 py-2">Start Date</th>
+            <th className="px-4 py-2">End Date</th>
+            <th className="px-4 py-2">Remaining Redeem</th>
+          </tr>
+        </thead>
+        <tbody>
+          {promotions.filter(promo => promo.customerID).map((promotion) => (
+            <tr key={promotion.promotionID}>
+              <td className="border px-4 py-2">{promotion.promotionID}</td>
+              <td className="border px-4 py-2">{promotion.customerID}</td>
+              <td className="border px-4 py-2">{promotion.code}</td>
+              <td className="border px-4 py-2">{promotion.description}</td>
+              <td className="border px-4 py-2">{promotion.discountRate}%</td>
+              <td className="border px-4 py-2">{new Date(promotion.startDate).toLocaleDateString()}</td>
+              <td className="border px-4 py-2">{new Date(promotion.endDate).toLocaleDateString()}</td>
+              <td className="border px-4 py-2">{promotion.remainingRedeem}</td>
+              
+            </tr>
+          ))}
+        </tbody>
+      </table>
+
+      <h2 className="text-xl font-semibold mb-4">Promotion you can redeem</h2>
+      <table className="table-auto w-full mb-4">
+        <thead>
+          <tr>
+            <th className="px-4 py-2">Code</th>
+            <th className="px-4 py-2">Description</th>
+            <th className="px-4 py-2">Discount Rate</th>
+            <th className="px-4 py-2">Start Date</th>
+            <th className="px-4 py-2">End Date</th>
+            <th className="px-4 py-2">Remaining Redeem</th>
+            <th className="px-4 py-2">Select</th>
+          </tr>
+        </thead>
+        <tbody>
+          {promotions.filter(promo => !promo.customerID).map((promotion) => (
+            <tr key={promotion.promotionID}>
+              <td className="border px-4 py-2">{promotion.code}</td>
+              <td className="border px-4 py-2">{promotion.description}</td>
+              <td className="border px-4 py-2">{promotion.discountRate}%</td>
+              <td className="border px-4 py-2">{new Date(promotion.startDate).toLocaleDateString()}</td>
+              <td className="border px-4 py-2">{new Date(promotion.endDate).toLocaleDateString()}</td>
+              <td className="border px-4 py-2">{promotion.remainingRedeem}</td>
+              <td className="border px-4 py-2">
+                <input
+                  type="radio"
+                  name="promotion"
+                  value={promotion.promotionID}
+                  onChange={() => setSelectedPromotion(promotion.promotionID)}
+                />
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
 
       <button
         onClick={handleRedeem}
@@ -72,4 +127,4 @@ const RedeemLoyaltyPoints = () => {
   );
 };
 
-export default RedeemLoyaltyPoints; 
+export default RedeemLoyaltyPoints;

@@ -29,6 +29,7 @@ import RedeemLoyaltyPoints from './pages/RedeemLoyaltyPoints';
 
 
 function App() {
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const location = useLocation();
   const shouldRenderHeaderFooter = !(
     location.pathname.startsWith("/admin") || location.pathname.startsWith("/staff")
@@ -41,6 +42,11 @@ function App() {
         <Header  />
       )}
       <main className="min-h-screen">
+        {isLoggedIn && (
+          <div>
+            <a href="/redeemLoyaltyPoints" className="btn">Redeem Point</a>
+          </div>
+        )}
         <Routes>
           <Route path="/" element={<LandingPage />} />
           <Route path="/home" element={<Navigate to="/" />} />

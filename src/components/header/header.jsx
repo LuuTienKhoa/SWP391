@@ -111,6 +111,13 @@ function Header() {
               >
                 Your Koi
               </Link>
+              <Link
+                to="/redeemLoyaltyPoints"
+                className="block px-4 py-2 text-gray-700 hover:bg-gray-100"
+                onClick={() => setDropdownOpen(false)}
+              >
+                Redeem Point
+              </Link>
               <span className="block px-4 py-2 text-gray-700">Loyalty Points: {loyaltyPoints}</span>
               {role === "1" &&(
                 <Link
