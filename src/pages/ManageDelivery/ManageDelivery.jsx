@@ -95,6 +95,9 @@ const ManageDelivery = () => {
             <th className="p-2 border">Address</th>
             <th className="p-2 border">Total Amount</th>
             <th className="p-2 border">Status</th>
+            {userRole === 0 ? (
+            <th className="p-2 border"></th>
+            ) : null}
           </tr>
         </thead>
         <tbody>
@@ -120,7 +123,18 @@ const ManageDelivery = () => {
               <td className="p-2 border">{delivery.address}</td>
               <td className="p-2 border">{delivery.order.totalAmount} VND</td>
               <td className="p-2 border">{getStatusLabel(delivery.status)}</td>
-             
+              {delivery.status === 1 || delivery.status === 2 || delivery.status === 3 ?  ( // Delivered, Failed, Cancelled
+                 userRole === 0 ? (
+                <td className="p-2 border">
+                  <button
+                    onClick={() => handleDeleteDelivery(delivery.deliveryID)}
+                    className="bg-red-500 text-white px-4 py-1 rounded"
+                  >
+                    Delete
+                  </button>
+                </td>
+                 ) : null
+              ) : null}
             </tr>
           ))}
         </tbody>
