@@ -20,6 +20,8 @@ const ProductsPage = () => {
   const [sortOrder, setSortOrder] = useState("normal");
   const [cartOpen, setCartOpen] = useState(false);
   const [isCartVisible, setIsCartVisible] = useState(false);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [searchType, setSearchType] = useState("name"); 
 
   // Pagination
   const [currentPage, setCurrentPage] = useState(1);
@@ -42,17 +44,34 @@ const ProductsPage = () => {
         });
       }
 
+      if (searchTerm) {
+        sortedData = sortedData.filter((fish) => {
+          const searchLower = searchTerm.toLowerCase();
+          return (
+            fish.name.toLowerCase().includes(searchLower) ||
+            fish.species.toLowerCase().includes(searchLower) ||
+            (fish.origin && fish.origin.toLowerCase().includes(searchLower)) ||
+            fish.color.toLowerCase().includes(searchLower)
+          );
+        });
+      }
+
       setKoiFishs(sortedData);
     } catch (error) {
       console.error("Error fetching koi fish:", error);
       alert("Failed to fetch koi fish. Please check the console for more details.");
     }
-  }, [sortOrder]);
+  }, [sortOrder, searchTerm]);
 
   useEffect(() => {
     fetchKoiFish();
-  }, [sortOrder, fetchKoiFish]);
+  }, [sortOrder, fetchKoiFish, searchTerm]);
 
+  // Update search term
+  const handleSearchChange = (e) => {
+    setSearchTerm(e.target.value);
+    setCurrentPage(1); // Reset to the first page on a new search
+  };
   useEffect(() => {
     localStorage.setItem("cartItems", JSON.stringify(cartItems));
   }, [cartItems]);
@@ -146,6 +165,57 @@ const ProductsPage = () => {
             </button>
           </div>
         </div>
+ 
+        {/* Search Bar */}
+        <div className="flex flex-col sm:flex-row justify-between items-center mb-4 p-4">
+          <div className="flex flex-wrap gap-2 mb-4 sm:mb-0">
+            <button
+              onClick={() => setSearchType("name")}
+              className={`p-2 rounded-lg ${searchType === "name" ? "bg-gray-800 text-white" : "bg-gray-300"}`}
+            >
+              Name
+            </button>
+            <button
+              onClick={() => setSearchType("species")}
+              className={`p-2 rounded-lg ${searchType === "species" ? "bg-gray-800 text-white" : "bg-gray-300"}`}
+            >
+              Species
+            </button>
+            <button
+              onClick={() => setSearchType("origin")}
+              className={`p-2 rounded-lg ${searchType === "origin" ? "bg-gray-800 text-white" : "bg-gray-300"}`}
+            >
+              Origin
+            </button>
+            <button
+              onClick={() => setSearchType("color")}
+              className={`p-2 rounded-lg ${searchType === "color" ? "bg-gray-800 text-white" : "bg-gray-300"}`}
+            >
+              Color
+            </button>
+          </div>
+
+          <input
+            type="text"
+            placeholder={`Search by ${searchType}`}
+            value={searchTerm}
+            onChange={handleSearchChange}
+            className="p-3 border border-gray-400 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-gray-500 transition duration-300 bg-white w-full max-w-lg"
+          />
+
+          <div className="flex justify-end items-center mt-4 sm:mt-0">
+            <select
+              value={sortOrder}
+              onChange={(e) => setSortOrder(e.target.value)}
+              className="p-3 border border-gray-400 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-gray-500 transition duration-300 bg-white ml-4"
+            >
+              <option value="normal">Price</option>
+              <option value="asc">Price: Ascending</option>
+              <option value="desc">Price: Descending</option>
+            </select>
+          </div>
+        </div>
+
 
         {/* Product Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">

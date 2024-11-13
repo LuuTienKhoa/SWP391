@@ -149,36 +149,48 @@ const PaymentPage = () => {
             </div>
           )}
 
-          <div className="bg-gray-200 p-6 rounded-lg mb-6">
-            <p className="text-4xl font-bold text-gray-800">
-              {batch
-                ? `$${(batch.pricePerBatch * (paymentMethod === 'Direct-Payment' ? 0.5 : 1)).toFixed(2)}`
+                {/* Price */}
+                <div className="bg-gray-200 p-6 rounded-lg mb-6">
+            <p className="text-4xl font-bold">
+              {batch 
+                ? `$${(batch.pricePerBatch * (paymentMethod === 'Direct-Payment' ? 0.5 : 1)).toFixed(2)}` 
                 : `$${(koiFish?.price * (paymentMethod === 'Direct-Payment' ? 0.5 : 1)).toFixed(2)}`}
             </p>
-            <p className="text-sm mt-2 text-gray-600">
-              {paymentMethod === 'Direct-Payment'
+            <p className="text-sm mt-2">
+              {paymentMethod === 'Direct-Payment' 
                 ? "Please pay 50% of the product value."
                 : "This is just the original amount of the product. It does not include the discount code."}
             </p>
           </div>
-
+          {/* Address and Phone */}
           <div className="bg-gray-200 p-6 rounded-lg mb-6">
             {paymentMethod === 'Direct-Payment' ? (
               <>
-                <p className="text-sm mt-2 text-gray-600">Shop's Address:</p>
-                <p className="text-2xl font-bold text-gray-800">123 Pham The Hien, Quan 8</p>
-                <p className="text-sm mt-2 text-gray-600">Shop's Phone:</p>
-                <p className="text-2xl font-bold text-gray-800">0908228121</p>
+                <p className="text-sm mt-2">Shop's Address:</p>
+                <p className="text-2xl font-bold">123 Pham The Hien, Quan 8</p>
+                <p className="text-sm mt-2">Shop's Phone:</p>
+                <p className="text-2xl font-bold">0908228121</p>
                 <p className="text-xl mt-2">Packed Date: {formatDate(packDate)}</p>
                 <p className="text-xl mt-2">Expected Pickup Date: {formatDate(packDate)} to {formatDate(deliveryDate)}</p>
+                <p className="text-sm mt-2">
+                - The product will be packed within 3 days from the time the customer deposits.                </p>
+                <p className="text-sm mt-2">
+                - Please come at the right time after 3 days of packing and within 7 days to pick up the product.                </p>
+                <p className="text-sm mt-2">
+                - If the time is exceeded, the order will be canceled and we will not return the deposit to you                </p>
+
               </>
             ) : (
               <>
-                <p className="text-sm mt-2 text-gray-600">Your Address:</p>
-                <p className="text-2xl font-bold text-gray-800">{user.address}</p>
-                <p className="text-sm mt-2 text-gray-600">Your Phone:</p>
-                <p className="text-2xl font-bold text-gray-800">{user.phone}</p>
+                <p className="text-sm mt-2">Your Address:</p>
+                <p className="text-2xl font-bold">{user.address}</p>
+                <p className="text-sm mt-2">Your Phone:</p>
+                <p className="text-2xl font-bold">{user.phone}</p>
                 <p className="text-xl mt-2">Estimated delivery date: {formatDate(deliveryDate)}</p>
+                <p className="text-sm mt-2">
+                  We will deliver to you based on the address you provided when registering. Any changes to the delivery address please change in 
+                  <a href="http://localhost:5173/profile" className="text-blue-500 underline"> your information here</a>.
+                </p>
               </>
             )}
           </div>
