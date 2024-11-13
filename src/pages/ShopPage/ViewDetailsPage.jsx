@@ -11,16 +11,16 @@ const ViewDetailsPage = () => {
   useEffect(() => {
     const fetchKoiFishDetails = async () => {
       try {
-        const response = await api.get(`/koi/Koi/${id}`);
-        setKoiFish(response.data);
+      
+        if (window.location.pathname.includes('/consignmentKoi/')) {
+          const response = await api.get(`/ConsignmentKoi/${id}`); // Đường dẫn cho consignmentKoi
+          setKoiFish(response.data);
+        } else if (window.location.pathname.includes('/koi/')) {
+          const response = await api.get(`/koi/Koi/${id}`); // Đường dẫn cho koi
+          setKoiFish(response.data);
+        }
       } catch (error) {
         console.error("Error fetching koi fish details:", error);
-        try {
-          const response = await api.get(`/ConsignmentKoi/${id}`);
-          setKoiFish(response.data);
-        } catch (error) {
-          console.error("Error fetching koi fish details:", error);
-        }
       }
     };
 
