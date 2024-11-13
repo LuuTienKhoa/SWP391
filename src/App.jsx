@@ -24,6 +24,8 @@ import PaymentSuccess from './pages/ShopPage/PaymentSuccess';
 import UserConsignmentsDetailPage from './pages/ConsignPage';
 import FeedBackPage from './pages/Feedback/FeedbackPage'
 import LandingPage from './pages/LandingPage';
+import YourKoi from './pages/YourKoi';
+
 function App() {
   const location = useLocation();
   const shouldRenderHeaderFooter = !(
@@ -59,6 +61,7 @@ function App() {
           <Route path="/consigned" element={<UserConsignmentsDetailPage />} />    
           <Route path="/*" element={<RoleBasedRoutes />} />
           <Route path="/feedback" element={<FeedBackPage />} />
+          <Route path="/your-koi" element={<YourKoi />} />
           <Route path="*" element={<NotFoundPage />} />
         </Routes>
       </main>
