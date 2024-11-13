@@ -81,27 +81,31 @@ const DeliveryDetail = () => {
             <p><strong>Total Amount:</strong> {delivery.order.totalAmount} VND</p>
             <p><strong>Status:</strong> {getStatusLabel(delivery.status)}</p>
             <p><strong>Reason:</strong> {delivery.reason || 'N/A'}</p>
-            {delivery.reasonImage && <img src={delivery.reasonImage} alt="Reason" className="mt-2"/>}
+            {delivery.reasonImage && <img src={delivery.reasonImage} alt="Reason" className="mt-2" />}
 
             <div className="flex space-x-4 mt-4">
-              <button
-                onClick={() => handleStatusChange(1)} // Delivered
-                className="bg-green-500 text-white px-4 py-2 rounded"
-              >
-                Delivered
-              </button>
-              <button
-                onClick={() => handleStatusChange(2)} // Failed
-                className="bg-red-500 text-white px-4 py-2 rounded"
-              >
-                Failed
-              </button>
-              <button
-                onClick={() => handleStatusChange(3)} // Cancelled
-                className="bg-yellow-500 text-white px-4 py-2 rounded"
-              >
-                Cancelled
-              </button>
+              {delivery.status === 0 && (
+                <>
+                  <button
+                    onClick={() => handleStatusChange(1)} // Delivered
+                    className="bg-green-500 text-white px-4 py-2 rounded"
+                  >
+                    Delivered
+                  </button>
+                  <button
+                    onClick={() => handleStatusChange(2)} // Failed
+                    className="bg-red-500 text-white px-4 py-2 rounded"
+                  >
+                    Failed
+                  </button>
+                  <button
+                    onClick={() => handleStatusChange(3)} // Cancelled
+                    className="bg-yellow-500 text-white px-4 py-2 rounded"
+                  >
+                    Cancelled
+                  </button>
+                </>
+              )}
             </div>
 
             <button onClick={() => setShowEditForm(true)} className="bg-blue-500 text-white p-2 mt-2">
