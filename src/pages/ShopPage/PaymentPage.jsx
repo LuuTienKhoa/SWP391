@@ -102,9 +102,14 @@ const PaymentPage = () => {
         <div className="lg:w-1/2 p-4 bg-white rounded-lg mb-6 lg:mb-0 flex flex-col items-center">
           {batch ? (
             <>
+            <img
+                src={batch?.image ?? "https://www.kodamakoifarm.com/wp-content/uploads/2024/05/w0503s054-re-260x421.jpg"}
+                alt={batch?.name}
+                className="h-auto max-w-xs flex flex-col justify-center items-center"
+              />
               <h2 className="text-2xl font-semibold mb-2 mt-2">{batch.name} #{batch.batchID}</h2>
               <p className="text-gray-500 mb-4">Quantity: {batch.quantityPerBatch}</p>
-              <p className="text-4xl font-bold text-gray-800">${batch.pricePerBatch?.toFixed(2)}</p>
+              <p className="text-4xl font-bold text-gray-800">{batch.pricePerBatch} đ</p>
             </>
           ) : (
             <>
@@ -115,7 +120,7 @@ const PaymentPage = () => {
               />
               <h2 className="text-2xl font-semibold mb-2 mt-2">{koiFish?.name} # {koiFish?.koiID || koiFish.consignmentKoiID}</h2>
               <p className="text-gray-500 mb-4">{koiFish?.species}</p>
-              <p className="text-4xl font-bold text-gray-800">${koiFish?.price?.toFixed(2)}</p>
+              <p className="text-4xl font-bold text-gray-800">{koiFish?.price} đ</p>
             </>
           )}
         </div>
@@ -153,8 +158,8 @@ const PaymentPage = () => {
                 <div className="bg-gray-200 p-6 rounded-lg mb-6">
             <p className="text-4xl font-bold">
               {batch 
-                ? `$${(batch.pricePerBatch * (paymentMethod === 'Direct-Payment' ? 0.5 : 1)).toFixed(2)}` 
-                : `$${(koiFish?.price * (paymentMethod === 'Direct-Payment' ? 0.5 : 1)).toFixed(2)}`}
+                ? `${(batch.pricePerBatch * (paymentMethod === 'Direct-Payment' ? 0.5 : 1))} đ` 
+                : `${(koiFish?.price * (paymentMethod === 'Direct-Payment' ? 0.5 : 1))} đ`}
             </p>
             <p className="text-sm mt-2">
               {paymentMethod === 'Direct-Payment' 

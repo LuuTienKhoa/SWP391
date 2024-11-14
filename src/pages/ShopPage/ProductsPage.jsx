@@ -141,17 +141,7 @@ const ProductsPage = () => {
           </button>
 
           <div className="flex justify-end items-center">
-            <div>
-              <select
-                value={sortOrder}
-                onChange={(e) => setSortOrder(e.target.value)}
-                className="p-3 border border-gray-400 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-gray-500 transition duration-300 bg-white"
-              >
-                <option value="normal">Price</option>
-                <option value="asc">Price: Ascending</option>
-                <option value="desc">Price: Descending</option>
-              </select>
-            </div>
+          
             <button
               onClick={() => setCartOpen(true)}
               className="relative flex items-center justify-center text-black px-4 py-2 rounded hover:bg-gray-100 transition duration-300"
