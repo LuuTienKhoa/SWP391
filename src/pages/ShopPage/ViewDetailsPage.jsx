@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import api from "../../config/axios";
 
 const ViewDetailsPage = () => {
@@ -7,6 +7,7 @@ const ViewDetailsPage = () => {
   const [koiFish, setKoiFish] = useState(null);
   const [selectedImage, setSelectedImage] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchKoiFishDetails = async () => {
@@ -48,7 +49,11 @@ const ViewDetailsPage = () => {
     koiFish?.addOn?.healthCertificate,
     koiFish?.addOn?.ownershipCertificate,
   ].filter(Boolean); // Filter out any undefined or null images
-
+  const handleNavigateToPayment = (koiFish) => {
+    const id = koiFish.consignmentKoiID || koiFish.koiID;
+    navigate(`/payment/${id}`, { state: { koiFish } });
+  };
+  
   return (
     <div className="min-h-screen bg-white text-black p-6">
       <div className="container mx-auto max-w-4xl bg-white rounded-lg shadow-lg p-6">
@@ -93,8 +98,12 @@ const ViewDetailsPage = () => {
 
             <div className="mt-6 flex space-x-4">
               <button className="px-4 py-2 bg-black text-white rounded-lg shadow hover:bg-gray-800 transition duration-300">Add to Cart</button>
-              <button className="px-4 py-2 bg-gray-700 text-white rounded-lg shadow hover:bg-gray-900 transition duration-300">Payment</button>
-            </div>
+              <button
+                    onClick={() => handleNavigateToPayment(koiFish)}
+                    className="bg-white text-black border border-black px-4 py-2 rounded-lg hover:bg-gray-200 transition duration-300 font-medium"
+                  >
+                    Pay Now
+                  </button>            </div>
           </div>
         </div>
       </div>
