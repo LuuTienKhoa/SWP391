@@ -1,11 +1,12 @@
 import React, { useEffect, useState, useCallback } from 'react';
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import api from '../../config/axios';
 
 const ManagePromotion = () => {
   const [promotions, setPromotions] = useState([]);
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+  const location = useLocation();
 
   const fetchPromotions = useCallback(async () => {
     setLoading(true);
@@ -42,14 +43,17 @@ const ManagePromotion = () => {
   return (
     <div className="p-6">
       <h1 className="text-3xl font-bold mb-6 text-center">Promotion</h1>
-      <div className="mb-4 text-center">
-        <button
-          onClick={() => navigate("/admin/managePromotion/createPromotion")}
-          className="bg-green-500 text-white rounded px-4 py-2"
-        >
-          Create Promotion
-        </button>
-      </div>
+
+      {location.pathname.includes('/admin') && (
+        <div className="mb-4 text-center">
+          <button
+            onClick={() => navigate("/admin/managePromotion/createPromotion")}
+            className="bg-green-500 text-white rounded px-4 py-2"
+          >
+            Create Promotion
+          </button>
+        </div>
+      )}
 
       {loading ? (
         <p>Loading...</p>

@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import api from "../../config/axios";
 
 const ProductsPage = () => {
@@ -17,6 +17,7 @@ const ProductsPage = () => {
   const [species, setSpecies] = useState("");
   const [filterVisible, setFilterVisible] = useState(false);
   const navigate = useNavigate();
+  const location = useLocation();
   
   const getStatusLabel ={
     0: "Available",
@@ -101,14 +102,16 @@ const ProductsPage = () => {
       <h1 className="text-3xl font-bold mb-6 text-center">Koi Fish</h1>
 
       {/* Create Koi Button */}
-      <div className="mb-4 text-center">
-        <button
-          onClick={() => navigate("/admin/manageKoi/createKoi")}
-          className="bg-green-500 text-white rounded px-4 py-2"
-        >
-          Create Koi
-        </button>
-      </div>
+      {location.pathname.includes('/admin') && (
+        <div className="mb-4 text-center">
+          <button
+            onClick={() => navigate("/admin/manageKoi/createKoi")}
+            className="bg-green-500 text-white rounded px-4 py-2"
+          >
+            Create Koi
+          </button>
+        </div>
+      )}
 
       {/* Filter Button */}
       <div className="mb-4 text-center">

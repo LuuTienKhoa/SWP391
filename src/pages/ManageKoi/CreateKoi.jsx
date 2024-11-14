@@ -64,7 +64,7 @@ const CreateKoi = ({ onCreateSuccess }) => {
       });
     } catch (error) {
       console.error("Error creating koi fish:", error);
-      alert("Failed to create koi fish.");
+    
     }
   };
 
