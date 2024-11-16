@@ -35,6 +35,7 @@ const ConsignPage = ({ token }) => {
     5: "Negotiate",
   };
   const [openKoiDetailsModal, setOpenKoiDetailsModal] = useState(false);
+  const [openDetailsModal, setOpenDetailsModal] = useState(false);
   const handleViewKoiDetails = (consignment) => {
     setSelectedConsignment(consignment);
     setOpenKoiDetailsModal(true);
@@ -142,6 +143,11 @@ const ConsignPage = ({ token }) => {
     }
   };
 
+  const handleViewDetails = (consignment) => {
+    setSelectedConsignment(consignment);
+    setOpenDetailsModal(true);
+  };
+
   if (loading) return <CircularProgress />;
   if (error) return <p style={{ color: 'red' }}>Error: {error}</p>;
 
@@ -162,39 +168,64 @@ const ConsignPage = ({ token }) => {
       {filteredConsignments.map(consignment => (
         <Card key={consignment.consignmentID} sx={{ marginBottom: 3, padding: 2, boxShadow: 3, borderRadius: 2, backgroundColor: "#f9f9f9", color: '#000' }}>
           <CardContent>
+            {consignment.consignmentKois?.[0]?.image && (
+              <Box sx={{ mb: 2, display: 'flex', justifyContent: 'center' }}>
+                <img 
+                  src={consignment.consignmentKois[0].image} 
+                  alt="Koi fish"
+                  style={{ 
+                    maxWidth: '100%', 
+                    height: 'auto', 
+                    maxHeight: '300px',
+                    borderRadius: '8px',
+                    objectFit: 'cover'
+                  }} 
+                />
+              </Box>
+            )}
             <Table>
               <TableBody>
-                <TableRow>
-                  <TableCell><strong>Consignment ID:</strong></TableCell>
-                  <TableCell>{consignment.consignmentID}</TableCell>
-                </TableRow>
                 <TableRow>
                   <TableCell><strong>Type:</strong></TableCell>
                   <TableCell>{consignment.type === 0 ? 'Sell' : 'Foster'}</TableCell>
                 </TableRow>
-                <TableRow>
-                  <TableCell><strong>Foster Price:</strong></TableCell>
-                  <TableCell>{new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(consignment.fosterPrice)}</TableCell>
-                </TableRow>
-                <TableRow>
-                  <TableCell><strong>End Date:</strong></TableCell>
-                  <TableCell>{new Date(consignment.endDate).toLocaleDateString()}</TableCell>
-                </TableRow>
+                {consignment.consignmentKois?.[0] && (
+                  <>
+                    <TableRow>
+                      <TableCell><strong>Koi Name:</strong></TableCell>
+                      <TableCell>{consignment.consignmentKois[0].name}</TableCell>
+                    </TableRow>
+                    <TableRow>
+                      <TableCell><strong>Species:</strong></TableCell>
+                      <TableCell>{consignment.consignmentKois[0].species}</TableCell>
+                    </TableRow>
+                    <TableRow>
+                      <TableCell><strong>Origin:</strong></TableCell>
+                      <TableCell>{consignment.consignmentKois[0].origin}</TableCell>
+                    </TableRow>
+                  </>
+                )}
               </TableBody>
             </Table>
-            <Button
-              variant="outlined"
-              color="primary"
-              onClick={() => handleViewKoiDetails(consignment)}
-              sx={{ mt: 2, color: "#000", borderColor: "#000", mr: 5 }}
-            >
-              View Koi Details
-            </Button>
-            {isBefore(parseISO(consignment.endDate), new Date()) && (
-              <Button variant="contained" color="default" onClick={() => handleReconsignClick(consignment)} sx={{ mt: 2, color: "#fff", backgroundColor: "#000" }}>
-                Reconsign
+            <Box sx={{ mt: 2, display: 'flex', gap: 2 }}>
+              <Button 
+                variant="outlined"
+                onClick={() => handleViewDetails(consignment)}
+                sx={{ color: "#000", borderColor: "#000" }}
+              >
+                View Details
               </Button>
-            )}
+              {isBefore(parseISO(consignment.endDate), new Date()) && (
+                <Button 
+                  variant="contained" 
+                  color="default" 
+                  onClick={() => handleReconsignClick(consignment)} 
+                  sx={{ color: "#fff", backgroundColor: "#000" }}
+                >
+                  Reconsign
+                </Button>
+              )}
+            </Box>
           </CardContent>
         </Card>
       ))}
@@ -263,6 +294,105 @@ const ConsignPage = ({ token }) => {
         </DialogContent>
         <DialogActions>
           <Button onClick={() => setOpenKoiDetailsModal(false)} color="secondary">Close</Button>
+        </DialogActions>
+      </Dialog>
+
+      {/* Complete Koi and Consignment Information */}
+      <Dialog open={openDetailsModal} onClose={() => setOpenDetailsModal(false)} maxWidth="sm" fullWidth>
+        <DialogTitle>Consignment Details</DialogTitle>
+        <DialogContent>
+          {selectedConsignment && (
+            <>
+              <Typography variant="h6" sx={{ mt: 2, mb: 2 }}></Typography>
+              <Table>
+                <TableBody>
+                  <TableRow>
+                    <TableCell><strong>Type:</strong></TableCell>
+                    <TableCell>{selectedConsignment.type === 0 ? 'Sell' : 'Foster'}</TableCell>
+                  </TableRow>
+                  <TableRow>
+                    <TableCell><strong>Status:</strong></TableCell>
+                    <TableCell>{statusLabel[selectedConsignment.status]}</TableCell>
+                  </TableRow>
+                  <TableRow>
+                    <TableCell><strong>Foster Price:</strong></TableCell>
+                    <TableCell>{new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(selectedConsignment.fosterPrice)}</TableCell>
+                  </TableRow>
+                  <TableRow>
+                    <TableCell><strong>Start Date:</strong></TableCell>
+                    <TableCell>{new Date(selectedConsignment.startDate).toLocaleDateString()}</TableCell>
+                  </TableRow>
+                  <TableRow>
+                    <TableCell><strong>End Date:</strong></TableCell>
+                    <TableCell>{new Date(selectedConsignment.endDate).toLocaleDateString()}</TableCell>
+                  </TableRow>
+                  <TableRow>
+                    <TableCell><strong>Created At:</strong></TableCell>
+                    <TableCell>{new Date(selectedConsignment.createAt).toLocaleDateString()}</TableCell>
+                  </TableRow>
+                </TableBody>
+              </Table>
+
+              {selectedConsignment.consignmentKois?.[0] && (
+                <>
+                  <Typography variant="h6" sx={{ mt: 3, mb: 2 }}>Koi Details</Typography>
+                  <Table>
+                    <TableBody>
+                      <TableRow>
+                        <TableCell><strong>Name:</strong></TableCell>
+                        <TableCell>{selectedConsignment.consignmentKois[0].name}</TableCell>
+                      </TableRow>
+                      <TableRow>
+                        <TableCell><strong>Species:</strong></TableCell>
+                        <TableCell>{selectedConsignment.consignmentKois[0].species}</TableCell>
+                      </TableRow>
+                      <TableRow>
+                        <TableCell><strong>Gender:</strong></TableCell>
+                        <TableCell>{selectedConsignment.consignmentKois[0].gender}</TableCell>
+                      </TableRow>
+                      <TableRow>
+                        <TableCell><strong>Age:</strong></TableCell>
+                        <TableCell>{selectedConsignment.consignmentKois[0].age} months</TableCell>
+                      </TableRow>
+                      <TableRow>
+                        <TableCell><strong>Size:</strong></TableCell>
+                        <TableCell>{selectedConsignment.consignmentKois[0].size} cm</TableCell>
+                      </TableRow>
+                      <TableRow>
+                        <TableCell><strong>Color:</strong></TableCell>
+                        <TableCell>{selectedConsignment.consignmentKois[0].color}</TableCell>
+                      </TableRow>
+                      <TableRow>
+                        <TableCell><strong>Daily Feed Amount:</strong></TableCell>
+                        <TableCell>{selectedConsignment.consignmentKois[0].dailyFeedAmount} grams</TableCell>
+                      </TableRow>
+                      <TableRow>
+                        <TableCell><strong>Personality:</strong></TableCell>
+                        <TableCell>{selectedConsignment.consignmentKois[0].personality}</TableCell>
+                      </TableRow>
+                      <TableRow>
+                        <TableCell><strong>Origin:</strong></TableCell>
+                        <TableCell>{selectedConsignment.consignmentKois[0].origin}</TableCell>
+                      </TableRow>
+                      <TableRow>
+                        <TableCell><strong>Selection Rate:</strong></TableCell>
+                        <TableCell>{selectedConsignment.consignmentKois[0].selectionRate}</TableCell>
+                      </TableRow>
+                      {selectedConsignment.type === 0 && (
+                        <TableRow>
+                          <TableCell><strong>Price:</strong></TableCell>
+                          <TableCell>{new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(selectedConsignment.consignmentKois[0].price)}</TableCell>
+                        </TableRow>
+                      )}
+                    </TableBody>
+                  </Table>
+                </>
+              )}
+            </>
+          )}
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setOpenDetailsModal(false)} sx={{ color: "#000" }}>Close</Button>
         </DialogActions>
       </Dialog>
     </Box>

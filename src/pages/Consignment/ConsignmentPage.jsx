@@ -57,7 +57,7 @@ const ConsignmentPage = () => {
     const handleSubmit = async (values) => {
         if (startDate && endDate && endDate.isBefore(startDate)) {
             message.error('End date cannot be earlier than the start date');
-            return; // Prevent submission
+            return;
         }
         if (selectedType === 1) { 
             values.price = 0;
@@ -82,7 +82,7 @@ const ConsignmentPage = () => {
                 return;
             }
 
-            await api.post('/Consignment/pending', formData, {
+            const response = await api.post('/Consignment/pending', formData, {
                 headers: {
                     Authorization: `Bearer ${token}`,
                     'Content-Type': 'multipart/form-data',
@@ -91,6 +91,11 @@ const ConsignmentPage = () => {
 
             message.success('Consignment submitted successfully and is pending approval.');
             setTotalCost(0); // Reset total cost
+            
+            // Redirect to payment URL if available
+            if (response.data && response.data.paymentUrl) {
+                window.location.href = response.data.paymentUrl;
+            }
         } catch (error) {
             console.log(error)
             message.error('Failed to consign fish. Please try again.');

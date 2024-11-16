@@ -30,7 +30,11 @@ const ManageConsignmentPage = () => {
   const fetchConsignments = async () => {
     try {
       const response = await api.get('/Consignment/');
-      setConsignments(response.data);
+      const consignmentsWithPrice = response.data.map(consignment => ({
+        ...consignment,
+        price: consignment.consignmentKois?.[0]?.price || 'N/A'
+      }));
+      setConsignments(consignmentsWithPrice);
     } catch (err) {
       console.log(err);
       setErrorMessage('Failed to fetch consignments');
@@ -59,7 +63,6 @@ const ManageConsignmentPage = () => {
           customerID: '',
           consignmentKoiID: '',
           type: 0,
-          fosterPrice: '',
           status: 0
         });
       } else {
@@ -83,7 +86,6 @@ const ManageConsignmentPage = () => {
         consignmentID: editConsignmentId,  
         customerID: newConsignment.customerID,
         type: parseInt(newConsignment.type, 10),
-        fosterPrice: newConsignment.fosterPrice,
         status: parseInt(newConsignment.status, 10),
         startDate: newConsignment.startDate ? new Date(newConsignment.startDate).toISOString() : '',  
         endDate: newConsignment.endDate ? new Date(newConsignment.endDate).toISOString() : '',
@@ -123,9 +125,8 @@ const ManageConsignmentPage = () => {
     setNewConsignment({
       customerID: consignment.customerID || '', 
       type: consignment.type || 0,
-      fosterPrice: consignment.fosterPrice || '',
       status: consignment.status || 0,
-      name: consignment.name  || '',
+      name: consignment.name || '',
       startDate: consignment.startDate || '', 
       endDate: consignment.endDate || ''
     });
@@ -176,7 +177,10 @@ const ManageConsignmentPage = () => {
       </div>
 
       <ConsignmentTable
-        consignments={filteredConsignments}
+        consignments={filteredConsignments.map(consignment => ({
+          ...consignment,
+          price: consignment.price
+        }))}
         startEditing={startEditing}
         handleDelete={handleDeleteConsignment}
       />
