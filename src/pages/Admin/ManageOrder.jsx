@@ -27,6 +27,12 @@ const ManageOrder = () => {
   };
 
   const deleteOrder = async (id) => {
+    const orderToDelete = orders.find((order) => order.orderID === id);
+    if (orderToDelete && getStatusLabel(orderToDelete.status) !== "Cancelled") {
+      alert("Chỉ có thể xóa đơn hàng có trạng thái 'Cancelled'.");
+      return;
+    }
+
     const confirmDelete = window.confirm(
       "Are you sure you want to delete this order?"
     );
@@ -58,11 +64,11 @@ const ManageOrder = () => {
 
   const formatDate = (dateString) => {
     const date = new Date(dateString);
-    const day = String(date.getDate()).padStart(2, '0');
-    const month = String(date.getMonth() + 1).padStart(2, '0'); // Months are zero-based
+    const day = String(date.getDate()).padStart(2, "0");
+    const month = String(date.getMonth() + 1).padStart(2, "0"); // Months are zero-based
     const year = date.getFullYear();
-    const hours = String(date.getHours()).padStart(2, '0');
-    const minutes = String(date.getMinutes()).padStart(2, '0');
+    const hours = String(date.getHours()).padStart(2, "0");
+    const minutes = String(date.getMinutes()).padStart(2, "0");
     return `${day}/${month}/${year}, ${hours}:${minutes}`;
   };
 
@@ -109,6 +115,8 @@ const ManageOrder = () => {
           <thead>
             <tr className="bg-gray-200">
               <th className="py-2 px-4 border">Order ID</th>
+              <th className="py-2 px-4 border">Koi ID</th>
+              <th className="py-2 px-4 border">Image</th>
               <th className="py-2 px-4 border">Customer ID</th>
               <th className="py-2 px-4 border">Staff ID</th>
               <th className="py-2 px-4 border">Date of purchase</th>
@@ -117,9 +125,7 @@ const ManageOrder = () => {
               <th className="py-2 px-4 border">Total Amount</th>
               <th className="py-2 px-4 border">Type</th>
               <th className="py-2 px-4 border">Status</th>
-              {userRole === 0 ? (
-            <th className="p-2 border"></th>
-            ) : null}
+              <th className="p-2 border">Action</th>
             </tr>
           </thead>
           <tbody>
@@ -128,15 +134,20 @@ const ManageOrder = () => {
                 <td className="py-2 px-4 border">
                   <button
                     onClick={() => {
-                      const path = userRole === 0 
-                        ? navigate("/admin/manageOrder/orderDetail/${order.orderID}")
-                        : userRole === 1 
-                        ? `/staff/manageOrder/orderDetail/${order.orderID}`
-                        : null;
+                      const path =
+                        userRole === 0
+                          ? navigate(
+                              "/admin/manageOrder/orderDetail/${order.orderID}"
+                            )
+                          : userRole === 1
+                          ? `/staff/manageOrder/orderDetail/${order.orderID}`
+                          : null;
                       if (path) {
                         navigate(path);
                       } else {
-                        alert("You do not have permission to access this page.");
+                        alert(
+                          "You do not have permission to access this page."
+                        );
                       }
                     }}
                     className="text-blue-500 underline"
@@ -144,28 +155,42 @@ const ManageOrder = () => {
                     {order.orderID}
                   </button>
                 </td>
+
+                <td className="py-2 px-4 border">
+                  {order.orderDetails?.[0]?.koi?.koiID}
+                </td>
+                <td className="py-2 px-4 border">
+                  <img
+                    src={order.orderDetails?.[0]?.koi?.image}
+                    alt={order.orderDetails?.[0]?.koi?.name}
+                    style={{ width: "100px", height: "auto" }}
+                  />
+                </td>
                 <td className="py-2 px-4 border">{order.customerID}</td>
                 <td className="py-2 px-4 border">{order.staffID}</td>
-                <td className="py-2 px-4 border">{formatDate(order.createAt)}</td>
-                <td className="py-2 px-4 border">{formatDate(order.updateAt)}</td>
+                <td className="py-2 px-4 border">
+                  {formatDate(order.createAt)}
+                </td>
+                <td className="py-2 px-4 border">
+                  {formatDate(order.updateAt)}
+                </td>
                 <td className="py-2 px-4 border">{order.promotionID}</td>
                 <td className="py-2 px-4 border">{order.totalAmount}</td>
                 <td className="py-2 px-4 border">{getTypeLabel(order.type)}</td>
                 <td className="py-2 px-4 border">
                   {getStatusLabel(order.status)}
                 </td>
-                {order.status === 1 || order.status === 2 ? ( // Completed, Cancelled
-                  userRole === 0 ? ( // Only show delete button for admin
-                    <td className="p-2 border">
-                      <button
-                        onClick={() => deleteOrder(order.orderID)}
-                        className="bg-red-500 text-white px-4 py-1 rounded"
-                      >
-                        Delete
-                      </button>
-                    </td>
-                  ) : null
-                ) : null}
+
+                <td className="p-2 border">
+                  {getStatusLabel(order.status) === "Cancelled" && (
+                    <button
+                      onClick={() => deleteOrder(order.orderID)}
+                      className="bg-red-500 text-white px-4 py-1 rounded"
+                    >
+                      Delete
+                    </button>
+                  )}
+                </td>
               </tr>
             ))}
           </tbody>

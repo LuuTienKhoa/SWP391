@@ -20,8 +20,14 @@ const ProductsPage = () => {
   const [sortOrder, setSortOrder] = useState("normal");
   const [cartOpen, setCartOpen] = useState(false);
   const [isCartVisible, setIsCartVisible] = useState(false);
-  const [searchTerm, setSearchTerm] = useState("");
-  const [searchType, setSearchType] = useState("name"); 
+ 
+  const [searchCriteria, setSearchCriteria] = useState({
+    name: "",
+    color: "",
+    species: "",
+    origin: "",
+  });
+  
 
   // Pagination
   const [currentPage, setCurrentPage] = useState(1);
@@ -44,34 +50,38 @@ const ProductsPage = () => {
         });
       }
 
-      if (searchTerm) {
+   
+      if (Object.values(searchCriteria).some((term) => term)) {
         sortedData = sortedData.filter((fish) => {
-          const searchLower = searchTerm.toLowerCase();
+          const { name, color, species, origin } = searchCriteria;
           return (
-            fish.name.toLowerCase().includes(searchLower) ||
-            fish.species.toLowerCase().includes(searchLower) ||
-            (fish.origin && fish.origin.toLowerCase().includes(searchLower)) ||
-            fish.color.toLowerCase().includes(searchLower)
+            (!name || fish.name.toLowerCase().includes(name.toLowerCase())) &&
+            (!color || fish.color.toLowerCase().includes(color.toLowerCase())) &&
+            (!species || fish.species.toLowerCase().includes(species.toLowerCase())) &&
+            (!origin || (fish.origin && fish.origin.toLowerCase().includes(origin.toLowerCase())))
           );
         });
       }
+      
 
       setKoiFishs(sortedData);
     } catch (error) {
       console.error("Error fetching koi fish:", error);
       alert("Failed to fetch koi fish. Please check the console for more details.");
     }
-  }, [sortOrder, searchTerm]);
+  }, [sortOrder, searchCriteria]);
 
   useEffect(() => {
     fetchKoiFish();
-  }, [sortOrder, fetchKoiFish, searchTerm]);
+  }, [sortOrder, fetchKoiFish, searchCriteria]);
 
-  // Update search term
-  const handleSearchChange = (e) => {
-    setSearchTerm(e.target.value);
-    setCurrentPage(1); // Reset to the first page on a new search
-  };
+ 
+
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [searchCriteria]);
+  
+  
   useEffect(() => {
     localStorage.setItem("cartItems", JSON.stringify(cartItems));
   }, [cartItems]);
@@ -158,53 +168,50 @@ const ProductsPage = () => {
  
         {/* Search Bar */}
         <div className="flex flex-col sm:flex-row justify-between items-center mb-4 p-4">
-          <div className="flex flex-wrap gap-2 mb-4 sm:mb-0">
-            <button
-              onClick={() => setSearchType("name")}
-              className={`p-2 rounded-lg ${searchType === "name" ? "bg-gray-800 text-white" : "bg-gray-300"}`}
-            >
-              Name
-            </button>
-            <button
-              onClick={() => setSearchType("species")}
-              className={`p-2 rounded-lg ${searchType === "species" ? "bg-gray-800 text-white" : "bg-gray-300"}`}
-            >
-              Species
-            </button>
-            <button
-              onClick={() => setSearchType("origin")}
-              className={`p-2 rounded-lg ${searchType === "origin" ? "bg-gray-800 text-white" : "bg-gray-300"}`}
-            >
-              Origin
-            </button>
-            <button
-              onClick={() => setSearchType("color")}
-              className={`p-2 rounded-lg ${searchType === "color" ? "bg-gray-800 text-white" : "bg-gray-300"}`}
-            >
-              Color
-            </button>
-          </div>
+  {/* Search Type Buttons */}
+  <div className="flex flex-wrap gap-4 mb-4">
+  {["name", "color", "species", "origin"].map((type) => (
+    <div key={type} className="flex flex-col">
+      <label htmlFor={type} className="text-sm font-medium capitalize">
+        Search by {type}
+      </label>
+      <input
+        id={type}
+        type="text"
+        placeholder={`Enter ${type}`}
+        value={searchCriteria[type]}
+        onChange={(e) =>
+          setSearchCriteria((prev) => ({ ...prev, [type]: e.target.value }))
+        }
+        className="p-3 border border-gray-400 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-gray-500 transition duration-300 bg-white"
+      />
+    </div>
+  ))}
+  <button
+    onClick={() => setSearchCriteria({ name: "", color: "", species: "", origin: "" })}
+    className="p-3 bg-gray-800 text-white rounded-lg shadow-md hover:bg-gray-700"
+  >
+    Clear Filters
+  </button>
+</div>
 
-          <input
-            type="text"
-            placeholder={`Search by ${searchType}`}
-            value={searchTerm}
-            onChange={handleSearchChange}
-            className="p-3 border border-gray-400 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-gray-500 transition duration-300 bg-white w-full max-w-lg"
-          />
 
-          <div className="flex justify-end items-center mt-4 sm:mt-0">
-            <select
-              value={sortOrder}
-              onChange={(e) => setSortOrder(e.target.value)}
-              className="p-3 border border-gray-400 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-gray-500 transition duration-300 bg-white ml-4"
-            >
-              <option value="normal">Price</option>
-              <option value="asc">Price: Ascending</option>
-              <option value="desc">Price: Descending</option>
-            </select>
-          </div>
-        </div>
+  {/* Sort Options */}
+  <div className="flex justify-end items-center mt-4 sm:mt-0">
+    <select
+      value={sortOrder}
+      onChange={(e) => setSortOrder(e.target.value)}
+      className="p-3 border border-gray-400 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-gray-500 transition duration-300 bg-white ml-4"
+      aria-label="Sort by price"
+    >
+      <option value="normal">Default Order</option>
+      <option value="asc">Price: Ascending</option>
+      <option value="desc">Price: Descending</option>
+    </select>
+  </div>
+</div>
+
+
 
 
         {/* Product Grid */}

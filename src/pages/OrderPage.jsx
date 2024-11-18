@@ -39,9 +39,9 @@ const OrderPage = ({ token }) => {
           },
         });
 
-        // Sort orders by creation date (most recent first)
+        // Sắp xếp các đơn hàng theo orderID (lớn nhất lên đầu)
         const sortedOrders = response.data.sort(
-          (a, b) => new Date(b.createAt) - new Date(a.createAt)
+          (a, b) => b.orderID - a.orderID
         );
         setOrders(sortedOrders);
       } catch (err) {

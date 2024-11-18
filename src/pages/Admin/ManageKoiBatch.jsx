@@ -1,5 +1,5 @@
 import React, { useState, useEffect,useMemo } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import api from '../../config/axios';
 import BatchTable from '../KoiBatch/BatchTable';
 import EditBatchForm from '../KoiBatch/EditAndCreateForm';
@@ -18,6 +18,7 @@ const ManageKoiBatch = () => {
   const [maxPrice, setMaxPrice] = useState('');
   const navigate = useNavigate();
   const [showModal, setShowModal] = useState(false);
+  const location = useLocation();
 
   const openModal = () => setShowModal(true);
   const closeModal = () => setShowModal(false);
@@ -170,9 +171,9 @@ const ManageKoiBatch = () => {
     <div className="p-6">
       <h1 className="text-3xl font-bold mb-6 text-center">Koi Batches Available</h1>
       <div className="text-center mb-6">
-      <div className="text-center mb-6">
-        <button onClick={() => setShowCreateForm(true)}>Create New Batch</button>
-      </div>
+        {location.pathname.includes('/admin') && (
+          <button onClick={() => setShowCreateForm(true)}>Create New Batch</button>
+        )}
       </div>
 
       {filterVisible && <FilterForm {...{ name, species, minPrice, maxPrice, setName, setSpecies, setMinPrice, setMaxPrice, handleFilter }} />}

@@ -4,6 +4,13 @@ import api from "../../config/axios";
 import Modal from "../../components/Modal/Modal";
 import Stepper from "../../components/Stepper";
 
+const formatDate = (date) => {
+  const day = String(date.getDate()).padStart(2, '0'); // Lấy ngày và thêm số 0 nếu cần
+  const month = String(date.getMonth() + 1).padStart(2, '0'); // Lấy tháng (tháng bắt đầu từ 0)
+  const year = date.getFullYear(); // Lấy năm
+  return `${day}/${month}/${year}`; // Trả về định dạng dd/mm/yyyy
+};
+
 const DeliveryDetail = () => {
   const { id } = useParams();
   const [delivery, setDelivery] = useState(null);
@@ -14,7 +21,7 @@ const DeliveryDetail = () => {
   const [showReasonModal, setShowReasonModal] = useState(false);
   const [newStatus, setNewStatus] = useState(null);
 
-  const steps = ["Delivering", "Delivered", "Cancelled", "Failed"];
+  const steps = ["Delivering", "Delivered",  "Failed","Cancelled"];
 
   useEffect(() => {
     const fetchDeliveryDetails = async () => {
@@ -80,8 +87,8 @@ const DeliveryDetail = () => {
         <p><strong>Delivery ID:</strong> {delivery?.deliveryID}</p>
         <p><strong>Order ID:</strong> {delivery?.orderID}</p>
         <p><strong>Customer ID:</strong> {delivery?.customerID}</p>
-        <p><strong>Start Delivery Day:</strong> {delivery?.startDeliDay}</p>
-        <p><strong>End Delivery Day:</strong> {delivery?.endDeliDay}</p>
+        <p><strong>Start Delivery Day:</strong> {formatDate(new Date(delivery?.startDeliDay))}</p>
+        <p><strong>End Delivery Day:</strong> {formatDate(new Date(delivery?.endDeliDay))}</p>
         <p><strong>Address:</strong> {delivery?.address}</p>
         <p><strong>Status:</strong> {steps[delivery?.status]}</p>
         <p><strong>Reason:</strong> {delivery?.reason || "N/A"}</p>
@@ -100,13 +107,13 @@ const DeliveryDetail = () => {
               Mark as Delivered
             </button>
             <button
-              onClick={() => handleStatusChange(2)} // Cancelled
+              onClick={() => handleStatusChange(3)} // Cancelled
               className="bg-red-500 text-white px-4 py-2 rounded"
             >
               Cancel
             </button>
             <button
-              onClick={() => handleStatusChange(3)} // Failed
+              onClick={() => handleStatusChange(2)} // Failed
               className="bg-yellow-500 text-white px-4 py-2 rounded"
             >
               Mark as Failed
