@@ -16,7 +16,7 @@ const ConsignKoiTable = ({ consignKois, startEditing, handleDelete }) => {
           <th className="py-3 px-6 text-left">Origin</th>
           <th className="py-3 px-6 text-left">Selection Rate</th>
           <th className="py-3 px-6 text-left">Species</th>
-          <th className="py-3 px-6 text-left">Price</th>
+          <th className="py-3 px-6 text-left">Desired Price</th>
           <th className="py-3 px-6 text-left">ConsignKoi Image</th>
           <th className="py-3 px-6 text-left">Origin Certificate</th>
           <th className="py-3 px-6 text-left">Health Certificate</th>

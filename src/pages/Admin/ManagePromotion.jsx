@@ -41,7 +41,7 @@ const ManagePromotion = () => {
   };
 
   return (
-    <div className="p-6">
+<div className="p-6">
       <h1 className="text-3xl font-bold mb-6 text-center">Promotion</h1>
 
       {location.pathname.includes('/admin') && (
@@ -106,6 +106,7 @@ const ManagePromotion = () => {
       )}
     </div>
   );
+
 };
 
 export default ManagePromotion;

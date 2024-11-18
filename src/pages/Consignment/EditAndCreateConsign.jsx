@@ -44,7 +44,7 @@ const EditConsignmentForm = ({ newConsignment, handleChange, handleSave, custome
         value={newConsignment.type} 
         onChange={handleChange} 
         className="w-full p-2 border"
-        disabled // Make it read-only for editing
+        readOnly
       >
         <option value="0">Sell</option>
         <option value="1">Foster</option>
@@ -58,6 +58,7 @@ const EditConsignmentForm = ({ newConsignment, handleChange, handleSave, custome
         value={newConsignment.fosterPrice} 
         onChange={handleChange} 
         className="w-full p-2 border" 
+        readOnly
       />
 
       {/* Conditional Status Field - Display only relevant statuses based on Type */}

@@ -1,9 +1,9 @@
-// ManageConsignKoi.js
 import React, { useState, useEffect } from 'react';
 import api from '../../config/axios';
 import ConsignKoiTable from '../ConsignmentKoi/ConsignKoiTable';
 import EditAndCreateConsignForm from '../ConsignmentKoi/EditAndCreateConsignKoi';
 import Modal from '../../components/Modal/Modal';
+import Pagination from '../../components/Pagination';
 
 const ManageConsignKoi = () => {
   const [consignKois, setConsignKois] = useState([]);
@@ -26,6 +26,8 @@ const ManageConsignKoi = () => {
   const [showCreateForm, setShowCreateForm] = useState(false);
   const [showEditForm, setShowEditForm] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
+  const [currentPage, setCurrentPage] = useState(1);
+  const postsPerPage = 10; // Number of rows per page
 
   useEffect(() => {
     fetchConsignKois();
@@ -56,19 +58,43 @@ const ManageConsignKoi = () => {
     setShowCreateForm(false);
   };
 
+  // Calculate displayed rows
+  const indexOfLastPost = currentPage * postsPerPage;
+  const indexOfFirstPost = indexOfLastPost - postsPerPage;
+  const currentPosts = consignKois.slice(indexOfFirstPost, indexOfLastPost);
+
+  // Handle page change
+  const paginate = (pageNumber) => setCurrentPage(pageNumber);
+
   return (
     <div className="p-6">
       <h1 className="text-3xl font-bold mb-6 text-center">Manage Consignment Koi</h1>
       <div className="text-center mb-6">
-        <button onClick={() => setShowCreateForm(true)} className="bg-green-500 text-white px-4 py-2 rounded">Create New Consignment Koi</button>
+        <button
+          onClick={() => setShowCreateForm(true)}
+          className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 transition duration-200"
+        >
+          Create New Consignment Koi
+        </button>
       </div>
 
-      <ConsignKoiTable
-        consignKois={consignKois}
-        startEditing={startEditing}
-        handleDelete={handleDeleteKoi}
+      {/* Display Table */}
+      <div className="overflow-x-auto bg-white rounded-lg shadow-md">
+        <ConsignKoiTable
+          consignKois={currentPosts}
+          startEditing={startEditing}
+          handleDelete={handleDeleteKoi}
+        />
+      </div>
+
+      {/* Pagination */}
+      <Pagination
+        totalPosts={consignKois.length}
+        postPerPage={postsPerPage}
+        paginate={paginate}
       />
 
+      {/* Edit Form Modal */}
       {showEditForm && (
         <Modal onClose={() => setShowEditForm(false)}>
           <EditAndCreateConsignForm
@@ -80,6 +106,7 @@ const ManageConsignKoi = () => {
         </Modal>
       )}
 
+      {/* Create Form Modal */}
       {showCreateForm && (
         <Modal onClose={() => setShowCreateForm(false)}>
           <EditAndCreateConsignForm
@@ -91,7 +118,10 @@ const ManageConsignKoi = () => {
         </Modal>
       )}
 
-      {errorMessage && <p className="text-red-500 text-center mt-4">{errorMessage}</p>}
+      {/* Error Message */}
+      {errorMessage && (
+        <p className="text-red-500 text-center mt-4">{errorMessage}</p>
+      )}
     </div>
   );
 };

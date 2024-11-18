@@ -86,6 +86,7 @@ const ManageConsignmentPage = () => {
         consignmentID: editConsignmentId,  
         customerID: newConsignment.customerID,
         type: parseInt(newConsignment.type, 10),
+        fosterPrice: newConsignment.fosterPrice || 0,
         status: parseInt(newConsignment.status, 10),
         startDate: newConsignment.startDate ? new Date(newConsignment.startDate).toISOString() : '',  
         endDate: newConsignment.endDate ? new Date(newConsignment.endDate).toISOString() : '',
@@ -126,6 +127,7 @@ const ManageConsignmentPage = () => {
       customerID: consignment.customerID || '', 
       type: consignment.type || 0,
       status: consignment.status || 0,
+      fosterPrice: consignment.fosterPrice || '',
       name: consignment.name || '',
       startDate: consignment.startDate || '', 
       endDate: consignment.endDate || ''
