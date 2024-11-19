@@ -116,6 +116,7 @@ const ManageOrder = () => {
             <tr className="bg-gray-200">
               <th className="py-2 px-4 border">Order ID</th>
               <th className="py-2 px-4 border">Koi ID</th>
+              <th className="py-2 px-4 border">ConsignmentKoi ID</th>
               <th className="py-2 px-4 border">Image</th>
               <th className="py-2 px-4 border">Customer ID</th>
               <th className="py-2 px-4 border">Staff ID</th>
@@ -157,12 +158,15 @@ const ManageOrder = () => {
                 </td>
 
                 <td className="py-2 px-4 border">
-                  {order.orderDetails?.[0]?.koi?.koiID}
+                  {order.orderDetails?.[0]?.koi?.koiID || order.orderDetails?.[0]?.consignmentKoi?.consignmentKoiID}
+                </td>
+                <td className="py-2 px-4 border">
+                  {order.orderDetails?.[0]?.consignmentKoi?.consignment?.consignmentID}
                 </td>
                 <td className="py-2 px-4 border">
                   <img
-                    src={order.orderDetails?.[0]?.koi?.image}
-                    alt={order.orderDetails?.[0]?.koi?.name}
+                    src={order.orderDetails?.[0]?.koi?.image || order.orderDetails?.[0]?.consignmentKoi?.image}
+                    alt={order.orderDetails?.[0]?.koi?.name || order.orderDetails?.[0]?.consignmentKoi?.name}
                     style={{ width: "100px", height: "auto" }}
                   />
                 </td>

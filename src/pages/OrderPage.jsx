@@ -173,8 +173,8 @@ const OrderPage = ({ token }) => {
                       </TableCell>
                       <TableCell>
                         <img
-                          src={order.orderDetails?.[0]?.koi?.image}
-                          alt={order.orderDetails?.[0]?.koi?.name}
+                          src={order.orderDetails?.[0]?.koi?.image || order.orderDetails?.[0]?.consignmentKoi?.image}
+                          alt={order.orderDetails?.[0]?.koi?.name || order.orderDetails?.[0]?.consignmentKoi?.name}
                           style={{ width: "100px", height: "auto" }}
                         />
                       </TableCell>
@@ -184,7 +184,7 @@ const OrderPage = ({ token }) => {
                         <strong>Koi Name:</strong>
                       </TableCell>
                       <TableCell>
-                        {order.orderDetails?.[0]?.koi?.name}
+                        {order.orderDetails?.[0]?.koi?.name || order.orderDetails?.[0]?.consignmentKoi?.name} 
                       </TableCell>
                     </TableRow>
                    
