@@ -34,7 +34,13 @@ const ManageConsignmentPage = () => {
         ...consignment,
         price: consignment.consignmentKois?.[0]?.price || 'N/A'
       }));
-      setConsignments(consignmentsWithPrice);
+      const sortedConsignments = consignmentsWithPrice.sort((a, b) => {
+        const dateA = new Date(a.startDate);
+        const dateB = new Date(b.startDate);
+        return dateB - dateA; // Descending order
+      });
+  
+      setConsignments(sortedConsignments);
     } catch (err) {
       console.log(err);
       setErrorMessage('Failed to fetch consignments');

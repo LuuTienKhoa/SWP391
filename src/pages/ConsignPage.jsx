@@ -69,8 +69,9 @@ const ConsignPage = ({ token }) => {
             Authorization: `Bearer ${token}`,
           },
         });
-        setConsignments(response.data);
-        setFilteredConsignments(response.data);
+        const sortedData = response.data.sort((a, b) => new Date(b.createAt) - new Date(a.createAt));
+        setConsignments(sortedData);
+        setFilteredConsignments(sortedData);
       } catch (err) {
         setError(err.response ? `API Error: ${err.response.status} - ${err.response.data.message}` : 'Error: ' + err.message);
       } finally {
@@ -326,7 +327,7 @@ const ConsignPage = ({ token }) => {
                   </TableRow>
                   <TableRow>
                     <TableCell><strong>Status:</strong></TableCell>
-                    <TableCell>{getStatusLabel[selectedConsignment.status]}</TableCell>
+                    <TableCell>{getStatusLabel(selectedConsignment.status)}</TableCell>
                   </TableRow>
                   <TableRow>
                     <TableCell><strong>Foster Price:</strong></TableCell>

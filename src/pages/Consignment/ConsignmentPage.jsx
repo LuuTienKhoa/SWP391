@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Form, Input, Button, Select, Upload, InputNumber, message, DatePicker } from 'antd';
+import { Form, Input, Button, Select, Upload, InputNumber, message, DatePicker, Row, Col } from 'antd';
 import { UploadOutlined } from '@ant-design/icons';
 import api from '../../config/axios';
 
@@ -24,7 +24,7 @@ const ConsignmentPage = () => {
 
     const calculateTotalCost = (start, end, pricePerDay) => {
         if (start && end && pricePerDay) {
-            const days = end.diff(start, 'days') +1;
+            const days = end.diff(start, 'days') + 1;
             setTotalCost(days * pricePerDay);
         } else {
             setTotalCost(0);
@@ -59,7 +59,7 @@ const ConsignmentPage = () => {
             message.error('End date cannot be earlier than the start date');
             return;
         }
-        if (selectedType === 1) { 
+        if (selectedType === 1) {
             values.price = 0;
         }
         setLoading(true);
@@ -91,7 +91,7 @@ const ConsignmentPage = () => {
 
             message.success('Consignment submitted successfully and is pending approval.');
             setTotalCost(0); // Reset total cost
-            
+
             // Redirect to payment URL if available
             if (response.data && response.data.paymentUrl) {
                 window.location.href = response.data.paymentUrl;
@@ -105,104 +105,161 @@ const ConsignmentPage = () => {
     };
 
     return (
-        <div style={{ display: 'flex', justifyContent: 'center', minHeight: '100vh', padding: '2rem' }}>
+        <div
+        style={{
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            minHeight: '100vh',
+            padding: '2rem',
+            background: 'linear-gradient(to bottom, #1a202c, #2d3748, #4a5568)', 
+        }}
+        >
             <Form
+                size ="large"
                 onFinish={handleSubmit}
                 layout="vertical"
-                style={{ width: '100%', maxWidth: 600 }}
+                style={{
+                    width: '100%',
+                    maxWidth: 1000,
+                    backgroundColor: '#ffffff', // Form background color
+                    padding: '2rem',
+                    borderRadius: '8px', // Rounded corners
+                    boxShadow: '0 4px 8px rgba(0, 0, 0, 0.2)', // Subtle shadow for contrast
+                }}
             >
-                <Form.Item label="Type" name="type" >
-                    <Select placeholder="Select type" onChange={handleTypeChange}>
-                        <Select.Option value={0}>Sell</Select.Option>
-                        <Select.Option value={1}>Foster</Select.Option>
-                    </Select>
-                </Form.Item>
+                <Row gutter={24}>
+                    <Col span={12}>
+                        <Form.Item label="Type" name="type" rules={[{ required: true, message: 'Please select a type' }]}>
+                            <Select placeholder="Select type" onChange={handleTypeChange}>
+                                <Select.Option value={0}>Sell</Select.Option>
+                                <Select.Option value={1}>Foster</Select.Option>
+                            </Select>
+                        </Form.Item>
 
-                <Form.Item label="Foster Name" name="name" rules={[{ required: true }]}>
-                    <Input placeholder="Enter name" />
-                </Form.Item>
+                        <Form.Item label="Foster Name" name="name" rules={[{ required: true, message: 'Please input the name' }]}>
+                            <Input placeholder="Enter name" />
+                        </Form.Item>
 
-                <Form.Item label="Foster Gender" name="gender" rules={[{ required: true }]}>
-                    <Input placeholder="Enter gender" />
-                </Form.Item>
+                        <Form.Item label="Foster Gender" name="gender" rules={[{ required: true, message: 'Please input the gender' }]}>
+                            <Input placeholder="Enter gender" />
+                        </Form.Item>
 
-                <Form.Item label="Foster Age" name="age" rules={[{ required: true, type: 'number' }]}>
-                    <InputNumber placeholder="Enter age" style={{ width: '100%' }} />
-                </Form.Item>
+                        <Form.Item label="Foster Age" name="age" rules={[{ required: true, type: 'number', message: 'Please input a valid age' }]}>
+                            <InputNumber placeholder="Enter age" style={{ width: '100%' }} />
+                        </Form.Item>
 
-                <Form.Item label="Foster Size (cm)" name="size">
-                    <InputNumber placeholder="Enter size" style={{ width: '100%' }} />
-                </Form.Item>
+                        <Form.Item label="Foster Size (cm)" name="size" rules={[{ required: true, type: 'number', message: 'Please input a valid size' }]}>
+                            <InputNumber placeholder="Enter size" style={{ width: '100%' }} />
+                        </Form.Item>
 
-                <Form.Item label="Daily Feed Amount (grams)" name="dailyFeedAmount">
-                    <InputNumber placeholder="Enter daily feed amount" style={{ width: '100%' }} />
-                </Form.Item>
+                        <Form.Item label="Price Per Day Option" name="priceListId" rules={[{ required: true, message: 'Please select a price per day option' }]}>
+                            <Select placeholder="Select price per day option" onChange={handlePriceListChange}>
+                                <Select.Option value={1}>Option 1 - 100,000 VND/day</Select.Option>
+                            </Select>
+                        </Form.Item>
+                    </Col>
 
-                <Form.Item label="Foster Personality" name="personality">
-                    <Input placeholder="Enter personality" />
-                </Form.Item>
+                    <Col span={12}>
+                        <Form.Item label="Daily Feed Amount (grams)" name="dailyFeedAmount" rules={[{ required: true, type: 'number', message: 'Please input the daily feed amount' }]}>
+                            <InputNumber placeholder="Enter daily feed amount" style={{ width: '100%' }} />
+                        </Form.Item>
 
-                <Form.Item label="Foster Origin" name="origin">
-                    <Input placeholder="Enter origin" />
-                </Form.Item>
+                        <Form.Item label="Foster Personality" name="personality" rules={[{ required: true, message: 'Please input the personality' }]}>
+                            <Input placeholder="Enter personality" />
+                        </Form.Item>
 
-                <Form.Item label="Foster Species" name="species" rules={[{ required: true }]}>
-                    <Input placeholder="Enter species" />
-                </Form.Item>
+                        <Form.Item label="Foster Origin" name="origin" rules={[{ required: true, message: 'Please input the origin' }]}>
+                            <Input placeholder="Enter origin" />
+                        </Form.Item>
 
-                <Form.Item label="Foster Color" name="color" >
-                    <Input placeholder="Enter color" />
-                </Form.Item>
+                        <Form.Item label="Foster Species" name="species" rules={[{ required: true, message: 'Please input the species' }]}>
+                            <Input placeholder="Enter species" />
+                        </Form.Item>
 
-                <Form.Item label="Foster Selection Rate" name="selectionRate" >
-                    <Input placeholder="Enter rate" />
-                </Form.Item>
+                        <Form.Item label="Foster Color" name="color" rules={[{ required: true, message: 'Please input the color' }]}>
+                            <Input placeholder="Enter color" />
+                        </Form.Item>
 
-                <Form.Item label="Desired Price" name="price" hidden={selectedType !== 0}>
-                    <Input placeholder="Enter price" />
-                </Form.Item>
+                        <Form.Item label="Foster Selection Rate" name="selectionRate">
+                            <Input placeholder="Enter rate" />
+                        </Form.Item>
+                    </Col>
+                </Row>
 
-                <Form.Item label="Price Per Day Option" name="priceListId" rules={[{ required: true }]}>
-                    <Select placeholder="Select price per day option" onChange={handlePriceListChange}>
-                        <Select.Option value={1}>Option 1 - 100,000 VND/day</Select.Option>
-                    </Select>
-                </Form.Item>
+                <Row gutter={24}>
+                    <Col span={12}>
+                        <Form.Item label="Start Date" name="startDate" rules={[{ required: true, message: 'Please select a start date' }]}>
+                            <DatePicker onChange={handleStartDateChange} style={{ width: '100%' }} />
+                        </Form.Item>
 
-                <Form.Item label="Start Date" name="startDate" rules={[{ required: true, message: 'Please select a start date' }]}>
-                    <DatePicker onChange={handleStartDateChange} style={{ width: '100%' }} />
-                </Form.Item>
+                        <Form.Item label="End Date" name="endDate" rules={[{ required: true, message: 'Please select an end date' }]}>
+                            <DatePicker onChange={handleEndDateChange} style={{ width: '100%' }} />
+                        </Form.Item>
 
-                <Form.Item label="End Date" name="endDate" rules={[{ required: true, message: 'Please select an end date' }]}>
-                    <DatePicker onChange={handleEndDateChange} style={{ width: '100%' }} />
-                </Form.Item>
+                        <Form.Item label="Estimated Total Cost" colon={false}>
+                            <span>{formatCurrency(totalCost)}</span>
+                        </Form.Item>
+                    </Col>
 
-                <Form.Item label="Estimated Total Cost" colon={false}>
-                    <span>{formatCurrency(totalCost)}</span>
-                </Form.Item>
+                    <Col span={12}>
+                        <Row gutter={16}>
+                            <Col span={12}>
+                                <Form.Item
+                                    label="Upload Image"
+                                    name="image"
+                                    valuePropName="file"
+                                    rules={[{ required: true, message: 'Please upload an image' }]}
+                                >
+                                    <Upload beforeUpload={() => false}>
+                                        <Button icon={<UploadOutlined />}>Click to Upload</Button>
+                                    </Upload>
+                                </Form.Item>
+                            </Col>
 
-                <Form.Item label="Upload Image" name="image" valuePropName="file">
-                    <Upload beforeUpload={() => false}>
-                        <Button icon={<UploadOutlined />}>Click to Upload</Button>
-                    </Upload>
-                </Form.Item>
+                            <Col span={12}>
+                                <Form.Item
+                                    label="Origin Certificate"
+                                    name="originCertificate"
+                                    valuePropName="file"
+                                    rules={[{ required: true, message: 'Please upload the origin certificate' }]}
+                                >
+                                    <Upload beforeUpload={() => false}>
+                                        <Button icon={<UploadOutlined />}>Click to Upload</Button>
+                                    </Upload>
+                                </Form.Item>
+                            </Col>
+                        </Row>
+                        <Row gutter={16}>
+                            <Col span={12}>
+                                <Form.Item
+                                    label="Health Certificate"
+                                    name="healthCertificate"
+                                    valuePropName="file"
+                                    rules={[{ required: true, message: 'Please upload the health certificate' }]}
+                                >
+                                    <Upload beforeUpload={() => false}>
+                                        <Button icon={<UploadOutlined />}>Click to Upload</Button>
+                                    </Upload>
+                                </Form.Item>
+                            </Col>
 
-                <Form.Item label="Origin Certificate" name="originCertificate" valuePropName="file">
-                    <Upload beforeUpload={() => false}>
-                        <Button icon={<UploadOutlined />}>Click to Upload</Button>
-                    </Upload>
-                </Form.Item>
+                            <Col span={12}>
+                                <Form.Item
+                                    label="Ownership Certificate"
+                                    name="ownershipCertificate"
+                                    valuePropName="file"
+                                    rules={[{ required: true, message: 'Please upload the ownership certificate' }]}
+                                >
+                                    <Upload beforeUpload={() => false}>
+                                        <Button icon={<UploadOutlined />}>Click to Upload</Button>
+                                    </Upload>
+                                </Form.Item>
+                            </Col>
+                        </Row>
+                    </Col>
 
-                <Form.Item label="Health Certificate" name="healthCertificate" valuePropName="file">
-                    <Upload beforeUpload={() => false}>
-                        <Button icon={<UploadOutlined />}>Click to Upload</Button>
-                    </Upload>
-                </Form.Item>
-
-                <Form.Item label="Ownership Certificate" name="ownershipCertificate" valuePropName="file">
-                    <Upload beforeUpload={() => false}>
-                        <Button icon={<UploadOutlined />}>Click to Upload</Button>
-                    </Upload>
-                </Form.Item>
+                </Row>
 
                 <Form.Item>
                     <Button type="primary" htmlType="submit" loading={loading} block>
@@ -211,6 +268,7 @@ const ConsignmentPage = () => {
                 </Form.Item>
             </Form>
         </div>
+
     );
 };
 

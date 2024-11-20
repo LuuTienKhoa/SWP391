@@ -19,11 +19,10 @@ const PaymentPage = () => {
   const navigate = useNavigate();
   const [user, setUser] = useState({ address: '', phone: '' });
   const [loading, setLoading] = useState(false);
-  const [totalCost, setTotalCost] = useState(0);
-
+  const [totalCost, setTotalCost] = useState(0);  
+  const [warningMessage, setWarningMessage] = useState('');
   const pricePerDay = {
     1: 100000, // Option 1 price per day
-    2: 150000, // Option 2 price per day
   };
 
   useEffect(() => {
@@ -95,7 +94,9 @@ const PaymentPage = () => {
       window.location.href = response.data.paymentUrl;
     } catch (error) {
       console.error('Error processing payment:', error);
-      alert('Failed to process payment. Please try again.');
+      setWarningMessage(
+        "We're sorry! Something went wrong while processing your payment. Please try again or contact support if the issue persists."
+      );
     } finally {
       setLoading(false);
     }
@@ -143,75 +144,85 @@ const PaymentPage = () => {
   const getTotalCost = () => {
     if (priceListId && endDate) {
       const startDate = new Date();
-      const endDateFormatted = new Date(endDate); 
-  
-      const timeDifference = endDateFormatted - startDate; 
-      const days = Math.ceil(timeDifference / (1000 * 60 * 60 * 24)) +1; 
-  
+      const endDateFormatted = new Date(endDate);
+
+      const timeDifference = endDateFormatted - startDate;
+      const days = Math.ceil(timeDifference / (1000 * 60 * 60 * 24)) + 1;
+
       if (days > 0) {
-        return days * pricePerDay[priceListId] ; 
+        return days * pricePerDay[priceListId];
       }
     }
     return 0;
   };
-  
+
+  const handleBuyingAmountChange = (value) => {
+    if (value > batch.remainBatch) {
+      setWarningMessage(`The number of batches you want to buy exceeds the available quantity (${batch.remainBatch}).`);
+    } else {
+      setWarningMessage('');
+    }
+    setBuyingAmount(value);
+  };
 
   return (
-    <div className="min-h-screen bg-gray-100 p-10 flex justify-center items-center text-gray-900">
-      <div className="flex flex-col lg:flex-row w-full max-w-6xl bg-white p-8 rounded-lg shadow-lg border border-gray-300">
-        <div className="lg:w-1/2 p-4 bg-white rounded-lg mb-6 lg:mb-0 flex flex-col items-center">
-          {batch ? (
-            <>
-              <img
-                src={batch?.image ?? "https://www.kodamakoifarm.com/wp-content/uploads/2024/05/w0503s054-re-260x421.jpg"}
-                alt={batch?.name}
-                className="h-auto max-w-xs flex flex-col justify-center items-center"
-              />
-              <h2 className="text-2xl font-semibold mb-2 mt-2">{batch.name} #{batch.batchID}</h2>
-              <p className="text-gray-500 mb-4">Quantity: {batch.quantityPerBatch}</p>
-              <p className="text-4xl font-bold text-gray-800">
-                {formatCurrency(batch.pricePerBatch)}
-              </p>
-            </>
-          ) : (
-            <>
-              <img
-                src={koiFish?.image ?? "https://www.kodamakoifarm.com/wp-content/uploads/2024/05/w0503s054-re-260x421.jpg"}
-                alt={koiFish?.name}
-                className="h-auto max-w-xs flex flex-col justify-center items-center"
-              />
-              <h2 className="text-2xl font-semibold mb-2 mt-2">{koiFish?.name} # {koiFish?.koiID || koiFish.consignmentKoiID}</h2>
-              <p className="text-gray-500 mb-4">{koiFish?.species}</p>
-              <p className="text-4xl font-bold text-gray-800">
-                {formatCurrency(koiFish?.price)}
-              </p>
-            </>
-          )}
+    <div className="min-h-screen bg-gray-100 p-6">
+      <div className="max-w-7xl mx-auto bg-white rounded-lg shadow-lg p-6 lg:flex lg:space-x-8">
+        <div className="lg:w-1/2 flex flex-col items-center">
+          <img
+            src={
+              batch?.image ||
+              koiFish?.image ||
+              "https://via.placeholder.com/300"
+            }
+            alt={batch?.name || koiFish?.name}
+            className="w-full max-w-md rounded-lg shadow-md"
+          />
+          <h2 className="text-3xl font-bold mt-4">
+            {batch
+              ? `${batch.name} #${batch.batchID}`
+              : `${koiFish?.name} #${koiFish?.koiID || koiFish?.consignmentKoiID}`}
+          </h2>
+          <p className="text-gray-600 mt-2">
+            {batch
+              ? `Price Per Batch: ${formatCurrency(batch.pricePerBatch)}`
+              : `Price: ${formatCurrency(koiFish?.price)}`}
+          </p>
+          <p className="text-gray-600 mt-2">
+            Quantity Koi per batch: {batch.quantityPerBatch} 
+          </p>
+          <p className="text-gray-600 mt-2">
+            Remaining quantity available: {batch.remainBatch}
+          </p>
+
         </div>
 
-        <div className="lg:w-1/2 lg:ml-8">
-          <h2 className="text-3xl font-semibold mb-6">Payment</h2>
-
-          <div className="mb-6">
-            <label className="block text-lg font-medium mb-2">Select Payment Method</label>
+        <div className="lg:w-1/2 mt-6 lg:mt-0">
+          <h3 className="text-2xl font-semibold mb-4">Payment Details</h3>
+          <div className="bg-gray-100 p-4 rounded-lg mb-4">
+            <label className="block text-lg font-medium">Payment Method</label>
             <select
-              className="w-full p-3 bg-gray-200 rounded-lg text-gray-800"
+              className="w-full mt-2 p-3 rounded-lg border-gray-300"
               value={paymentMethod}
               onChange={(e) => setPaymentMethod(e.target.value)}
             >
               <option value="VNPay">VNPay - Pay Full Amount</option>
-              <option value="Direct-Payment">Direct Payment - Pay 50% Upfront</option>
+              <option value="Direct-Payment">
+                Direct Payment - Pay 50% Upfront
+              </option>
             </select>
           </div>
 
-          <div className="mb-6">
-            <Checkbox
-              checked={wantConsign}
-              onChange={(e) => setWantConsign(e.target.checked)}
-            >
-              Want to consign this koi?
-            </Checkbox>
-          </div>
+          {!batch && koiFish && (
+            <div className="mb-6">
+              <Checkbox
+                checked={wantConsign}
+                onChange={(e) => setWantConsign(e.target.checked)}
+              >
+                Want to consign this koi?
+              </Checkbox>
+            </div>
+          )}
           {wantConsign && (
             <div className="mb-6 bg-gray-100 p-4 rounded-lg">
               <h3 className="text-lg font-medium mb-4">Consignment Details</h3>
@@ -225,8 +236,7 @@ const PaymentPage = () => {
                   className="w-full"
                   onChange={(value) => setPriceListId(value)}
                 >
-                  <Select.Option value={1}>Option 1 - 100,000 VND/day</Select.Option>
-                  <Select.Option value={2}>Option 2 - 150,000 VND/day</Select.Option>
+                  <Select.Option value={1}>100,000 VND/day</Select.Option>
                 </Select>
               </div>
 
@@ -251,15 +261,16 @@ const PaymentPage = () => {
 
           {batch && (
             <div className="mb-6">
-              <label className="block text-lg font-medium mb-2">Quantity</label>
+              <label className="block text-lg font-medium mb-2">How many batches do you want to buy:</label>
               <input
                 type="number"
                 name="quantity"
                 className="w-full p-3 bg-gray-200 rounded-lg text-gray-800"
                 placeholder="0"
                 value={buyingAmount}
-                onChange={(e) => setBuyingAmount(parseInt(e.target.value))}
+                onChange={(e) => handleBuyingAmountChange(parseInt(e.target.value) || 0)}
               />
+               {warningMessage && <p className="text-red-500 text-sm mt-2">{warningMessage}</p>}
             </div>
           )}
 
