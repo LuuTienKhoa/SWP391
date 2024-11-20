@@ -1,10 +1,12 @@
 import React from 'react';
 
 const Stepper = ({ steps, currentStep }) => {
+  const filteredSteps =
+    currentStep < steps.indexOf("Cancelled") ? steps.filter(step => step !== "Cancelled") : steps;
   return (
     <div className="flex flex-col items-center mb-4">
       <div className="flex justify-between w-full max-w-xl mb-2">
-        {steps.map((step, index) => (
+        {filteredSteps.map((step, index) => (
           <div key={index} className="flex flex-col items-center">
             {/* Step Circle */}
             <div
@@ -29,7 +31,7 @@ const Stepper = ({ steps, currentStep }) => {
         <div
           className="absolute top-1/2 transform -translate-y-1/2 h-1 bg-blue-500 transition-all duration-300"
           style={{
-            width: `${(currentStep / (steps.length - 1)) * 100}%`,
+            width: `${(currentStep / (filteredSteps.length - 1)) * 100}%`,
           }}
         ></div>
       </div>

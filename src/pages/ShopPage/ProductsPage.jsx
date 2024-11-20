@@ -20,14 +20,14 @@ const ProductsPage = () => {
   const [sortOrder, setSortOrder] = useState("normal");
   const [cartOpen, setCartOpen] = useState(false);
   const [isCartVisible, setIsCartVisible] = useState(false);
- 
+
   const [searchCriteria, setSearchCriteria] = useState({
     name: "",
     color: "",
     species: "",
     origin: "",
   });
-  
+
 
   // Pagination
   const [currentPage, setCurrentPage] = useState(1);
@@ -50,7 +50,7 @@ const ProductsPage = () => {
         });
       }
 
-   
+
       if (Object.values(searchCriteria).some((term) => term)) {
         sortedData = sortedData.filter((fish) => {
           const { name, color, species, origin } = searchCriteria;
@@ -62,7 +62,7 @@ const ProductsPage = () => {
           );
         });
       }
-      
+
 
       setKoiFishs(sortedData);
     } catch (error) {
@@ -75,13 +75,13 @@ const ProductsPage = () => {
     fetchKoiFish();
   }, [sortOrder, fetchKoiFish, searchCriteria]);
 
- 
+
 
   useEffect(() => {
     setCurrentPage(1);
   }, [searchCriteria]);
-  
-  
+
+
   useEffect(() => {
     localStorage.setItem("cartItems", JSON.stringify(cartItems));
   }, [cartItems]);
@@ -131,7 +131,7 @@ const ProductsPage = () => {
   };
   const formatCurrency = (value) => {
     return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(value);
-};
+  };
 
   return (
     <div className="bg-white min-h-screen text-black">
@@ -146,12 +146,12 @@ const ProductsPage = () => {
             onClick={toggleCartVisibility}
             className="flex items-center justify-center bg-black text-white border-none rounded-full px-6 py-3 shadow-lg hover:bg-gray-900 transition duration-300 transform hover:scale-105"
           >
-            <FiRefreshCw className="mr-2 text-white" size={20} /> 
+            <FiRefreshCw className="mr-2 text-white" size={20} />
             Compare ({compareItems.length})
           </button>
 
           <div className="flex justify-end items-center">
-          
+
             <button
               onClick={() => setCartOpen(true)}
               className="relative flex items-center justify-center text-black px-4 py-2 rounded hover:bg-gray-100 transition duration-300"
@@ -165,51 +165,51 @@ const ProductsPage = () => {
             </button>
           </div>
         </div>
- 
+
         {/* Search Bar */}
         <div className="flex flex-col sm:flex-row justify-between items-center mb-4 p-4">
-  {/* Search Type Buttons */}
-  <div className="flex flex-wrap gap-4 mb-4">
-  {["name", "color", "species", "origin"].map((type) => (
-    <div key={type} className="flex flex-col">
-      <label htmlFor={type} className="text-sm font-medium capitalize">
-        Search by {type}
-      </label>
-      <input
-        id={type}
-        type="text"
-        placeholder={`Enter ${type}`}
-        value={searchCriteria[type]}
-        onChange={(e) =>
-          setSearchCriteria((prev) => ({ ...prev, [type]: e.target.value }))
-        }
-        className="p-3 border border-gray-400 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-gray-500 transition duration-300 bg-white"
-      />
-    </div>
-  ))}
-  <button
-    onClick={() => setSearchCriteria({ name: "", color: "", species: "", origin: "" })}
-    className="p-3 bg-gray-800 text-white rounded-lg shadow-md hover:bg-gray-700"
-  >
-    Clear Filters
-  </button>
-</div>
+          {/* Search Type Buttons */}
+          <div className="flex flex-wrap gap-4 mb-4">
+            {["name", "color", "species", "origin"].map((type) => (
+              <div key={type} className="flex flex-col">
+                <label htmlFor={type} className="text-sm font-medium capitalize">
+                  Search by {type}
+                </label>
+                <input
+                  id={type}
+                  type="text"
+                  placeholder={`Enter ${type}`}
+                  value={searchCriteria[type]}
+                  onChange={(e) =>
+                    setSearchCriteria((prev) => ({ ...prev, [type]: e.target.value }))
+                  }
+                  className="p-3 border border-gray-400 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-gray-500 transition duration-300 bg-white"
+                />
+              </div>
+            ))}
+            <button
+              onClick={() => setSearchCriteria({ name: "", color: "", species: "", origin: "" })}
+              className="p-3 bg-gray-800 text-white rounded-lg shadow-md hover:bg-gray-700"
+            >
+              Clear Filters
+            </button>
+          </div>
 
 
-  {/* Sort Options */}
-  <div className="flex justify-end items-center mt-4 sm:mt-0">
-    <select
-      value={sortOrder}
-      onChange={(e) => setSortOrder(e.target.value)}
-      className="p-3 border border-gray-400 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-gray-500 transition duration-300 bg-white ml-4"
-      aria-label="Sort by price"
-    >
-      <option value="normal">Default Order</option>
-      <option value="asc">Price: Ascending</option>
-      <option value="desc">Price: Descending</option>
-    </select>
-  </div>
-</div>
+          {/* Sort Options */}
+          <div className="flex justify-end items-center mt-4 sm:mt-0">
+            <select
+              value={sortOrder}
+              onChange={(e) => setSortOrder(e.target.value)}
+              className="p-3 border border-gray-400 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-gray-500 transition duration-300 bg-white ml-4"
+              aria-label="Sort by price"
+            >
+              <option value="normal">Default Order</option>
+              <option value="asc">Price: Ascending</option>
+              <option value="desc">Price: Descending</option>
+            </select>
+          </div>
+        </div>
 
 
 
@@ -270,8 +270,8 @@ const ProductsPage = () => {
                   <button
                     onClick={() => handleCompare(koiFish)}
                     className={`px-4 py-2 rounded-lg font-medium transition duration-300 ${compareItems.find((item) => item.koiID === koiFish.koiID)
-                        ? "bg-gray-800 text-white hover:bg-gray-900"
-                        : "bg-gray-500 text-white hover:bg-gray-600"
+                      ? "bg-gray-800 text-white hover:bg-gray-900"
+                      : "bg-gray-500 text-white hover:bg-gray-600"
                       }`}
                   >
                     {compareItems.find((item) => item.koiID === koiFish.koiID)
@@ -301,8 +301,10 @@ const ProductsPage = () => {
           onRemove={handleRemoveFromCart}
         />
       </div>
+      <div className="pb-10">
+        <Pagination totalPosts={koiFishs.length} postPerPage={postsPerPage} paginate={paginate} />
+      </div>
 
-      <Pagination totalPosts={koiFishs.length} postPerPage={postsPerPage} paginate={paginate} />
     </div>
   );
 };

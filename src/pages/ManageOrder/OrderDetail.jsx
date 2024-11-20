@@ -92,12 +92,13 @@ const OrderDetail = () => {
 
   return (
     <div className="p-6">
-      <h1 className="text-3xl font-bold mb-4 text-center">Order Details</h1>
+      <h1 className="text-4xl font-bold mb-6 text-center text-dark">Order Details</h1>
 
       <Stepper steps={steps} currentStep={order ? order.status : 0} />
 
-      <section className="mb-6">
-        <h2 className="text-2xl font-semibold mb-2">Basic Order Information</h2>
+      <div className="bg-white p-6 rounded-lg shadow-lg mt-6">
+        <h2 className="text-2xl font-semibold mb-4 text-gray-800">Basic Order Information</h2>
+        <div className="grid grid-cols-2 gap-4 text-lg"> 
         <p><strong>Order ID:</strong> {order?.orderID}</p>
         <p><strong>Customer ID:</strong> {order?.customerID || "N/A"}</p>
         <p><strong>Staff ID:</strong> {order?.staffID || "N/A"}</p>
@@ -106,66 +107,107 @@ const OrderDetail = () => {
         <p><strong>Total Amount:</strong> {order ? order.totalAmount.toLocaleString() : "N/A"} VND</p>
         <p><strong>Type:</strong> {order?.type === 0 ? "Online" : "Offline"}</p>
         <p><strong>Status:</strong> {order ? steps[order.status] : "N/A"}</p>
-        <p><strong>Reason:</strong> {order?.reason || "N/A"}</p>
-        {order?.reasonImage && <img src={order.reasonImage} alt="Reason" className="mt-2" />}
-      </section>
-
-      <div className="flex space-x-4 mb-4">
-        {order?.status === 0 && (
-          <>
-            <button onClick={() => handleStatusChange(1)} className="bg-green-500 text-white px-4 py-2 rounded">
-              Complete
-            </button>
-            <button onClick={() => handleStatusChange(2)} className="bg-red-500 text-white px-4 py-2 rounded">
-              Cancelled
-            </button>
-            <button onClick={() => setShowEditForm(true)} className="bg-blue-500 text-white px-4 py-2 rounded">
-              Edit Order
-            </button>
-          </>
+        </div>
+        {order?.reason && (
+          <div className="mt-4">
+            <p>
+              <strong>Reason:</strong> {order.reason}
+            </p>
+            {order.reasonImage && (
+              <img
+                src={order.reasonImage}
+                alt="Reason"
+                className="mt-2 border rounded-lg"
+              />
+            )}
+          </div>
         )}
       </div>
 
+      {/* Action Buttons */}
+      <div className="flex space-x-4 mt-6">
+        {order?.status === 0 && (
+          <>
+            <button
+              onClick={() => setShowEditForm(true)}
+              className="bg-blue-500 text-white px-6 py-2 rounded-lg hover:bg-blue-600"
+            >
+              Edit Order
+            </button>
+            <button
+              onClick={() => handleStatusChange(1)}
+              className="bg-green-500 text-white px-6 py-2 rounded-lg hover:bg-green-600"
+            >
+              Mark as Completed
+            </button>
+            <button
+              onClick={() => handleStatusChange(2)}
+              className="bg-red-500 text-white px-6 py-2 rounded-lg hover:bg-red-600"
+            >
+              Cancel Order
+            </button>
+          </>
+        )}
+        {order?.status === 1 && (
+          <p className="text-lg text-green-600 font-bold">
+            Order is Completed.
+          </p>
+        )}
+        {order?.status === 2 && (
+          <p className="text-lg text-red-600 font-bold">
+            Order is Cancelled.
+          </p>
+        )}
+      </div>
+
+      {/* Edit Order Form Modal */}
       {showEditForm && (
         <Modal onClose={() => setShowEditForm(false)}>
-          <EditOrderForm order={order} handleChange={handleChange} handleSave={handleSave} handleFileChange={handleFileChange} />
+          <EditOrderForm
+            order={order}
+            handleChange={(e) => {
+              const { name, value } = e.target;
+              setOrder((prev) => ({ ...prev, [name]: value }));
+            }}
+            handleSave={() => {
+              setShowEditForm(false);
+              alert("Order updated successfully!");
+            }}
+          />
         </Modal>
       )}
 
+      {/* Reason Modal */}
       {showReasonModal && (
         <Modal onClose={() => setShowReasonModal(false)}>
-          <div className="p-4">
-            <h2 className="text-xl font-bold mb-4">Provide Reason and Image</h2>
-            <div className="mb-4">
-              <label className="block text-sm font-medium">Reason</label>
-              <input
-                type="text"
-                value={reason}
-                onChange={(e) => setReason(e.target.value)}
-                className="mt-1 block w-full border border-gray-300 rounded-md"
-              />
-            </div>
-            <div className="mb-4">
-              <label className="block text-sm font-medium">Reason Image</label>
-              <input
-                type="file"
-                onChange={(e) => {
-                  const file = e.target.files[0];
-                  if (file) {
-                    const reader = new FileReader();
-                    reader.onloadend = () => setReasonImage(reader.result);
-                    reader.readAsDataURL(file);
-                  }
-                }}
-                className="mt-1 block w-full border border-gray-300 rounded-md"
-              />
-            </div>
+          <div className="p-6">
+            <h2 className="text-2xl font-bold mb-4">Provide Reason</h2>
+            <label className="block mb-2 text-sm font-medium">Reason</label>
+            <input
+              type="text"
+              value={reason}
+              onChange={(e) => setReason(e.target.value)}
+              className="w-full border rounded-lg p-2 mb-4"
+            />
+            <label className="block mb-2 text-sm font-medium">Reason Image</label>
+            <input
+              type="file"
+              onChange={(e) => {
+                const file = e.target.files[0];
+                if (file) {
+                  const reader = new FileReader();
+                  reader.onloadend = () => setReasonImage(reader.result);
+                  reader.readAsDataURL(file);
+                }
+              }}
+              className="w-full border rounded-lg p-2"
+            />
             <button
               onClick={() => {
                 updateOrderStatus(newStatus);
                 setShowReasonModal(false);
               }}
-              className="bg-green-500 text-white px-4 py-2 rounded"
+              className="mt-4 bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600"
             >
               Submit
             </button>

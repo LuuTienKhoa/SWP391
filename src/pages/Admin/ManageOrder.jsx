@@ -2,13 +2,17 @@ import React, { useState, useEffect } from "react";
 import api from "../../config/axios";
 import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
-
+import { FaClock, FaCheckCircle, FaTimesCircle, FaGlobe, FaStore } from "react-icons/fa";
+import Pagination from "../../components/Pagination";
 const ManageOrder = () => {
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [selectedStatus, setSelectedStatus] = useState("All");
+  const [filterType, setFilterType] = useState("all");
+  const [filterStatus, setFilterStatus] = useState("all");
   const navigate = useNavigate();
   const userRole = 1;
+  const [currentPage, setCurrentPage] = useState(1);
+  const postsPerPage = 10;
 
   useEffect(() => {
     fetchOrders();
@@ -47,16 +51,37 @@ const ManageOrder = () => {
   };
 
   const getTypeLabel = (type) => {
-    return type === 0 ? "Online" : "Offline";
+    return type === 0 ? (
+      <span className="flex items-center justify-center text-blue-500">
+        <FaGlobe className="mr-1" /> Online
+      </span>
+    ) : (
+      <span className="flex items-center justify-center text-green-500">
+        <FaStore className="mr-1" /> Offline
+      </span>
+    );
   };
+
   const getStatusLabel = (status) => {
     switch (status) {
       case 0:
-        return "Pending";
+        return (
+          <span className="flex items-center justify-center text-yellow-500">
+            <FaClock className="mr-1" /> Pending
+          </span>
+        );
       case 1:
-        return "Completed";
+        return (
+          <span className="flex items-center justify-center text-green-500">
+            <FaCheckCircle className="mr-1" /> Completed
+          </span>
+        );
       case 2:
-        return "Cancelled";
+        return (
+          <span className="flex items-center justify-center text-red-500">
+            <FaTimesCircle className="mr-1" /> Cancelled
+          </span>
+        );
       default:
         return "Unknown";
     }
@@ -72,65 +97,73 @@ const ManageOrder = () => {
     return `${day}/${month}/${year}, ${hours}:${minutes}`;
   };
 
-  const filteredOrders =
-    selectedStatus === "All"
-      ? orders
-      : orders.filter(
-          (order) => getStatusLabel(order.status) === selectedStatus
-        );
+  const filteredOrders = orders.filter((order) => {
+    const matchesType =
+      filterType === "all" || order.type === (filterType === "online" ? 0 : 1);
+    const matchesStatus =
+      filterStatus === "all" ||
+      order.status ===
+      (filterStatus === "pending"
+        ? 0
+        : filterStatus === "completed"
+          ? 1
+          : 2);
+    return matchesType && matchesStatus;
+  });
+
+  const indexOfLastPost = currentPage * postsPerPage;
+  const indexOfFirstPost = indexOfLastPost - postsPerPage;
+  const currentPosts = filteredOrders.slice(indexOfFirstPost, indexOfLastPost);
+
+  const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
   if (loading) return <div>Loading...</div>;
 
   return (
     <div className="p-6">
       <h1 className="text-3xl font-bold mb-6 text-center">Manage Orders</h1>
-      <div className="mb-4 text-center">
-        <button
-          onClick={() => setSelectedStatus("All")}
-          className="bg--500 text-white px-4 py-1 rounded mr-2"
-        >
-          All
-        </button>
-        <button
-          onClick={() => setSelectedStatus("Pending")}
-          className="bg-yellow-500 text-white px-4 py-1 rounded mr-2"
-        >
-          Pending
-        </button>
-        <button
-          onClick={() => setSelectedStatus("Completed")}
-          className="bg-green-500 text-white px-4 py-1 rounded mr-2"
-        >
-          Completed
-        </button>
-        <button
-          onClick={() => setSelectedStatus("Cancelled")}
-          className="bg-red-500 text-white px-4 py-1 rounded mr-2"
-        >
-          Cancelled
-        </button>
-      </div>
       <div className="overflow-x-auto">
         <table className="min-w-full bg-white border border-gray-300">
           <thead>
             <tr className="bg-gray-200">
-              <th className="py-2 px-4 border">Order ID</th>
+              <th className="py-2 px-4 border">Order</th>
               <th className="py-2 px-4 border">Koi ID</th>
-              <th className="py-2 px-4 border">ConsignmentKoi ID</th>
+              <th className="py-2 px-4 border">ConsigKoi ID</th>
               <th className="py-2 px-4 border">Image</th>
               <th className="py-2 px-4 border">Customer ID</th>
               <th className="py-2 px-4 border">Staff ID</th>
-              <th className="py-2 px-4 border">Date of purchase</th>
-              <th className="py-2 px-4 border">Date of update </th>
+              <th className="py-2 px-4 border">Purchase Date</th>
+              <th className="py-2 px-4 border">Updated Date</th>
               <th className="py-2 px-4 border">Promotion </th>
               <th className="py-2 px-4 border">Total Amount</th>
-              <th className="py-2 px-4 border">Type</th>
-              <th className="py-2 px-4 border">Status</th>
+              <th className="py-2 px-4 border">
+                <select
+                  value={filterType}
+                  onChange={(e) => setFilterType(e.target.value)}
+                  className="w-full bg-gray-200 border-none outline-none text-sm"
+                >
+                  <option value="all">All Types</option>
+                  <option value="online">Online</option>
+                  <option value="offline">Offline</option>
+                </select>
+              </th>
+              <th className="py-2 px-4 border">
+                <select
+                  value={filterStatus}
+                  onChange={(e) => setFilterStatus(e.target.value)}
+                  className="w-full bg-gray-200 border-none outline-none text-sm"
+                >
+                  <option value="all">All Statuses</option>
+                  <option value="pending">Pending</option>
+                  <option value="completed">Completed</option>
+                  <option value="cancelled">Cancelled</option>
+                </select>
+              </th>
               <th className="p-2 border">Action</th>
             </tr>
           </thead>
           <tbody>
-            {filteredOrders.map((order) => (
+            {currentPosts.map((order) => (
               <tr key={order.orderID} className="text-center border-b">
                 <td className="py-2 px-4 border">
                   <button
@@ -138,11 +171,11 @@ const ManageOrder = () => {
                       const path =
                         userRole === 0
                           ? navigate(
-                              "/admin/manageOrder/orderDetail/${order.orderID}"
-                            )
+                            "/admin/manageOrder/orderDetail/${order.orderID}"
+                          )
                           : userRole === 1
-                          ? `/staff/manageOrder/orderDetail/${order.orderID}`
-                          : null;
+                            ? `/staff/manageOrder/orderDetail/${order.orderID}`
+                            : null;
                       if (path) {
                         navigate(path);
                       } else {
@@ -172,21 +205,15 @@ const ManageOrder = () => {
                 </td>
                 <td className="py-2 px-4 border">{order.customerID}</td>
                 <td className="py-2 px-4 border">{order.staffID}</td>
-                <td className="py-2 px-4 border">
-                  {formatDate(order.createAt)}
-                </td>
-                <td className="py-2 px-4 border">
-                  {formatDate(order.updateAt)}
-                </td>
+                <td className="py-2 px-4 border">{formatDate(order.createAt)}</td>
+                <td className="py-2 px-4 border">{formatDate(order.updateAt)}</td>
                 <td className="py-2 px-4 border">{order.promotionID}</td>
                 <td className="py-2 px-4 border">{order.totalAmount}</td>
                 <td className="py-2 px-4 border">{getTypeLabel(order.type)}</td>
-                <td className="py-2 px-4 border">
-                  {getStatusLabel(order.status)}
-                </td>
+                <td className="py-2 px-4 border">{getStatusLabel(order.status)}</td>
 
                 <td className="p-2 border">
-                  {getStatusLabel(order.status) === "Cancelled" && (
+                  {order.status === 2 && (
                     <button
                       onClick={() => deleteOrder(order.orderID)}
                       className="bg-red-500 text-white px-4 py-1 rounded"
@@ -199,6 +226,12 @@ const ManageOrder = () => {
             ))}
           </tbody>
         </table>
+        {/* Pagination */}
+        <Pagination
+          totalPosts={filteredOrders.length}
+          postPerPage={postsPerPage}
+          paginate={paginate}
+        />
       </div>
     </div>
   );
