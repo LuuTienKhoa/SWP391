@@ -12,65 +12,77 @@ const StaffLayout = ({ children }) => {
 
   return (
     <div className="flex">
+      
       {/* Sidebar */}
       <div className="w-64 flex flex-col bg-gray-800 text-white p-4 h-full fixed overflow-y-auto">
         <h2 className="text-2xl font-semibold mb-8 text-center">F Koi Staff</h2>
         <ul>
-          {[
-            { label: 'Dashboard', icon: <MdDashboard size={24} />, link: '/staff' },
-            { label: 'Users', icon: <FaUsers size={24} />, link: '/staff/manage-user' },
-            { label: 'Orders', icon: <FaShoppingCart size={24} />, link: '/staff/manageOrder' },
-            { label: 'Koi Inventory', icon: <FaFish size={24} />, link: '/staff/manageKoi' },
-            { label: 'Batches', icon: <FaBox size={24} />, link: '/staff/manageKoiBatch' },  
-            { label: 'Promotions', icon: <FaTags size={24} />, link: '/staff/managePromotion' },  
-            { label: 'Feedback', icon: <FaComments size={24} />, link: '/staff/manageFeedback' },  
-            { label: 'Consignments', icon: <FaTruck size={24} />, link: '/staff/manageConsign' },  
-            { label: 'Deliveries', icon: <FaTruck size={24} />, link: '/staff/manageDelivery' },  
-            { label: 'Consigned Koi', icon: <FaFish size={24} />, link: '/staff/manageConsignKoi' }, 
-            { label: 'Transactions', icon: <FaTruck size={24} />, link: '/staff/manageTrans' }  
-          ].map((item, index) => (
-            <li key={index} className="mb-4">
-              <Link to={item.link}>
-                <Button
-                  startIcon={
-                    <Avatar
-                      sx={{
-                        backgroundColor: '#0288d1',
-                        height: 48,
-                        width: 48,
-                      }}
-                    >
-                      {item.icon}
-                    </Avatar>
-                  }
-                >
-                  {item.label}
-                </Button>
-              </Link>
-            </li>
-          ))}
-        </ul>
-        <div className="mt-auto">
-          <Button
-            color="inherit"
-            startIcon={
-              <Avatar
-                sx={{
-                  backgroundColor: '#0288d1',
-                  height: 48,
-                  width: 48,
-                }}
-              >
-                <FaHome size={24} color="white" /> 
-              </Avatar>
-            }
-            className="mt-4"
-            onClick={() => navigate('/')} // Thêm sự kiện onClick để điều hướng về trang chủ
+  {[
+    { label: 'Dashboard', icon: <MdDashboard size={24} />, link: '/staff' },
+    { label: 'Users', icon: <FaUsers size={24} />, link: '/staff/manage-user' },
+    { label: 'Orders', icon: <FaShoppingCart size={24} />, link: '/staff/manageOrder' },
+    { label: 'Koi Inventory', icon: <FaFish size={24} />, link: '/staff/manageKoi' },
+    { label: 'Batches', icon: <FaBox size={24} />, link: '/staff/manageKoiBatch' },
+    { label: 'Promotions', icon: <FaTags size={24} />, link: '/staff/managePromotion' },
+    { label: 'Feedback', icon: <FaComments size={24} />, link: '/staff/manageFeedback' },
+    { label: 'Consignments', icon: <FaTruck size={24} />, link: '/staff/manageConsign' },
+    { label: 'Deliveries', icon: <FaTruck size={24} />, link: '/staff/manageDelivery' },
+    { label: 'Consigned Koi', icon: <FaFish size={24} />, link: '/staff/manageConsignKoi' },
+    { label: 'Transactions', icon: <FaTruck size={24} />, link: '/staff/manageTrans' },
+  ].map((item, index) => (
+    <li key={index} className="mb-4">
+      <Link to={item.link}>
+        <Button
+          startIcon={item.icon}
+          sx={{
+            justifyContent: 'flex-start',
+            color: '#fff',
+            backgroundColor: '#1e293b',
+            '&:hover': {
+              backgroundColor: '#0288d1',
+            },
+            textAlign: 'left',
+            width: '100%',
+          }}
+        >
+          {item.label}
+        </Button>
+      </Link>
+    </li>
+  ))}
+</ul>
 
-          >
-            Home Page
-          </Button>
-        </div>
+<div className="mt-auto">
+  <Button
+    startIcon={
+      <Avatar
+        sx={{
+          backgroundColor: '#1e40af', 
+          height: 48,
+          width: 48,
+        }}
+      >
+        <FaHome size={24} color="white" />
+      </Avatar>
+    }
+    onClick={() => navigate('/')}
+    sx={{
+      color: '#ffffff', 
+      backgroundColor: '#1e293b', 
+      padding: '0.75rem 1.5rem',
+      fontWeight: 'bold',
+      borderRadius: '8px',
+      '&:hover': {
+        backgroundColor: '#2563eb', 
+        color: '#ffffff',
+      },
+    }}
+    className="transition-all duration-300 transform hover:scale-105" 
+  >
+    Home Page
+  </Button>
+</div>
+
 
       </div>
 
