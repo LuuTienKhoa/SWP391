@@ -33,7 +33,7 @@ ChartJS.register(
 // Tailwind for styling
 import 'tailwindcss/tailwind.css';
 
-export default function AdminPage() {
+export default function StaffPage() {
   const navigate = useNavigate();
 
   // Check the role in localStorage when the page loads

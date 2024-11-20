@@ -26,14 +26,24 @@ const ConsignPage = ({ token }) => {
   const [selectedTab, setSelectedTab] = useState(0);
   const [filteredConsignments, setFilteredConsignments] = useState([]);
   const dailyCostOptions = { 1: 100000, 2: 150000, 3: 250000, 5: 500000 };
-  const statusLabel = {
-    0: "Awaiting Payment",
-    1: "Available",
-    2: "Finished",
-    3: "Raising",
-    4: "Pending",
-    5: "Negotiate",
-  };
+  const getStatusLabel = (status) => {
+    switch (status) {
+        case 0:
+            return "Awaiting for Payment";
+        case 1:
+            return "Available";
+        case 2:
+            return "Finished";
+        case 3:
+            return "Raising";
+        case 4:
+            return "Pending";
+        case 5:
+            return "Negotiate";
+        default:
+            return "Unknown Status";
+    }
+};
   const [openKoiDetailsModal, setOpenKoiDetailsModal] = useState(false);
   const [openDetailsModal, setOpenDetailsModal] = useState(false);
   const handleViewKoiDetails = (consignment) => {
@@ -203,6 +213,10 @@ const ConsignPage = ({ token }) => {
                       <TableCell><strong>Origin:</strong></TableCell>
                       <TableCell>{consignment.consignmentKois[0].origin}</TableCell>
                     </TableRow>
+                    <TableRow>
+                      <TableCell><strong>Status:</strong></TableCell>
+                      <TableCell>{getStatusLabel(consignment.status)}</TableCell>
+                    </TableRow>
                   </>
                 )}
               </TableBody>
@@ -312,7 +326,7 @@ const ConsignPage = ({ token }) => {
                   </TableRow>
                   <TableRow>
                     <TableCell><strong>Status:</strong></TableCell>
-                    <TableCell>{statusLabel[selectedConsignment.status]}</TableCell>
+                    <TableCell>{getStatusLabel[selectedConsignment.status]}</TableCell>
                   </TableRow>
                   <TableRow>
                     <TableCell><strong>Foster Price:</strong></TableCell>

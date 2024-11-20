@@ -103,7 +103,8 @@ const ViewDetailsPage = () => {
                     className="bg-white text-black border border-black px-4 py-2 rounded-lg hover:bg-gray-200 transition duration-300 font-medium"
                   >
                     Pay Now
-                  </button>            </div>
+                  </button>            
+            </div>
           </div>
         </div>
       </div>
