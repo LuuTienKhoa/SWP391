@@ -1,38 +1,38 @@
-// src/pages/PaymentSuccess.jsx
 import { useLocation, useNavigate, useSearchParams } from 'react-router-dom';
+import Lottie from 'lottie-react';
+import successAnimation from '../../assets/animations/success.json';
 
 const PaymentSuccess = () => {
   const navigate = useNavigate();
-  const [searchParams, setSearchParams] = useSearchParams();
+  const [searchParams] = useSearchParams();
   const transactionID = searchParams.get('transactionID');
   const amount = searchParams.get('amount');
   const status_text = searchParams.get('status_text');
 
   return (
     <div className="min-h-screen bg-white flex items-center justify-center p-4">
-      <div className="bg-gray-800 p-8 rounded-lg shadow-lg text-white max-w-md w-full">
+      <div className="bg-white p-8 rounded-3xl shadow-2xl text-black max-w-lg w-full">
         <div className="text-center">
-          <div className="mb-4">
-            <svg
-              className="w-16 h-16 text-green-500 mx-auto"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth="2"
-                d="M5 13l4 4L19 7"
-              />
-            </svg>
-          </div>
+          <Lottie animationData={successAnimation} loop={false} className="w-32 h-32 mx-auto" />
 
-          <h2 className="text-2xl font-bold mb-4">Payment Successful!</h2>
+          <h2 className="text-3xl font-bold mb-4 text-black">Payment Successful!</h2>
+          <p className="text-gray-700 text-lg mb-6">
+            Thank you for your purchase! Your transaction was completed successfully.
+          </p>
+          <p className="text-gray-800 text-sm mb-2">
+            <strong>Transaction ID:</strong> {transactionID}
+          </p>
+          <p className="text-gray-800 text-sm mb-2">
+            <strong>Amount Paid:</strong> {amount} VND
+          </p>
+          <p className="text-gray-800 text-sm mb-6">
+            <strong>Status:</strong> {status_text}
+          </p>
+
           <div className="space-y-4">
             <button
               onClick={() => navigate('/')}
-              className="bg-gray-700 w-full py-3 rounded-lg hover:bg-gray-600 transition"
+              className="bg-black w-full py-3 text-white rounded-lg hover:bg-gray-800 transition duration-300 shadow-md"
             >
               Return to Home
             </button>

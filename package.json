@@ -25,6 +25,7 @@
     "date-fns": "^4.1.0",
     "fe-koi": "file:",
     "html-react-parser": "^5.1.18",
+    "lottie-react": "^2.4.0",
     "lucide-react": "^0.446.0",
     "moment": "^2.30.1",
     "prop-types": "^15.8.1",
