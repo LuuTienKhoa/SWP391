@@ -24,7 +24,7 @@ const ConsignmentPage = () => {
 
     const calculateTotalCost = (start, end, pricePerDay) => {
         if (start && end && pricePerDay) {
-            const days = end.diff(start, 'days');
+            const days = end.diff(start, 'days') +1;
             setTotalCost(days * pricePerDay);
         } else {
             setTotalCost(0);
@@ -165,9 +165,6 @@ const ConsignmentPage = () => {
                 <Form.Item label="Price Per Day Option" name="priceListId" rules={[{ required: true }]}>
                     <Select placeholder="Select price per day option" onChange={handlePriceListChange}>
                         <Select.Option value={1}>Option 1 - 100,000 VND/day</Select.Option>
-                        <Select.Option value={2}>Option 2 - 150,000 VND/day</Select.Option>
-                        <Select.Option value={3}>Option 3 - 250,000 VND/day</Select.Option>
-                        <Select.Option value={5}>Option 4 - 500,000 VND/day</Select.Option>
                     </Select>
                 </Form.Item>
 

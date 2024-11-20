@@ -8,19 +8,18 @@ const EditConsignmentForm = ({ newConsignment, handleChange, handleSave, custome
     return formattedDate;
   };
 
-  // Filter status options based on consignment type
   const getStatusOptions = () => {
     if (newConsignment.type === 1) { // Foster type
       return [
+        { value: 4, label: 'Pending' },
         { value: 3, label: 'Raising' },
         { value: 2, label: 'Finished' },
-        { value: 5, label: 'Negotiate' },
       ];
     } else if (newConsignment.type === 0) { // Sell type
       return [
-        { value: 0, label: 'Awaiting Payment' },
+        { value: 4, label: 'Pending' },
         { value: 1, label: 'Available' },
-        { value: 5, label: 'Negotiate' },
+        { value: 2, label: 'Finished' },
       ];
     }
     return [];

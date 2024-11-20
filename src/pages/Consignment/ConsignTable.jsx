@@ -34,7 +34,7 @@ const ConsignmentTable = ({ consignments, startEditing, handleDelete }) => {
           <th className="p-2 border">Type</th>
           <th className="p-2 border">Selling Price</th>
           <th className="p-2 border">Foster Price</th>
-          <th className="p-2 border">Price Per Day</th>         
+          <th className="p-2 border">Price Per Day</th>
           <th className="p-2 border">Start Day</th>
           <th className="p-2 border">End Day</th>
           <th className="p-2 border">Status</th>
@@ -51,8 +51,8 @@ const ConsignmentTable = ({ consignments, startEditing, handleDelete }) => {
               {consignment.type === 0 ? <span title="Sell">🛒</span> : <span title="Foster">🤝</span>}
             </td>
             <td className="p-2 border">
-        {consignment.type === 0 ? formatCurrency(consignment.price) : formatCurrency(0)}
-      </td>
+              {consignment.type === 0 ? formatCurrency(consignment.price) : formatCurrency(0)}
+            </td>
             <td className="p-2 border">{formatCurrency(consignment.fosterPrice)}</td>
             <td className="p-2 border">{formatCurrency(consignment.consignmentPriceList?.pricePerDay)}</td>
             <td className="p-2 border">{formatDate(consignment.startDate)}</td>
