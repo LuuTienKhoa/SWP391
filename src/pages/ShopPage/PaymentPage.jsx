@@ -319,10 +319,12 @@ const PaymentPage = () => {
             >
               <option value="">Select a promotion</option>
               {promotions.map((promotion) => (
-                <option key={promotion.promotionID} value={promotion.promotionID}>
-                  {promotion.code} - {promotion.description} ({promotion.discountRate}% off) -
-                  Remaining: {promotion.remainingRedeem} - Ends on: {new Date(promotion.endDate).toLocaleDateString()}
-                </option>
+                promotion.customerID !== null && (
+                  <option key={promotion.promotionID} value={promotion.promotionID}>
+                    {promotion.code} - {promotion.description} ({promotion.discountRate}% off) -
+                    Remaining: {promotion.remainingRedeem} - Ends on: {new Date(promotion.endDate).toLocaleDateString()}
+                  </option>
+                )
               ))}
             </select>
           </div>

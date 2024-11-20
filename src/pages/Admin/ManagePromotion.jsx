@@ -62,6 +62,7 @@ const ManagePromotion = () => {
           <table className="min-w-full bg-white border border-gray-300">
             <thead>
               <tr className="bg-gray-200">
+              <th className="py-2 px-4 border">Customer ID</th>
                 <th className="py-2 px-4 border">Code</th>
                 <th className="py-2 px-4 border">Description</th>
                 <th className="py-2 px-4 border">Discount Rate</th>
@@ -74,6 +75,7 @@ const ManagePromotion = () => {
             <tbody>
               {promotions.map((promotion) => (
                 <tr key={promotion.promotionID} className="text-center border-b">
+                  <td className="py-2 px-4 border">{promotion.customerID}</td>
                   <td className="py-2 px-4 border">{promotion.code}</td>
                   <td className="py-2 px-4 border">{promotion.description}</td>
                   <td className="py-2 px-4 border">{promotion.discountRate}%</td>

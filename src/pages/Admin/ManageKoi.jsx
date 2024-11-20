@@ -177,7 +177,7 @@ const ProductsPage = () => {
           </div>
 
           <div>
-            <label className="font-bold">Search by Price ($):</label>
+            <label className="font-bold">Search by Price (đ):</label>
             <div className="flex space-x-2">
               <input
                 type="number"
@@ -234,7 +234,7 @@ const ProductsPage = () => {
                 <th className="py-2 px-4 border">Name</th>
                 <th className="py-2 px-4 border">Gender</th>
                 <th className="py-2 px-4 border">Color</th>
-                <th className="py-2 px-4 border">Size (cm)</th>
+                <th className="py-2 px-4 border">Size</th>
                 <th className="py-2 px-4 border">Status</th>
                 <th className="py-2 px-4 border">Price</th>
                 <th className="py-2 px-4 border">Actions</th>
@@ -256,9 +256,9 @@ const ProductsPage = () => {
                   <td className="py-2 px-4 border">{koiFish.name}</td>
                   <td className="py-2 px-4 border">{koiFish.gender}</td>
                   <td className="py-2 px-4 border">{koiFish.color}</td>
-                  <td className="py-2 px-4 border">{koiFish.size}</td>
+                  <td className="py-2 px-4 border">{koiFish.size} cm</td>
                   <td className="py-2 px-4 border">{getStatusLabel[koiFish.status]}</td>
-                  <td className="py-2 px-4 border">${koiFish.price}</td>
+                  <td className="py-2 px-4 border">{koiFish.price} đ</td>
                   <td className="py-2 px-4 border">
                     <button
                       onClick={() => handleDeleteProduct(koiFish.koiID)}

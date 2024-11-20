@@ -24,7 +24,7 @@ const BatchTable = ({ batches, startEditing, handleDelete }) => (
             <td className="p-2 border">{batch.name}</td>
             <td className="p-2 border">{batch.species}</td>
             <td className="p-2 border">{batch.remainBatch}</td>
-            <td className="p-2 border">${batch.pricePerBatch}</td>
+            <td className="p-2 border">{batch.pricePerBatch} đ</td>
             <td className="p-2 border">{batch.quantityPerBatch}</td>
             <td className="p-2 border">{batch.description}</td>
             <td className="p-2 border">

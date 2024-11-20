@@ -55,8 +55,6 @@ const RedeemLoyaltyPoints = () => {
       <table className="table-auto w-full mb-4">
         <thead>
           <tr>
-            <th className="px-4 py-2">Promotion ID</th>
-            <th className="px-4 py-2">Customer ID</th>
             <th className="px-4 py-2">Code</th>
             <th className="px-4 py-2">Description</th>
             <th className="px-4 py-2">Discount Rate</th>
@@ -68,8 +66,6 @@ const RedeemLoyaltyPoints = () => {
         <tbody>
           {promotions.filter(promo => promo.customerID).map((promotion) => (
             <tr key={promotion.promotionID}>
-              <td className="border px-4 py-2">{promotion.promotionID}</td>
-              <td className="border px-4 py-2">{promotion.customerID}</td>
               <td className="border px-4 py-2">{promotion.code}</td>
               <td className="border px-4 py-2">{promotion.description}</td>
               <td className="border px-4 py-2">{promotion.discountRate}%</td>
@@ -86,7 +82,6 @@ const RedeemLoyaltyPoints = () => {
       <table className="table-auto w-full mb-4">
         <thead>
           <tr>
-            <th className="px-4 py-2">Code</th>
             <th className="px-4 py-2">Description</th>
             <th className="px-4 py-2">Discount Rate</th>
             <th className="px-4 py-2">Start Date</th>
@@ -98,7 +93,6 @@ const RedeemLoyaltyPoints = () => {
         <tbody>
           {promotions.filter(promo => !promo.customerID).map((promotion) => (
             <tr key={promotion.promotionID}>
-              <td className="border px-4 py-2">{promotion.code}</td>
               <td className="border px-4 py-2">{promotion.description}</td>
               <td className="border px-4 py-2">{promotion.discountRate}%</td>
               <td className="border px-4 py-2">{new Date(promotion.startDate).toLocaleDateString()}</td>
