@@ -83,10 +83,10 @@ const KoiBatchPage = () => {
   };
   const formatCurrency = (value) => {
     return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(value);
-};
+  };
   return (
     <div className="p-8">
-      <h1 className="text-4xl font-bold mb-6 text-center text-gray-800">Koi Batches Available</h1>
+      <h1 className="text-4xl font-bold mb-6 text-center text-gray-800">Koi Batch Collection</h1>
 
       {/* Filter Section */}
       <div className="text-center mb-6">
@@ -167,13 +167,14 @@ const KoiBatchPage = () => {
           ))
         )}
       </div>
-
       {/* Pagination */}
-      <Pagination
-        totalPosts={batches.length}
-        postPerPage={postsPerPage}
-        paginate={paginate}
-      />
+      <div className="pb-5 pt-10">
+        <Pagination
+          totalPosts={batches.length}
+          postPerPage={postsPerPage}
+          paginate={paginate}
+        />
+      </div>
 
       {/* Modal for Batch Details */}
       {selectedBatch && (
@@ -181,7 +182,7 @@ const KoiBatchPage = () => {
           open={!!selectedBatch}
           onCancel={closeModal}
           footer={null}
-          title={selectedBatch?.name}
+          title={<span style={{ fontSize: '1.5rem', fontWeight: 'bold' }}>{selectedBatch?.name}</span>} // Larger title
         >
           <div className="text-center">
             <img
@@ -189,18 +190,28 @@ const KoiBatchPage = () => {
               alt={selectedBatch.name}
               className="w-full h-48 object-contain mb-4"
             />
-            <p><strong>Price:</strong> ${selectedBatch.pricePerBatch}</p>
-            <p><strong>Description:</strong> {selectedBatch.description}</p>
-            <p><strong>Remaining Per Batch:</strong> {selectedBatch.remainBatch}</p>
-            <p><strong>Species:</strong> {selectedBatch.species}</p>
+            <p style={{ fontSize: '1.25rem', marginBottom: '0.5rem' }}>
+              <strong>Price:</strong> ${selectedBatch.pricePerBatch}
+            </p>
+            <p style={{ fontSize: '1.25rem', marginBottom: '0.5rem' }}>
+              <strong>Description:</strong> {selectedBatch.description}
+            </p>
+            <p style={{ fontSize: '1.25rem', marginBottom: '0.5rem' }}>
+              <strong>Remaining Batch:</strong> {selectedBatch.remainBatch}
+            </p>
+            <p style={{ fontSize: '1.25rem', marginBottom: '1rem' }}>
+              <strong>Species:</strong> {selectedBatch.species}
+            </p>
             <button
               onClick={() => handleNavigateToPayment(selectedBatch)}
               className="bg-green-500 text-white py-2 px-4 rounded hover:bg-green-600 mt-4"
+              style={{ fontSize: '1.25rem' }} // Larger button text
             >
               Buy Now
             </button>
           </div>
         </Modal>
+
       )}
     </div>
   );
