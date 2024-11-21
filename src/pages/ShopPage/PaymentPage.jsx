@@ -198,7 +198,7 @@ const PaymentPage = () => {
               </p>
             </>
           ) : (
-            <p className="text-gray-600 mt-2">Batch information not available</p>
+            <p className="text-gray-600 mt-2"></p>
           )}
 
         </div>
