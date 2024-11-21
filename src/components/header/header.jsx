@@ -162,9 +162,6 @@ function Header() {
                     >
                       Redeem Points
                     </Link>
-                    <span className="block px-4 py-2 text-sm text-gray-400">
-                      Loyalty Points: {loyaltyPoints}
-                    </span>
                   </>
                 )}
                 {role === "1" && (

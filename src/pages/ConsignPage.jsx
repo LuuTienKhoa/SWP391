@@ -3,11 +3,13 @@ import api from '../config/axios';
 import { Tab, Tabs, Card, CardContent, Typography, Box, Dialog, CircularProgress, Button, DialogTitle, DialogContent, Table, TableBody, TableRow, TableCell, DialogActions, Select, MenuItem, TextField } from '@mui/material';
 import { DatePicker } from 'antd';
 import { isBefore, parseISO, differenceInDays } from 'date-fns';
-
+import Pagination from '../components/Pagination';
 const ConsignPage = ({ token }) => {
   const [consignments, setConsignments] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 5; 
   const [openReconsignModal, setOpenReconsignModal] = useState(false);
   const [selectedConsignment, setSelectedConsignment] = useState(null);
   const [reconsignDetails, setReconsignDetails] = useState({
@@ -87,8 +89,11 @@ const ConsignPage = ({ token }) => {
       setFilteredConsignments(consignments);
     } else {
       const statusFilter = newValue - 1;
-      setFilteredConsignments(consignments.filter(consignment => consignment.status === statusFilter));
+      setFilteredConsignments(
+        consignments.filter((consignment) => consignment.status === statusFilter)
+      );
     }
+    setCurrentPage(1); 
   };
 
   const handleReconsignClick = (consignment) => {
@@ -159,6 +164,13 @@ const ConsignPage = ({ token }) => {
     setOpenDetailsModal(true);
   };
 
+
+ 
+  const paginate = (pageNumber) => setCurrentPage(pageNumber);
+  const indexOfLastItem = currentPage * itemsPerPage;
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+  const currentItems = filteredConsignments.slice(indexOfFirstItem, indexOfLastItem);
+
   if (loading) return <CircularProgress />;
   if (error) return <p style={{ color: 'red' }}>Error: {error}</p>;
 
@@ -176,7 +188,7 @@ const ConsignPage = ({ token }) => {
         <Tab label="Pending" />
         <Tab label="Negotiate" />
       </Tabs>
-      {filteredConsignments.map(consignment => (
+      {currentItems.map(consignment => (
         <Card key={consignment.consignmentID} sx={{ marginBottom: 3, padding: 2, boxShadow: 3, borderRadius: 2, backgroundColor: "#f9f9f9", color: '#000' }}>
           <CardContent>
             {consignment.consignmentKois?.[0]?.image && (
@@ -410,6 +422,11 @@ const ConsignPage = ({ token }) => {
           <Button onClick={() => setOpenDetailsModal(false)} sx={{ color: "#000" }}>Close</Button>
         </DialogActions>
       </Dialog>
+      <Pagination
+        totalPosts={filteredConsignments.length}
+        postPerPage={itemsPerPage}
+        paginate={paginate}
+      />
     </Box>
   );
 };

@@ -17,9 +17,12 @@ import {
   Card,
   CardContent,
 } from "@mui/material";
+import Pagination from "../components/Pagination";
 
 const OrderPage = ({ token }) => {
   const [orders, setOrders] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 5;
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [feedback, setFeedback] = useState({}); // State to hold feedback for each order
@@ -134,6 +137,15 @@ const OrderPage = ({ token }) => {
       ? orders
       : orders.filter((order) => order.status === filterStatus);
 
+  const indexOfLastOrder = currentPage * itemsPerPage;
+  const indexOfFirstOrder = indexOfLastOrder - itemsPerPage;
+  const currentOrders = filteredOrders.slice(indexOfFirstOrder, indexOfLastOrder);
+
+  const paginate = (pageNumber) => setCurrentPage(pageNumber);
+
+
+
+
   return (
     <Box sx={{ maxWidth: 900, margin: "0 auto", padding: 4 }}>
       <div>
@@ -142,7 +154,10 @@ const OrderPage = ({ token }) => {
         </Typography>
         <Tabs
           value={filterStatus}
-          onChange={(e, newValue) => handleFilterChange(newValue)}
+          onChange={(e, newValue) => {
+            setFilterStatus(newValue);
+            setCurrentPage(1); //Set = 1 
+          }}
           indicatorColor="primary"
           textColor="primary"
           variant="fullWidth"
@@ -154,7 +169,7 @@ const OrderPage = ({ token }) => {
           <Tab label="Cancelled" value={2} />
         </Tabs>
         <div>
-          {filteredOrders.map((order) => (
+          {currentOrders.map((order) => (
             <Card
               key={order.orderID}
               sx={{
@@ -167,7 +182,7 @@ const OrderPage = ({ token }) => {
               <CardContent>
                 <Table>
                   <TableBody>
-                  <TableRow>
+                    <TableRow>
                       <TableCell>
                         <strong></strong>
                       </TableCell>
@@ -184,10 +199,10 @@ const OrderPage = ({ token }) => {
                         <strong>Koi Name:</strong>
                       </TableCell>
                       <TableCell>
-                        {order.orderDetails?.[0]?.koi?.name || order.orderDetails?.[0]?.consignmentKoi?.name} 
+                        {order.orderDetails?.[0]?.koi?.name || order.orderDetails?.[0]?.consignmentKoi?.name}
                       </TableCell>
                     </TableRow>
-                   
+
 
                     <TableRow>
                       <TableCell>
@@ -209,7 +224,7 @@ const OrderPage = ({ token }) => {
                         {new Date(order.createAt).toLocaleString()}
                       </TableCell>
                     </TableRow>
-                   
+
 
                     <TableRow>
                       <TableCell>
@@ -315,6 +330,11 @@ const OrderPage = ({ token }) => {
           ))}
         </div>
       </div>
+      <Pagination
+        totalPosts={filteredOrders.length}
+        postPerPage={itemsPerPage}
+        paginate={paginate}
+      />
     </Box>
   );
 };
