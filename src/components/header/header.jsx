@@ -117,7 +117,7 @@ function Header() {
         {isLoggedIn && (
           <div className="relative">
             <button
-              onClick={() => setDropdownOpen(!isDropdownOpen)}
+              onClick={() => setDropdownOpen((prev) => !prev)}
               className="flex items-center space-x-1 text-gray-300 hover:text-gray-400 focus:outline-none"
             >
               <span>Account</span>

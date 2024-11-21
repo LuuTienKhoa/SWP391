@@ -71,7 +71,7 @@ function App() {
           <Route path="/feedback" element={<FeedBackPage />} />
           <Route path="/your-koi" element={<YourKoi />} />
           <Route path="/redeemLoyaltyPoints" element={<RedeemLoyaltyPoints />} />
-          <Route path="*" element={<NotFoundPage />} />
+          <Route path="/404" element={<NotFoundPage />} />
         </Routes>
       </main>
       {shouldRenderHeaderFooter && <Footer />}
