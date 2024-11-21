@@ -19,7 +19,7 @@ const PaymentPage = () => {
   const navigate = useNavigate();
   const [user, setUser] = useState({ address: '', phone: '' });
   const [loading, setLoading] = useState(false);
-  const [totalCost, setTotalCost] = useState(0);  
+  const [totalCost, setTotalCost] = useState(0);
   const [warningMessage, setWarningMessage] = useState('');
   const pricePerDay = {
     1: 100000, // Option 1 price per day
@@ -188,12 +188,18 @@ const PaymentPage = () => {
               ? `Price Per Batch: ${formatCurrency(batch.pricePerBatch)}`
               : `Price: ${formatCurrency(koiFish?.price)}`}
           </p>
-          <p className="text-gray-600 mt-2">
-            Quantity Koi per batch: {batch.quantityPerBatch} 
-          </p>
-          <p className="text-gray-600 mt-2">
-            Remaining quantity available: {batch.remainBatch}
-          </p>
+          {batch ? (
+            <>
+              <p className="text-gray-600 mt-2">
+                Quantity Koi per batch: {batch.quantityPerBatch}
+              </p>
+              <p className="text-gray-600 mt-2">
+                Remaining quantity available: {batch.remainBatch}
+              </p>
+            </>
+          ) : (
+            <p className="text-gray-600 mt-2">Batch information not available</p>
+          )}
 
         </div>
 
@@ -270,7 +276,7 @@ const PaymentPage = () => {
                 value={buyingAmount}
                 onChange={(e) => handleBuyingAmountChange(parseInt(e.target.value) || 0)}
               />
-               {warningMessage && <p className="text-red-500 text-sm mt-2">{warningMessage}</p>}
+              {warningMessage && <p className="text-red-500 text-sm mt-2">{warningMessage}</p>}
             </div>
           )}
 

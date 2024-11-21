@@ -204,7 +204,7 @@ const ProductsPage = () => {
               className="p-3 border border-gray-400 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-gray-500 transition duration-300 bg-white ml-4"
               aria-label="Sort by price"
             >
-              <option value="normal">Default Order</option>
+              <option value="normal">All</option>
               <option value="asc">Price: Ascending</option>
               <option value="desc">Price: Descending</option>
             </select>
