@@ -18,6 +18,11 @@ const UpdatePromotion = ({ onSuccess }) => {
     const fetchPromotion = async () => {
       try {
         const response = await api.get(`/Promotion/${id}`);
+        
+        if (response.status === 404) {
+          return navigate("/404");  
+        }
+        
         setFormData(response.data);
       } catch (error) {
         console.error("Error fetching data:", error);

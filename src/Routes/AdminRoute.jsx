@@ -22,6 +22,7 @@ import ManageConsignKoi from "../pages/Admin/ManageConsignKoi"
 import CreateTransactionPage from '../pages/CreateTransactionPage'
 import OrderDetail from '../pages/ManageOrder/OrderDetail';
 import DeliveryDetail from '../pages/ManageDelivery/DeliveryDetail';
+import NotFoundPage from '../pages/NotFound/NotFoundPage';
 
 const DynamicLayout = ({ role, children }) => {
   return role === "0" ? <AdminLayout>{children}</AdminLayout> : <StaffLayout>{children}</StaffLayout>;
@@ -70,6 +71,7 @@ function RoleBasedRoutes() {
 
   return (
     <Routes>
+      <Route path="*" element={<NotFoundPage />} />
       {/* Admin Routes */}
       {adminRoutes.map((route, index) => (
         <Route

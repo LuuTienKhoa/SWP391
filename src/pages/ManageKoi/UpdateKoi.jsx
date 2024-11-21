@@ -29,6 +29,11 @@ const UpdateKoi = ({ onUpdateSuccess }) => {
     const fetchKoiData = async () => {
       try {
         const response = await api.get(`/koi/Koi/${id}`);
+        
+        if (response.status === 404) {
+          return navigate("/404");
+        }
+        
         setFormData(response.data);
       } catch (error) {
         console.error("Error fetching koi data:", error);

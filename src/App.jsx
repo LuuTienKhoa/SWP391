@@ -41,7 +41,7 @@ function App() {
       {shouldRenderHeaderFooter && (
         <Header  />
       )}
-      <main className="min-h-screen">
+      <main className="mb-auto">
         {isLoggedIn && (
           <div>
             <a href="/redeemLoyaltyPoints" className="btn">Redeem Point</a>

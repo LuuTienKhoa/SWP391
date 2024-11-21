@@ -27,6 +27,11 @@ const DeliveryDetail = () => {
     const fetchDeliveryDetails = async () => {
       try {
         const response = await api.get(`/koi/Delivery/${id}`);
+
+        if (response.status === 404) {
+          return navigate("/404");  
+        }
+        
         setDelivery(response.data);
       } catch (error) {
         console.error("Error fetching delivery details:", error);

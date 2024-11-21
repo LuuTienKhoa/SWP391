@@ -37,6 +37,11 @@ const UpdateOrder = () => {
   const fetchOrder = async () => {
     try {
       const response = await api.get(`/Order/${id}`);
+      
+      if (response.status === 404) {
+        return navigate("/404");  
+      }
+      
       setOrder(response.data);
     } catch (error) {
       console.error('Error fetching order:', error);

@@ -23,6 +23,11 @@ const OrderDetail = () => {
       setLoading(true);
       try {
         const response = await api.get(`/Order/${id}`);
+        
+        if (response.status === 404) {
+          return navigate("/404");  
+        }
+        
         setOrder(response.data);
       } catch (error) {
         setErrorMessage("Failed to fetch order details.");

@@ -15,9 +15,19 @@ const ViewDetailsPage = () => {
       
         if (window.location.pathname.includes('/consignmentKoi/')) {
           const response = await api.get(`/ConsignmentKoi/${id}`); // Đường dẫn cho consignmentKoi
+
+          if (response.status === 404) {
+            return navigate("/404");
+           }
+
           setKoiFish(response.data);
         } else if (window.location.pathname.includes('/koi/')) {
           const response = await api.get(`/koi/Koi/${id}`); // Đường dẫn cho koi
+
+          if (response.status === 404) {
+            return navigate("/404");  
+          }
+          
           setKoiFish(response.data);
         }
       } catch (error) {
