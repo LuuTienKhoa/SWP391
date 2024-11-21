@@ -2,6 +2,8 @@ import React from 'react';
 import aboutBg from '../assets/about_bg.jpg';
 import fish from '../assets/koi1.jpg'; // Replace with your actual koi image path
 import Koi2 from '../assets/Koi7.png'
+import { Button } from 'antd';
+import { Link } from 'react-router-dom';
 
 function AboutPage() {
   return (
@@ -17,6 +19,21 @@ function AboutPage() {
           <h1 className="text-white text-5xl font-semibold mb-4" style={{ fontFamily: 'Playfair Display SC, serif' }}>
             About Our Family History
           </h1>
+        </div>
+      </div>
+
+      {/* Mission Statement Section */}
+      <div className="bg-gradient-to-r from-blue-50 to-blue-100 py-16">
+        <div className="container mx-auto px-4">
+          <div className="text-center max-w-3xl mx-auto">
+            <h2 className="text-4xl font-bold mb-6" style={{ fontFamily: 'Playfair Display, serif' }}>
+              Our Mission
+            </h2>
+            <p className="text-xl text-gray-700 leading-relaxed">
+              To provide the highest quality koi fish while promoting sustainable breeding practices 
+              and educating enthusiasts about the art and science of koi keeping.
+            </p>
+          </div>
         </div>
       </div>
 
@@ -46,6 +63,43 @@ function AboutPage() {
                 src={Koi2}
               >              
               </img>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Services Section */}
+      <div className="bg-gray-50 py-16">
+        <div className="container mx-auto px-4">
+          <h2 className="text-4xl font-bold text-center mb-12" style={{ fontFamily: 'Playfair Display, serif' }}>
+            Our Services
+          </h2>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {/* Breeding Program */}
+            <div className="bg-white p-6 rounded-lg shadow-lg">
+              <h3 className="text-2xl font-semibold mb-4">Breeding Program</h3>
+              <p className="text-gray-600">
+                Our selective breeding program focuses on developing exceptional koi with 
+                superior genetics, vibrant colors, and distinct patterns.
+              </p>
+            </div>
+            
+            {/* Consulting Services */}
+            <div className="bg-white p-6 rounded-lg shadow-lg">
+              <h3 className="text-2xl font-semibold mb-4">Expert Consultation</h3>
+              <p className="text-gray-600">
+                Get professional advice on koi selection, pond management, and health care 
+                from our experienced team.
+              </p>
+            </div>
+            
+            {/* Health Care */}
+            <div className="bg-white p-6 rounded-lg shadow-lg">
+              <h3 className="text-2xl font-semibold mb-4">Health Care</h3>
+              <p className="text-gray-600">
+                Regular health checks and maintenance services to ensure your koi remain 
+                healthy and vibrant.
+              </p>
             </div>
           </div>
         </div>
@@ -91,7 +145,54 @@ function AboutPage() {
         </div>
       </div>
 
- 
+      {/* Quality Commitment Section */}
+      <div className="bg-gradient-to-r from-gray-900 to-blue-900 text-white py-16">
+        <div className="container mx-auto px-4">
+          <div className="max-w-4xl mx-auto text-center">
+            <h2 className="text-4xl font-bold mb-8" style={{ fontFamily: 'Playfair Display, serif' }}>
+              Our Quality Commitment
+            </h2>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
+              <div>
+                <h3 className="text-xl font-semibold mb-4">Premium Bloodlines</h3>
+                <p>Carefully selected breeding pairs to ensure exceptional offspring</p>
+              </div>
+              <div>
+                <h3 className="text-xl font-semibold mb-4">Advanced Facilities</h3>
+                <p>State-of-the-art breeding and growing facilities</p>
+              </div>
+              <div>
+                <h3 className="text-xl font-semibold mb-4">Expert Care</h3>
+                <p>Dedicated team of experienced koi professionals</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Contact CTA Section */}
+      <div className="bg-white py-16">
+        <div className="container mx-auto px-4 text-center">
+          <h2 className="text-4xl font-bold mb-8" style={{ fontFamily: 'Playfair Display, serif' }}>
+            Ready to Start Your Koi Journey?
+          </h2>
+          <p className="text-xl text-gray-600 mb-8 max-w-2xl mx-auto">
+            Whether you're a beginner or an experienced collector, we're here to help you 
+            find the perfect koi for your collection.
+          </p>
+          <div className="flex justify-center items-center gap-4">
+            <Button type="primary" size="large">
+              Contact Us
+            </Button>
+            <Link to="/products">
+              <Button size="large">
+                View Our Collection
+              </Button>
+            </Link>
+          </div>
+        </div>
+      </div>
+
     </div>
   );
 }
