@@ -81,6 +81,7 @@ const Card = () => {
     justify-content: center;
     width: 30em;
     height: 30em;
+    margin: auto;
   }
   
   .main {
@@ -252,6 +253,7 @@ const Card = () => {
     justify-content: center;
     border-radius: 15px;
     box-shadow: 3.5px 3.5px 0px #e69635;
+    z-index: 0;
   }
   .screen_out {
     width: auto;

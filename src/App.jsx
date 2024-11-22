@@ -21,6 +21,7 @@ import OrderPage from './pages/OrderPage';
 import NotFoundPage from './pages/NotFound/NotFoundPage';
 import RoleBasedRoutes from './Routes/AdminRoute';
 import PaymentSuccess from './pages/ShopPage/PaymentSuccess';
+import PaymentFail from './pages/ShopPage/PaymentFail';
 import UserConsignmentsDetailPage from './pages/ConsignPage';
 import FeedBackPage from './pages/Feedback/FeedbackPage'
 import LandingPage from './pages/LandingPage';
@@ -65,7 +66,8 @@ function App() {
           <Route path="/payment/:id" element={<PaymentPage />} />
           <Route path="/koiBatch" element={<KoiBatchPage />} />
           <Route path="/order" element={<OrderPage />} />
-          <Route path="/paymentSuccess" element={<PaymentSuccess />} />        
+          <Route path="/paymentSuccess" element={<PaymentSuccess />} />    
+          <Route path="/paymentFail" element={<PaymentFail />} />    
           <Route path="/consigned" element={<UserConsignmentsDetailPage />} />    
           <Route path="/*" element={<RoleBasedRoutes />} />
           <Route path="/feedback" element={<FeedBackPage />} />
