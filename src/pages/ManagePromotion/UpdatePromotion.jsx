@@ -42,7 +42,6 @@ const UpdatePromotion = ({ onSuccess }) => {
     try {
       await api.put(`/Promotion/${id}`, formData);
       alert("Promotion updated successfully!");
-      onSuccess(formData);
     } catch (error) {
       console.error("Error updating:", error);
       alert("Failed to update.");
@@ -52,7 +51,8 @@ const UpdatePromotion = ({ onSuccess }) => {
   return (
     <form onSubmit={handleSubmit} className="bg-white p-4 rounded shadow-md">
       <h2 className="text-xl font-bold mb-4">Update Promotion</h2>
-      {Object.keys(formData).map((key) => (
+      {Object.keys(formData).filter((key) => key !== "customerID" && key !== "customer")
+      .map((key) => (
         <div className="mb-2" key={key}>
           <label className="block text-sm font-medium">{key}</label>
           <input
@@ -61,7 +61,6 @@ const UpdatePromotion = ({ onSuccess }) => {
             value={formData[key]}
             onChange={handleChange}
             className="w-full p-2 border rounded"
-            required
           />
         </div>
       ))}
