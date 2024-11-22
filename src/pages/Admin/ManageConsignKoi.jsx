@@ -36,7 +36,8 @@ const ManageConsignKoi = () => {
   const fetchConsignKois = async () => {
     try {
       const response = await api.get('/ConsignmentKoi');
-      setConsignKois(response.data);
+      const sortedData = response.data.sort((a, b) => b.consignmentKoiID - a.consignmentKoiID);
+      setConsignKois(sortedData);
     } catch (error) {
       setErrorMessage('Failed to fetch consignment koi');
     }
