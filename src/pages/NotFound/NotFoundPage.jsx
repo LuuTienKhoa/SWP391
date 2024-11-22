@@ -7,7 +7,7 @@ function NotFoundPage() {
       <Card />
       <button
         onClick={() => window.location.href = '/'}
-        style={{ marginTop: '2em', padding: '1em 2em', fontSize: '1em', cursor: 'pointer', borderRadius: '5px', border: 'none', backgroundColor: '#ff5722', color: 'white' }}
+        style={{ marginTop: '2em', padding: '1em 2em', margin: "2em", fontSize: '1em', cursor: 'pointer', borderRadius: '5px', border: 'none', backgroundColor: '#ff5722', color: 'white' }}
       >
         Go Back Home
       </button>
