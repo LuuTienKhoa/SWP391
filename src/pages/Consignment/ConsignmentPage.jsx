@@ -106,17 +106,17 @@ const ConsignmentPage = () => {
 
     return (
         <div
-        style={{
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center',
-            minHeight: '100vh',
-            padding: '2rem',
-            background: 'linear-gradient(to bottom, #1a202c, #2d3748, #4a5568)', 
-        }}
+            style={{
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+                minHeight: '100vh',
+                padding: '2rem',
+                background: 'linear-gradient(to bottom, #1a202c, #2d3748, #4a5568)',
+            }}
         >
             <Form
-                size ="large"
+                size="large"
                 onFinish={handleSubmit}
                 layout="vertical"
                 style={{
@@ -136,7 +136,11 @@ const ConsignmentPage = () => {
                                 <Select.Option value={1}>Foster</Select.Option>
                             </Select>
                         </Form.Item>
-
+                        {selectedType === 0 && (
+                            <Form.Item label="Desired Price (VND)" name="price" rules={[{ required: true, type: 'number', message: 'Please input a valid price' }]}>
+                                <InputNumber placeholder="Enter price" style={{ width: '100%' }} />
+                            </Form.Item>
+                        )}
                         <Form.Item label="Foster Name" name="name" rules={[{ required: true, message: 'Please input the name' }]}>
                             <Input placeholder="Enter name" />
                         </Form.Item>
@@ -155,7 +159,7 @@ const ConsignmentPage = () => {
 
                         <Form.Item label="Price Per Day Option" name="priceListId" rules={[{ required: true, message: 'Please select a price per day option' }]}>
                             <Select placeholder="Select price per day option" onChange={handlePriceListChange}>
-                                <Select.Option value={1}>Option 1 - 100,000 VND/day</Select.Option>
+                                <Select.Option value={1}>100,000 VND/day</Select.Option>
                             </Select>
                         </Form.Item>
                     </Col>
@@ -184,6 +188,7 @@ const ConsignmentPage = () => {
                         <Form.Item label="Foster Selection Rate" name="selectionRate">
                             <Input placeholder="Enter rate" />
                         </Form.Item>
+
                     </Col>
                 </Row>
 
