@@ -24,7 +24,7 @@ const CreatePromotion = ({ onSuccess }) => {
     try {
       const response = await api.post('/Promotion', formData);
       alert("Promotion created successfully!");
-      onSuccess(response.data);
+      
     } catch (error) {
       console.error("Error creating promotion:", error);
       alert("Failed to create promotion.");
