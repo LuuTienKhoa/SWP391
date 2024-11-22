@@ -1,11 +1,32 @@
-import React from 'react';
+import React, { useState } from 'react';
 
-const ConsignmentTable = ({ consignments, startEditing, handleDelete }) => {
+const ConsignmentTable = ({ 
+  consignments, 
+  startEditing, 
+  handleDelete, 
+  handleUpdateKoiPrice,
+  editingKoiPrice,
+  setEditingKoiPrice 
+}) => {
+  const [tempPrice, setTempPrice] = useState('');
+
+  const handlePriceClick = (koi, currentPrice) => {
+    setEditingKoiPrice(koi.consignmentKoiID);
+    setTempPrice(currentPrice);
+  };
+
+  const handlePriceSubmit = (koi) => {
+    if (tempPrice && !isNaN(tempPrice) && parseFloat(tempPrice) >= 0) {
+      handleUpdateKoiPrice(koi, tempPrice);
+    } else {
+      alert('Please enter a valid price (must be 0 or greater)');
+    }
+  };
+
   const formatCurrency = (value) => {
     return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(value);
   };
 
-  // Function to map status code to a descriptive label with colors and icons
   const getStatusLabel = (status) => {
     switch (status) {
       case 0: return <span className="text-yellow-600" title="Awaiting Payment">🕒 Awaiting Payment</span>;
@@ -30,7 +51,6 @@ const ConsignmentTable = ({ consignments, startEditing, handleDelete }) => {
         <tr className="bg-gray-200">
           <th className="p-2 border">Consignment ID</th>
           <th className="p-2 border">Customer ID</th>
-          <th className="p-2 border">Consignment Koi ID</th>
           <th className="p-2 border">Type</th>
           <th className="p-2 border">Selling Price</th>
           <th className="p-2 border">Foster Price</th>
@@ -46,12 +66,51 @@ const ConsignmentTable = ({ consignments, startEditing, handleDelete }) => {
           <tr key={consignment.consignmentID} className="text-center border-b">
             <td className="p-2 border">{consignment.consignmentID}</td>
             <td className="p-2 border">{consignment.customerID || 'Unknown'}</td>
-            <td className="p-2 border">{consignment.consignmentKois?.[0]?.consignmentKoiID || 'Unknown'}</td>
             <td className="p-2 border">
               {consignment.type === 0 ? <span title="Sell">🛒</span> : <span title="Foster">🤝</span>}
             </td>
             <td className="p-2 border">
-              {consignment.type === 0 ? formatCurrency(consignment.price) : formatCurrency(0)}
+              {consignment.type === 0 ? (
+                editingKoiPrice === consignment.consignmentKois?.[0]?.consignmentKoiID ? (
+                  <div className="flex items-center space-x-2 justify-center">
+                    <input
+                      type="number"
+                      value={tempPrice}
+                      onChange={(e) => setTempPrice(e.target.value)}
+                      className="w-32 px-2 py-1 border rounded"
+                      min="0"
+                      step="1000"
+                    />
+                    <button
+                      onClick={() => handlePriceSubmit(consignment.consignmentKois[0])}
+                      className="bg-green-500 text-white px-2 py-1 rounded hover:bg-green-600"
+                      title="Save price"
+                    >
+                      💾
+                    </button>
+                    <button
+                      onClick={() => setEditingKoiPrice(null)}
+                      className="bg-red-500 text-white px-2 py-1 rounded hover:bg-red-600"
+                      title="Cancel"
+                    >
+                      ❌
+                    </button>
+                  </div>
+                ) : (
+                  <span
+                    onClick={() => handlePriceClick(
+                      consignment.consignmentKois?.[0],
+                      consignment.consignmentKois?.[0]?.price
+                    )}
+                    className="cursor-pointer hover:text-blue-500"
+                    title="Click to edit price"
+                  >
+                    {formatCurrency(consignment.consignmentKois?.[0]?.price || 0)}
+                  </span>
+                )
+              ) : (
+                <span className="text-gray-500">N/A</span>
+              )}
             </td>
             <td className="p-2 border">{formatCurrency(consignment.fosterPrice)}</td>
             <td className="p-2 border">{formatCurrency(consignment.consignmentPriceList?.pricePerDay)}</td>
@@ -59,12 +118,22 @@ const ConsignmentTable = ({ consignments, startEditing, handleDelete }) => {
             <td className="p-2 border">{formatDate(consignment.endDate)}</td>
             <td className="p-2 border">{getStatusLabel(consignment.status)}</td>
             <td className="p-2 border">
-              <button onClick={() => startEditing(consignment)} className="bg-blue-500 text-white px-2 py-1 rounded-full hover:bg-blue-600">
-                ✏️
-              </button>
-              <button onClick={() => handleDelete(consignment.consignmentID)} className="bg-red-500 text-white px-2 py-1 rounded-full hover:bg-red-600">
-                🗑️
-              </button>
+              <div className="flex justify-center gap-2">
+                <button 
+                  onClick={() => startEditing(consignment)} 
+                  className="bg-blue-500 text-white px-2 py-1 rounded-full hover:bg-blue-600"
+                  title="Edit consignment"
+                >
+                  ✏️
+                </button>
+                <button 
+                  onClick={() => handleDelete(consignment.consignmentID)} 
+                  className="bg-red-500 text-white px-2 py-1 rounded-full hover:bg-red-600"
+                  title="Delete consignment"
+                >
+                  🗑️
+                </button>
+              </div>
             </td>
           </tr>
         ))}

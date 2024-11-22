@@ -21,6 +21,7 @@ const ManageConsignmentPage = () => {
   const [showEditForm, setShowEditForm] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
   const [filteredStatus, setFilteredStatus] = useState(null);
+  const [editingKoiPrice, setEditingKoiPrice] = useState(null);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -167,6 +168,97 @@ const ManageConsignmentPage = () => {
     ? consignments.filter((consignment) => consignment.status === filteredStatus)
     : consignments;
 
+  const handleUpdateKoiPrice = async (consignmentKoi, newPrice) => {
+    try {
+      const token = localStorage.getItem('accessToken');
+      if (!token) {
+        navigate('/login');
+        return;
+      }
+
+      // Create a default object with all required fields
+      const defaultKoi = {
+        name: '',
+        gender: '',
+        age: 0,
+        size: '',
+        color: '',
+        dailyFeedAmount: '',
+        personality: '',
+        origin: '',
+        selectionRate: '',
+        species: '',
+        price: 0,
+        consignmentID: consignmentKoi?.consignmentID || 0,
+        addOnId: consignmentKoi?.addOnId || null,
+        addOn: {
+          addOnID: consignmentKoi?.addOn?.addOnID || null,
+          originCertificate: null,
+          healthCertificate: null,
+          ownershipCertificate: null,
+          koiID: null,
+          consignmentKoiID: consignmentKoi?.consignmentKoiID || null,
+          koiInventoryID: null
+        },
+        ...consignmentKoi // Spread the actual koi data over defaults
+      };
+
+      const formData = new FormData();
+      
+      // Append all fields with null checks and default values
+      formData.append('name', defaultKoi.name);
+      formData.append('gender', defaultKoi.gender);
+      formData.append('age', defaultKoi.age.toString());
+      formData.append('size', defaultKoi.size);
+      formData.append('color', defaultKoi.color);
+      formData.append('dailyFeedAmount', defaultKoi.dailyFeedAmount);
+      formData.append('personality', defaultKoi.personality);
+      formData.append('origin', defaultKoi.origin);
+      formData.append('selectionRate', defaultKoi.selectionRate);
+      formData.append('species', defaultKoi.species);
+      formData.append('price', newPrice.toString());
+      formData.append('consignmentId', defaultKoi.consignmentID.toString());
+
+      // Add addOn related fields
+      if (defaultKoi.addOnId) {
+        formData.append('addOnId', defaultKoi.addOnId.toString());
+      }
+
+      // Add addOn object fields if they exist
+      if (defaultKoi.addOn) {
+        formData.append('addOn.addOnID', defaultKoi.addOn.addOnID?.toString() || '');
+        formData.append('addOn.originCertificate', defaultKoi.addOn.originCertificate || '');
+        formData.append('addOn.healthCertificate', defaultKoi.addOn.healthCertificate || '');
+        formData.append('addOn.ownershipCertificate', defaultKoi.addOn.ownershipCertificate || '');
+        formData.append('addOn.koiID', defaultKoi.addOn.koiID?.toString() || '');
+        formData.append('addOn.consignmentKoiID', defaultKoi.addOn.consignmentKoiID?.toString() || '');
+        formData.append('addOn.koiInventoryID', defaultKoi.addOn.koiInventoryID?.toString() || '');
+      }
+
+      const response = await api.put(
+        `/ConsignmentKoi/${consignmentKoi.consignmentKoiID}`, 
+        formData,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            'Content-Type': 'multipart/form-data'
+          },
+        }
+      );
+
+      if (response.status === 200) {
+        await fetchConsignments();
+        setEditingKoiPrice(null);
+        setErrorMessage('');
+      } else {
+        setErrorMessage("Failed to update Koi price");
+      }
+    } catch (err) {
+      console.error("Failed to update Koi price", err);
+      setErrorMessage(err.response?.data?.message || "Failed to update Koi price");
+    }
+  };
+
   return (
     <div className="p-6">
       <h1 className="text-3xl font-bold mb-6 text-center">Manage Consignments</h1>
@@ -191,6 +283,9 @@ const ManageConsignmentPage = () => {
         }))}
         startEditing={startEditing}
         handleDelete={handleDeleteConsignment}
+        handleUpdateKoiPrice={handleUpdateKoiPrice}
+        editingKoiPrice={editingKoiPrice}
+        setEditingKoiPrice={setEditingKoiPrice}
       />
 
       {showEditForm && (
