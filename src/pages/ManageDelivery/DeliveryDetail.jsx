@@ -4,11 +4,14 @@ import api from "../../config/axios";
 import Modal from "../../components/Modal/Modal";
 import Stepper from "../../components/Stepper";
 
-const formatDate = (date) => {
-  const day = String(date.getDate()).padStart(2, '0'); // Lấy ngày và thêm số 0 nếu cần
-  const month = String(date.getMonth() + 1).padStart(2, '0'); // Lấy tháng (tháng bắt đầu từ 0)
-  const year = date.getFullYear(); // Lấy năm
-  return `${day}/${month}/${year}`; // Trả về định dạng dd/mm/yyyy
+const formatDate = (dateString) => {
+  if (!dateString) return 'N/A';
+  const date = new Date(dateString);
+  date.setHours(date.getHours() + 7);
+  const day = String(date.getDate()).padStart(2, '0');
+  const month = String(date.getMonth() + 1).padStart(2, '0');
+  const year = date.getFullYear();
+  return `${day}/${month}/${year}`;
 };
 
 const DeliveryDetail = () => {
@@ -50,18 +53,21 @@ const DeliveryDetail = () => {
   };
 
   const updateDeliveryStatus = async () => {
-    const today = new Date().toISOString().split("T")[0]; // Format today's date as YYYY-MM-DD
+    const date = new Date();
+    date.setHours(date.getHours() + 7);
+    const today = date.toISOString();
+
     const formData = new FormData();
     formData.append("DeliveryID", delivery.deliveryID);
     formData.append("OrderID", delivery.orderID);
     formData.append("CustomerID", delivery.customerID);
     formData.append("Status", newStatus);
     formData.append("StartDeliDay", delivery.startDeliDay);
-    formData.append("EndDeliDay", today); // Set EndDeliDay to today's date
+    formData.append("EndDeliDay", today);
     formData.append("Address", delivery.address);
     formData.append("Reason", reason);
     if (reasonImage) formData.append("ReasonImage", reasonImage);
-  
+
     try {
       await api.put(`/koi/Delivery/${id}`, formData, {
         headers: {
@@ -93,7 +99,7 @@ const DeliveryDetail = () => {
         <p><strong>Order ID:</strong> {delivery?.orderID}</p>
         <p><strong>Customer ID:</strong> {delivery?.customerID}</p>
         <p><strong>Start Delivery Day:</strong> {formatDate(new Date(delivery?.startDeliDay))}</p>
-        <p><strong>End Delivery Day:</strong> {formatDate(new Date(delivery?.endDeliDay))}</p>
+        
         <p><strong>Address:</strong> {delivery?.address}</p>
         <p><strong>Status:</strong> {steps[delivery?.status]}</p>
         <p><strong>Reason:</strong> {delivery?.reason || "N/A"}</p>
