@@ -1,93 +1,135 @@
-import React from 'react';
+  import React from 'react';
+  import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Button, IconButton, Collapse, Box, Typography } from '@mui/material';
+  import { KeyboardArrowDown, KeyboardArrowUp } from '@mui/icons-material';
 
-const ConsignKoiTable = ({ consignKois, startEditing, handleDelete }) => {
-  return (
-    <table className="min-w-full bg-white shadow-md rounded-lg overflow-hidden">
-      <thead>
-        <tr className="bg-gray-200 text-gray-600 uppercase text-sm leading-normal">
-          <th className="py-3 px-6 text-left">ID</th>
-          <th className="py-3 px-6 text-left">Name</th>
-          <th className="py-3 px-6 text-left">Gender</th>
-          <th className="py-3 px-6 text-left">Age</th>
-          <th className="py-3 px-6 text-left">Size</th>
-          <th className="py-3 px-6 text-left">Color</th>
-          <th className="py-3 px-6 text-left">Daily Feed Amount</th>
-          <th className="py-3 px-6 text-left">Personality</th> 
-          <th className="py-3 px-6 text-left">Origin</th>
-          <th className="py-3 px-6 text-left">Selection Rate</th>
-          <th className="py-3 px-6 text-left">Species</th>
-          <th className="py-3 px-6 text-left">Desired Price</th>
-          <th className="py-3 px-6 text-left">ConsignKoi Image</th>
-          <th className="py-3 px-6 text-left">Origin Certificate</th>
-          <th className="py-3 px-6 text-left">Health Certificate</th>
-          <th className="py-3 px-6 text-left">Ownership Certificate</th>
-          <th className="py-3 px-6 text-center">Actions</th>
-        </tr>
-      </thead>
-      <tbody className="text-gray-600 text-sm font-light">
-        {consignKois.map((consignKoi) => (
-          <tr key={consignKoi.consignmentKoiID} className="border-b border-gray-200 hover:bg-gray-100">
-            <td className="py-3 px-6 text-left whitespace-nowrap">{consignKoi.consignmentKoiID}</td>
-            <td className="py-3 px-6 text-left">{consignKoi.name}</td>
-            <td className="py-3 px-6 text-left">{consignKoi.gender}</td>
-            <td className="py-3 px-6 text-left">{consignKoi.age}</td>
-            <td className="py-3 px-6 text-left">{consignKoi.size}</td>
-            <td className="py-3 px-6 text-left">{consignKoi.color}</td>
-            <td className="py-3 px-6 text-left">{consignKoi.dailyFeedAmount}</td>
-            <td className="py-3 px-6 text-left">{consignKoi.personality}</td>
-            <td className="py-3 px-6 text-left">{consignKoi.origin}</td>
-            <td className="py-3 px-6 text-left">{consignKoi.selectionRate}</td>
-            <td className="py-3 px-6 text-left">{consignKoi.species}</td>
-            <td className="py-3 px-6 text-left">{consignKoi.price}</td>
+  const ConsignKoiTable = ({ consignKois, startEditing, handleDelete }) => {
+    const [openRow, setOpenRow] = React.useState(null);
 
-            <td className="py-3 px-6 text-left whitespace-nowrap">
-              {consignKoi.image ? (
-                <img src={consignKoi.image} alt="Koi Image" className="w-16 h-16 object-cover rounded" />
-              ) : (
-                'No Image'
-              )}
-            </td>
-            <td className="py-3 px-6 text-left whitespace-nowrap">
-              {consignKoi.addOn?.originCertificate ? (
-                <img src={consignKoi.addOn.originCertificate} alt="Origin Certificate" className="w-16 h-16 object-cover rounded" />
-              ) : (
-                'No Image'
-              )}
-            </td>
-            <td className="py-3 px-6 text-left whitespace-nowrap">
-              {consignKoi.addOn?.healthCertificate ? (
-                <img src={consignKoi.addOn.healthCertificate} alt="Health Certificate" className="w-16 h-16 object-cover rounded" />
-              ) : (
-                'No Image'
-              )}
-            </td>
-            <td className="py-3 px-6 text-left whitespace-nowrap">
-              {consignKoi.addOn?.ownershipCertificate ? (
-                <img src={consignKoi.addOn.ownershipCertificate} alt="Ownership Certificate" className="w-16 h-16 object-cover rounded" />
-              ) : (
-                'No Image'
-              )}
-            </td>
+    const toggleRow = (rowId) => {
+      setOpenRow((prev) => (prev === rowId ? null : rowId));
+    };
+    const hasDesiredPrice = consignKois.some((koi) => koi.price > 0);
+    return (
+<TableContainer component={Paper} sx={{ maxWidth: '100%', overflowX: 'auto' }}>
+      <Table>
+        <TableHead>
+          <TableRow sx={{ backgroundColor: '#f5f5f5' }}>
+            <TableCell />
+            <TableCell>ID</TableCell>
+            <TableCell>Name</TableCell>
+            <TableCell>Gender</TableCell>
+            <TableCell>Age</TableCell>
+            <TableCell>Size</TableCell>
+            <TableCell>Color</TableCell>
+            {hasDesiredPrice && <TableCell>Desired Price</TableCell>}
+            <TableCell>Actions</TableCell>
+          </TableRow>
+        </TableHead>
+        <TableBody>
+          {consignKois.map((consignKoi) => (
+            <React.Fragment key={consignKoi.consignmentKoiID}>
+              <TableRow hover>
+                <TableCell>
+                  <IconButton size="small" onClick={() => toggleRow(consignKoi.consignmentKoiID)}>
+                    {openRow === consignKoi.consignmentKoiID ? <KeyboardArrowUp /> : <KeyboardArrowDown />}
+                  </IconButton>
+                </TableCell>
+                <TableCell>{consignKoi.consignmentKoiID}</TableCell>
+                <TableCell>{consignKoi.name}</TableCell>
+                <TableCell>{consignKoi.gender}</TableCell>
+                <TableCell>{consignKoi.age}</TableCell>
+                <TableCell>{consignKoi.size}</TableCell>
+                <TableCell>{consignKoi.color}</TableCell>
+                {hasDesiredPrice && (
+                  <TableCell>
+                    {consignKoi.price > 0 ? consignKoi.price : ''}
+                  </TableCell>
+                )}
+                <TableCell>
+                  <Button
+                    variant="contained"
+                    color="primary"
+                    size="small"
+                    onClick={() => startEditing(consignKoi)}
+                    sx={{ marginRight: 1 }}
+                  >
+                    Edit
+                  </Button>
+                  <Button
+                    variant="contained"
+                    color="error"
+                    size="small"
+                    onClick={() => handleDelete(consignKoi.consignmentKoiID)}
+                  >
+                    Delete
+                  </Button>
+                </TableCell>
+              </TableRow>
+              <TableRow>
+                <TableCell colSpan={9} sx={{ padding: 0 }}>
+                  <Collapse in={openRow === consignKoi.consignmentKoiID} timeout="auto" unmountOnExit>
+                    <Box sx={{ margin: 2 }}>
+                      <Typography variant="subtitle1">Details:</Typography>
+                      <Typography variant="body2">
+                        <strong>Daily Feed Amount:</strong> {consignKoi.dailyFeedAmount}
+                      </Typography>
+                      <Typography variant="body2">
+                        <strong>Personality:</strong> {consignKoi.personality}
+                      </Typography>
+                      <Typography variant="body2">
+                        <strong>Origin:</strong> {consignKoi.origin}
+                      </Typography>
+                      <Typography variant="body2">
+                        <strong>Species:</strong> {consignKoi.species}
+                      </Typography>
+                      {consignKoi.price > 0 && (
+                        <Typography variant="body2">
+                          <strong>Desired Price:</strong> {consignKoi.price}
+                        </Typography>
+                      )}
+                      <Typography variant="body2">
+                        <strong>Certificates:</strong>
+                      </Typography>
+                      <Box display="flex" gap={2} mt={1}>
+                        {consignKoi.image && (
+                          <img
+                            src={consignKoi.image}
+                            alt="Koi Image"
+                            style={{ width: 64, height: 64, objectFit: 'cover', borderRadius: 8 }}
+                          />
+                        )}
+                        {consignKoi.addOn?.originCertificate && (
+                          <img
+                            src={consignKoi.addOn.originCertificate}
+                            alt="Origin Certificate"
+                            style={{ width: 64, height: 64, objectFit: 'cover', borderRadius: 8 }}
+                          />
+                        )}
+                        {consignKoi.addOn?.healthCertificate && (
+                          <img
+                            src={consignKoi.addOn.healthCertificate}
+                            alt="Health Certificate"
+                            style={{ width: 64, height: 64, objectFit: 'cover', borderRadius: 8 }}
+                          />
+                        )}
+                        {consignKoi.addOn?.ownershipCertificate && (
+                          <img
+                            src={consignKoi.addOn.ownershipCertificate}
+                            alt="Ownership Certificate"
+                            style={{ width: 64, height: 64, objectFit: 'cover', borderRadius: 8 }}
+                          />
+                        )}
+                      </Box>
+                    </Box>
+                  </Collapse>
+                </TableCell>
+              </TableRow>
+            </React.Fragment>
+          ))}
+        </TableBody>
+      </Table>
+    </TableContainer>
+    );
+  };
 
-            <td className="py-3 px-6 text-center">
-              <button
-                onClick={() => startEditing(consignKoi)}
-                className="bg-blue-500 text-white px-2 py-1 rounded hover:bg-blue-600 transition duration-200"
-              >
-                Edit
-              </button>
-              <button
-                onClick={() => handleDelete(consignKoi.consignmentKoiID)}
-                className="bg-red-500 text-white px-2 py-1 rounded ml-2 hover:bg-red-600 transition duration-200"
-              >
-                Delete
-              </button>
-            </td>
-          </tr>
-        ))}
-      </tbody>
-    </table>
-  );
-};
-
-export default ConsignKoiTable;
+  export default ConsignKoiTable;

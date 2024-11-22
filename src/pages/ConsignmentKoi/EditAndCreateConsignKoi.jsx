@@ -1,6 +1,17 @@
 import React from 'react';
 import api from '../../config/axios';
 import PropTypes from 'prop-types';
+import { TextField, Button, Grid, Typography, Box,MenuItem } from '@mui/material';
+import { styled } from '@mui/system';
+
+const StyledImagePreview = styled('img')({
+  marginTop: '16px',
+  height: '100px',
+  width: '100px',
+  borderRadius: '8px',
+  objectFit: 'cover',
+});
+
 const EditAndCreateConsignForm = ({ koi, setKoi, fetchConsignKois, editKoiId, isCreating }) => {
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -63,12 +74,24 @@ const EditAndCreateConsignForm = ({ koi, setKoi, fetchConsignKois, editKoiId, is
   
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-4 p-6 border rounded shadow-lg max-w-4xl mx-auto">
-      <h2 className="text-2xl font-bold mb-4 text-center">
+    <Box
+      component="form"
+      onSubmit={handleSubmit}
+      sx={{
+        maxWidth: '700px',
+        margin: 'auto',
+        padding: '16px',
+        border: '1px solid #ddd',
+        borderRadius: '8px',
+        boxShadow: 2,
+        backgroundColor: '#f9f9f9',
+      }}
+    >
+      <Typography variant="h5" textAlign="center" mb={2}>
         {isCreating ? 'Create Consignment Koi' : 'Edit Consignment Koi'}
-      </h2>
+      </Typography>
 
-      <div className="grid grid-cols-2 gap-6">
+      <Grid container spacing={2}>
         {/* Input Fields */}
         {[
           { name: 'name', label: 'Name', type: 'text', required: true },
@@ -81,56 +104,76 @@ const EditAndCreateConsignForm = ({ koi, setKoi, fetchConsignKois, editKoiId, is
           { name: 'origin', label: 'Origin', type: 'text' },
           { name: 'selectionRate', label: 'Selection Rate', type: 'text' },
           { name: 'species', label: 'Species', type: 'text', required: true },
-          { name: 'price', label: 'Price', type: 'number', required: true },
-          { name: 'consignmentID', label: 'Consignment ID', type: 'number', required: true },
         ].map((field) => (
-          <div key={field.name} className="flex flex-col">
-            <label className="mb-1 font-medium text-gray-700">
-              {field.label} {field.required && <span className="text-red-500">*</span>}
-            </label>
-            <input
-              type={field.type}
+          <Grid item xs={12} sm={6} key={field.name}>
+            <TextField
+              fullWidth
+              label={field.label}
               name={field.name}
+              type={field.type}
               value={koi[field.name] || ''}
               onChange={handleChange}
-              placeholder={`Enter ${field.label}`}
-              className="p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
               required={field.required}
+              variant="outlined"
             />
-          </div>
+          </Grid>
         ))}
 
+        {/* Price Field (Editable only if price > 0) */}
+        <Grid item xs={12} sm={6}>
+          <TextField
+            fullWidth
+            label="Price"
+            name="price"
+            type="number"
+            value={koi.price || ''}
+            onChange={handleChange}
+            disabled={koi.price === 0} // Disable if price is 0
+            variant="outlined"
+          />
+        </Grid>
+
         {/* Image Upload */}
-        <div className="col-span-2">
-          <label className="mb-1 font-medium text-gray-700">Image</label>
+        <Grid item xs={12}>
+          <Typography variant="subtitle1" mb={1}>
+            Upload Image
+          </Typography>
           <input
             type="file"
             name="image"
             onChange={handleImageChange}
-            className="p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+            style={{
+              display: 'block',
+              padding: '8px',
+              border: '1px solid #ccc',
+              borderRadius: '4px',
+              width: '100%',
+            }}
           />
           {koi.image && (
-            <img
+            <StyledImagePreview
               src={typeof koi.image === 'string' ? koi.image : URL.createObjectURL(koi.image)}
               alt="Preview"
-              className="mt-2 h-24 w-24 object-cover rounded"
             />
           )}
-        </div>
-      </div>
+        </Grid>
+      </Grid>
 
       {/* Submit Button */}
-      <div className="text-center mt-4">
-        <button
+      <Box textAlign="center" mt={3}>
+        <Button
           type="submit"
-          className="px-6 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition duration-200"
+          variant="contained"
+          color="primary"
+          sx={{ paddingX: '24px', paddingY: '10px' }}
         >
           {isCreating ? 'Create' : 'Save'}
-        </button>
-      </div>
-    </form>
+        </Button>
+      </Box>
+    </Box>
   );
 };
+
 EditAndCreateConsignForm.propTypes = {
   koi: PropTypes.shape({
     name: PropTypes.string,
@@ -145,7 +188,7 @@ EditAndCreateConsignForm.propTypes = {
     species: PropTypes.string,
     price: PropTypes.number,
     consignmentID: PropTypes.number,
-    image: PropTypes.any, // Accepting File objects or URLs
+    image: PropTypes.any,
     OriginCertificate: PropTypes.any,
     HealthCertificate: PropTypes.any,
     OwnershipCertificate: PropTypes.any,
