@@ -115,6 +115,15 @@ const OrderPage = ({ token }) => {
         return "Unknown Status";
     }
   };
+  const getTypeLabel = (type) => {
+    switch (type) {
+      case 0:
+        return "Online";
+      case 1:
+        return "Offline";
+      
+    }
+  };
   const getDeliveryLabel = (status) => {
     switch (status) {
       case 0:
@@ -214,11 +223,15 @@ const OrderPage = ({ token }) => {
                       <TableCell>
                         <strong>Total Amount:</strong>
                       </TableCell>
-                      <TableCell>{order.totalAmount}</TableCell>
+                      <TableCell>
+                        {order.type === 1 && order.status === 0
+                          ? `${order.totalAmount / 2}  / ${order.totalAmount}` 
+                          : order.totalAmount}
+                      </TableCell>
                     </TableRow>
                     <TableRow>
                       <TableCell>
-                        <strong>Created At:</strong>
+                        <strong>Buy At:</strong>
                       </TableCell>
                       <TableCell>
                         {new Date(order.createAt).toLocaleString()}
@@ -228,10 +241,18 @@ const OrderPage = ({ token }) => {
 
                     <TableRow>
                       <TableCell>
-                        <strong>Order Status:</strong>
+                        <strong>Status:</strong>
                       </TableCell>
                       <TableCell>{getOrderLabel(order.status)}</TableCell>
                     </TableRow>
+
+                    <TableRow>
+                      <TableCell>
+                        <strong>Type:</strong>
+                      </TableCell>
+                      <TableCell>{getTypeLabel(order.type)}</TableCell>
+                    </TableRow>
+                    
                     {/* {order.delivery ? (
                       <>
                         <TableRow>
