@@ -23,6 +23,7 @@ import CreateTransactionPage from '../pages/CreateTransactionPage'
 import OrderDetail from '../pages/ManageOrder/OrderDetail';
 import DeliveryDetail from '../pages/ManageDelivery/DeliveryDetail';
 import NotFoundPage from '../pages/NotFound/NotFoundPage';
+import KoiManagementPage from '../pages/Dashboard/DashboardPage';
 
 const DynamicLayout = ({ role, children }) => {
   return role === "0" ? <AdminLayout>{children}</AdminLayout> : <StaffLayout>{children}</StaffLayout>;
@@ -67,6 +68,7 @@ function RoleBasedRoutes() {
     { path: "/staff/manageOrder/updateOrder/:id", element: <UpdateOrder /> },
     { path: "/staff/manageFeedback", element: <ManageFeedback /> },
     { path: "/staff/manageConsignKoi", element: <ManageConsignKoi /> },
+    { path: "/staff/koi-management", element: <KoiManagementPage /> },
   ];
 
   return (

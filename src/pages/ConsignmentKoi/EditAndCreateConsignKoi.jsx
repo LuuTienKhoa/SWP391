@@ -1,7 +1,7 @@
 import React from 'react';
 import api from '../../config/axios';
 import PropTypes from 'prop-types';
-import { TextField, Button, Grid, Typography, Box,MenuItem } from '@mui/material';
+import { TextField, Button, Grid, Typography, Box, MenuItem } from '@mui/material';
 import { styled } from '@mui/system';
 
 const StyledImagePreview = styled('img')({
@@ -25,14 +25,16 @@ const EditAndCreateConsignForm = ({ koi, setKoi, fetchConsignKois, editKoiId, is
     const { name, files } = e.target;
     if (files.length > 0) {
       setKoi((prevKoi) => ({ ...prevKoi, [name]: files[0] }));
+    } else {
+      setKoi((prevKoi) => ({ ...prevKoi, [name]: '' }));
     }
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
+
     try {
-      const formData = new FormData(); 
+      const formData = new FormData();
       formData.append('name', koi.name || '');
       formData.append('gender', koi.gender || '');
       formData.append('age', koi.age || 0);
@@ -45,13 +47,35 @@ const EditAndCreateConsignForm = ({ koi, setKoi, fetchConsignKois, editKoiId, is
       formData.append('species', koi.species || '');
       formData.append('price', koi.price || 0);
       formData.append('consignmentId', koi.consignmentID || 0);
-  
-      // Append image files if they exist
-      if (koi.image) formData.append('Image', koi.image);
-      if (koi.OriginCertificate) formData.append('OriginCertificate', koi.OriginCertificate);
-      if (koi.HealthCertificate) formData.append('HealthCertificate', koi.HealthCertificate);
-      if (koi.OwnershipCertificate) formData.append('OwnershipCertificate', koi.OwnershipCertificate);
-  
+
+      if (koi.addOn?.addOnID) {
+        formData.append('addOnId', koi.addOn.addOnID);
+      }
+      // Main image
+      if (koi.image instanceof File) {
+        formData.append('image', koi.image);
+      } else {
+        formData.append('existingImage', koi.image);
+      }
+
+      if (koi.addOn?.originCertificate instanceof File) {
+        formData.append('addOn.originCertificate', koi.addOn.originCertificate);
+      } else if (koi.addOn?.originCertificate) {
+        formData.append('addOn.existingOriginCertificate', koi.addOn.originCertificate);
+      }
+
+      if (koi.addOn?.healthCertificate instanceof File) {
+        formData.append('addOn.healthCertificate', koi.addOn.healthCertificate);
+      } else if (koi.addOn?.healthCertificate) {
+        formData.append('addOn.existingHealthCertificate', koi.addOn.healthCertificate);
+      }
+
+      if (koi.addOn?.ownershipCertificate instanceof File) {
+        formData.append('addOn.ownershipCertificate', koi.addOn.ownershipCertificate);
+      } else if (koi.addOn?.ownershipCertificate) {
+        formData.append('addOn.existingOwnershipCertificate', koi.addOn.ownershipCertificate);
+      }
+
       if (isCreating) {
         // POST request for creating a new consignment koi
         await api.post('/ConsignmentKoi', formData, {
@@ -63,7 +87,7 @@ const EditAndCreateConsignForm = ({ koi, setKoi, fetchConsignKois, editKoiId, is
           headers: { 'Content-Type': 'multipart/form-data' },
         });
       }
-  
+
       fetchConsignKois(); // Refresh data after submit
       alert(isCreating ? 'Consignment Koi created successfully!' : 'Changes saved successfully!');
     } catch (error) {
@@ -71,7 +95,7 @@ const EditAndCreateConsignForm = ({ koi, setKoi, fetchConsignKois, editKoiId, is
       alert('An error occurred. Please try again.');
     }
   };
-  
+
 
   return (
     <Box
@@ -133,30 +157,47 @@ const EditAndCreateConsignForm = ({ koi, setKoi, fetchConsignKois, editKoiId, is
           />
         </Grid>
 
-        {/* Image Upload */}
-        <Grid item xs={12}>
-          <Typography variant="subtitle1" mb={1}>
-            Upload Image
-          </Typography>
-          <input
-            type="file"
-            name="image"
-            onChange={handleImageChange}
-            style={{
-              display: 'block',
-              padding: '8px',
-              border: '1px solid #ccc',
-              borderRadius: '4px',
-              width: '100%',
-            }}
-          />
-          {koi.image && (
-            <StyledImagePreview
-              src={typeof koi.image === 'string' ? koi.image : URL.createObjectURL(koi.image)}
-              alt="Preview"
-            />
-          )}
-        </Grid>
+       <Grid container spacing={3} alignItems="center">
+  {[
+    { name: 'image', label: 'Upload Main Image' },
+    { name: 'originCertificate', label: 'Upload Origin Certificate', isAddOn: true },
+    { name: 'healthCertificate', label: 'Upload Health Certificate', isAddOn: true },
+    { name: 'ownershipCertificate', label: 'Upload Ownership Certificate', isAddOn: true },
+  ].map((uploadField) => (
+    <Grid
+      item
+      xs={12}
+      sm={6}
+      md={3}
+      key={uploadField.name}
+      sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}
+    >
+      <Typography variant="subtitle2" mb={1} sx={{ textAlign: 'center', fontWeight: 'bold' }}>
+        {uploadField.label}
+      </Typography>
+      <input
+        type="file"
+        name={uploadField.name}
+        onChange={handleImageChange}
+        style={{ display: 'block', padding: '8px', border: '1px solid #ccc', borderRadius: '4px', width: '90%' }}
+      />
+      {uploadField.isAddOn && koi.addOn?.[uploadField.name] && (
+        <StyledImagePreview
+          src={typeof koi.addOn[uploadField.name] === 'string' ? koi.addOn[uploadField.name] : URL.createObjectURL(koi.addOn[uploadField.name])}
+          alt={`${uploadField.label} Preview`}
+        />
+      )}
+      {!uploadField.isAddOn && koi[uploadField.name] && (
+        <StyledImagePreview
+          src={typeof koi[uploadField.name] === 'string' ? koi[uploadField.name] : URL.createObjectURL(koi[uploadField.name])}
+          alt={`${uploadField.label} Preview`}
+        />
+      )}
+    </Grid>
+  ))}
+</Grid>
+
+
       </Grid>
 
       {/* Submit Button */}
@@ -170,7 +211,7 @@ const EditAndCreateConsignForm = ({ koi, setKoi, fetchConsignKois, editKoiId, is
           {isCreating ? 'Create' : 'Save'}
         </Button>
       </Box>
-    </Box>
+    </Box >
   );
 };
 
@@ -188,10 +229,24 @@ EditAndCreateConsignForm.propTypes = {
     species: PropTypes.string,
     price: PropTypes.number,
     consignmentID: PropTypes.number,
-    image: PropTypes.any,
-    OriginCertificate: PropTypes.any,
-    HealthCertificate: PropTypes.any,
-    OwnershipCertificate: PropTypes.any,
+    image: PropTypes.oneOfType([
+      PropTypes.string,
+      PropTypes.object,
+    ]),
+    addOn: PropTypes.shape({
+      originCertificate: PropTypes.oneOfType([
+        PropTypes.string,
+        PropTypes.object,
+      ]),
+      healthCertificate: PropTypes.oneOfType([
+        PropTypes.string,
+        PropTypes.object,
+      ]),
+      ownershipCertificate: PropTypes.oneOfType([
+        PropTypes.string,
+        PropTypes.object,
+      ]),
+    }),
   }).isRequired,
   setKoi: PropTypes.func.isRequired,
   fetchConsignKois: PropTypes.func.isRequired,

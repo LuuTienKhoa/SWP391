@@ -1,161 +1,165 @@
-import React, { useEffect } from 'react';
-import { Card, CardContent, Typography, Avatar, Grid, Button } from '@mui/material';
-import { MdDashboard } from 'react-icons/md';
-import { FaUsers, FaFish } from 'react-icons/fa';
-import { FaShoppingCart } from 'react-icons/fa'; 
+import React, { useState, useEffect } from "react";
+import { Layout, Statistic, Card, Row, Col, Button } from "antd";
+import { DollarOutlined, LineChartOutlined } from "@ant-design/icons";
+import { Line } from "@ant-design/charts";
+import api from "../config/axios";
+import { Link } from "react-router-dom";
 
-import { Line } from 'react-chartjs-2';
-import { useSelector } from 'react-redux';
-import { Link, useNavigate } from 'react-router-dom';
+const { Header, Content, Footer } = Layout;
 
-import {
-  Chart as ChartJS,
-  CategoryScale,
-  LinearScale,
-  PointElement,
-  LineElement,
-  Title,
-  Tooltip,
-  Legend,
-} from 'chart.js';
-
-// Register Chart.js components
-ChartJS.register(
-  CategoryScale,
-  LinearScale,
-  PointElement,
-  LineElement,
-  Title,
-  Tooltip,
-  Legend
-);
-
-// Tailwind for styling
-import 'tailwindcss/tailwind.css';
-
-export default function StaffPage() {
-  const navigate = useNavigate();
-
-  // Check the role in localStorage when the page loads
+const StaffPage = () => {
+  const [completedOrders, setCompletedOrders] = useState([]);
+  const [pendingCount, setPendingCount] = useState(0);
+  const [cancelledCount, setCancelledCount] = useState(0);
+  const [totalRevenue, setTotalRevenue] = useState(0);
+  const [chartData, setChartData] = useState([]);
   useEffect(() => {
-    const userRole = localStorage.getItem('userRole');
-    if (userRole !== '1') {
-    localStorage.removeItem('accessToken');
-    localStorage.removeItem('refreshToken');
-    localStorage.removeItem('role');
-    localStorage.removeItem('userName');
-      navigate('/'); 
-    }
-  }, [navigate]);
+    const fetchOrders = async () => {
+      try {
+        const response = await api.get("/Order");
+        const orders = response.data;
 
+        // Filter orders by status
+        const completed = orders.filter((order) => order.status === 1);
+        const pending = orders.filter((order) => order.status === 0);
+        const cancelled = orders.filter((order) => order.status === 2);
+
+        // Calculate revenue for completed orders
+        const totalCompletedRevenue = completed.reduce(
+          (sum, order) => sum + order.totalAmount,
+          0
+        );
+
+        // Prepare chart data
+        const chartData = completed
+          .map((order) => ({
+            date: new Date(order.createAt).toLocaleDateString("vi-VN"),
+            amount: order.totalAmount,
+          }))
+          .sort((a, b) => new Date(a.date) - new Date(b.date));
+
+        // Add trend arrows to chart data
+        const trendWithArrows = chartData.map((entry, index, array) => {
+          if (index === 0) return { ...entry, trend: "N/A" };
+          const prevAmount = array[index - 1].amount;
+          const trend = entry.amount > prevAmount ? "▲" : "▼";
+          return { ...entry, trend };
+        });
+
+        setCompletedOrders(completed);
+        setPendingCount(pending.length);
+        setCancelledCount(cancelled.length);
+        setTotalRevenue(totalCompletedRevenue);
+        setChartData(trendWithArrows);
+      } catch (error) {
+        console.error("Error fetching orders:", error);
+      }
+    };
+
+    fetchOrders();
+  }, []);
+
+  // Chart Configuration
+  const chartConfig = {
+    data: chartData,
+    xField: "date",
+    yField: "amount",
+    smooth: true, // Smooth lines for better aesthetics
+    label: {
+      content: (dataItem) =>
+        `${dataItem.amount.toLocaleString()} VND ${dataItem.trend}`,
+      style: {
+        fill: (dataItem) => (dataItem.trend === "▲" ? "green" : "red"),
+        fontSize: 10,
+      },
+    },
+    point: {
+      size: 5,
+      shape: "circle",
+      style: {
+        fill: "white",
+        stroke: "#5B8FF9",
+        lineWidth: 2,
+      },
+    },
+    tooltip: {
+      formatter: (dataItem) => ({
+        name: "Doanh thu",
+        value: `${dataItem.amount.toLocaleString()} VND ${dataItem.trend}`,
+      }),
+    },
+    lineStyle: {
+      stroke: "#5B8FF9",
+      lineWidth: 2,
+    },
+    meta: {
+      date: { alias: "Ngày" },
+      amount: { alias: "Doanh thu (VND)" },
+    },
+  };
 
   return (
-    <div className="flex">    
-      {/* Main Content */}
-      <div className="flex-1 p-8 overflow-hidden">
-        <Typography variant="h4" gutterBottom>
-          Dashboard
-        </Typography>
+    <Layout>
+      <Header style={{ color: "#fff", textAlign: "center", fontSize: "24px" }}>
+        Quản Lí
+      </Header>
+      <Content style={{ padding: "20px" }}>
+        {/* Statistics */}
+        <Row gutter={[16, 16]} style={{ marginBottom: "20px" }}>
+          <Col span={8}>
+            <Statistic
+              title="Tổng doanh thu"
+              value={totalRevenue}
+              precision={0}
+              prefix={<DollarOutlined />}
+              suffix="VND"
+            />
+          </Col>
+          <Col span={8}>
+            <Statistic
+              title="Đơn hàng đã hoàn thành"
+              value={completedOrders.length}
+              prefix={<LineChartOutlined />}
+            />
+          </Col>
+          <Col span={8}>
+            <Statistic title="Đơn hàng đang chờ" value={pendingCount} />
+          </Col>
+          <Col span={8}>
+            <Statistic title="Đơn hàng đã hủy" value={cancelledCount} />
+          </Col>
+        </Row>
 
-        {/* Metrics Cards */}
-        <Grid container spacing={4}>
-          {[
-            { title: "Today's Sales", value: '$2,500', percentage: '+20% from yesterday' },
-            { title: "Total Koi Fish in Inventory", value: '120', percentage: '-10% from last week' },
-            { title: 'New Orders', value: '15', percentage: '+5 from yesterday' },
-            { title: 'Returning Customers', value: '85', percentage: '+15% from last month' },
-          ].map((card, index) => (
-            <Grid item xs={12} sm={6} md={3} key={index}>
-              <Card>
-                <CardContent>
-                  <Typography variant="subtitle2" color="textSecondary" gutterBottom>
-                    {card.title}
-                  </Typography>
-                  <Typography variant="h4" gutterBottom>
-                    {card.value}
-                  </Typography>
-                  <Typography variant="body2" sx={{ color: 'green' }}>
-                    {card.percentage}
-                  </Typography>
-                </CardContent>
-              </Card>
-            </Grid>
-          ))}
-        </Grid>
+        {/* Revenue Trend Chart */}
+        <Card title="Biểu đồ xu hướng doanh thu" style={{ marginBottom: "20px" }}>
+          <Line {...chartConfig} />
+        </Card>
 
-        {/* Charts */}
-        <div className="mt-8 grid grid-cols-1 md:grid-cols-2 gap-4">
-          <Card>
-            <CardContent>
-              <Typography variant="h6" gutterBottom>
-                Monthly Sales Trends
-              </Typography>
-              <div className="chart-container" style={{ height: '300px', overflow: 'hidden' }}>
-                <Line
-                  data={{
-                    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
-                    datasets: [
-                      {
-                        label: 'Sales in $',
-                        data: [1200, 1500, 1800, 2200, 2000, 2300, 2500, 2600, 2700, 3000, 3100, 3200],
-                        backgroundColor: 'rgba(75,192,192,0.2)',
-                        borderColor: 'rgba(75,192,192,1)',
-                      },
-                    ],
-                  }}
-                  options={{
-                    maintainAspectRatio: false,
-                    responsive: true,
-                    scales: {
-                      y: {
-                        beginAtZero: true,
-                        suggestedMax: 4000,
-                      },
-                    },
-                  }}
-                  height={300}
-                  redraw
-                />
-              </div>
-            </CardContent>
-          </Card>
-
-          <Card>
-            <CardContent>
-              <Typography variant="h6" gutterBottom>
-                Koi Fish Inventory
-              </Typography>
-              <div className="chart-container" style={{ height: '300px', overflow: 'hidden' }}>
-                <Line
-                  data={{
-                    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
-                    datasets: [
-                      {
-                        label: 'Number of Koi Fish',
-                        data: [150, 140, 130, 120, 110, 105, 100, 120, 125, 140, 135, 130],
-                        backgroundColor: 'rgba(153,102,255,0.2)',
-                        borderColor: 'rgba(153,102,255,1)',
-                      },
-                    ],
-                  }}
-                  options={{
-                    maintainAspectRatio: false,
-                    responsive: true,
-                    scales: {
-                      y: {
-                        beginAtZero: true,
-                        suggestedMax: 200,
-                      },
-                    },
-                  }}
-                  height={300}
-                  redraw
-                />
-              </div>
-            </CardContent>
-          </Card>
-        </div>
-      </div>
-    </div>
+        {/* Quick Links */}
+        <Row gutter={[16, 16]}>
+          <Col span={12}>
+            <Card>
+              <Button block href="/staff">
+                Quản lý đơn hàng
+              </Button>
+            </Card>
+          </Col>
+          <Col span={12}>
+            <Card>
+              <Link to="/staff/koi-management">
+                <Button type="default" block>
+                  Quản lý Koi
+                </Button>
+              </Link>
+            </Card>
+          </Col>
+        </Row>
+      </Content>
+      <Footer style={{ textAlign: "center" }}>
+        Bảng điều khiển Koi Fish Shop ©2024
+      </Footer>
+    </Layout>
   );
-}
+};
+
+export default StaffPage;

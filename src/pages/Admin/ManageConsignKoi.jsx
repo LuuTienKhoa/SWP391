@@ -37,7 +37,15 @@ const ManageConsignKoi = () => {
     try {
       const response = await api.get('/ConsignmentKoi');
       const sortedData = response.data.sort((a, b) => b.consignmentKoiID - a.consignmentKoiID);
-      setConsignKois(sortedData);
+      const updatedData = sortedData.map((koi) => ({
+        ...koi,
+        image: koi.image || '', // Main image
+        OriginCertificate: koi.addOn?.OriginCertificate || '',
+        HealthCertificate: koi.addOn?.HealthCertificate || '',
+        OwnershipCertificate: koi.addOn?.OwnershipCertificate || '',
+      }));
+  
+      setConsignKois(updatedData);
     } catch (error) {
       setErrorMessage('Failed to fetch consignment koi');
     }
@@ -53,7 +61,13 @@ const ManageConsignKoi = () => {
   };
 
   const startEditing = (koi) => {
-    setNewKoi({ ...koi });
+    setNewKoi({ 
+      ...koi,
+      image:koi.image,
+      originCertificate: koi.addOn?.originCertificate || '', 
+      healthCertificate: koi.addOn?.healthCertificate || '', 
+      ownershipCertificate: koi.addOn?.ownershipCertificate || '',
+    });
     setEditKoiId(koi.consignmentKoiID);
     setShowEditForm(true);
     setShowCreateForm(false);
