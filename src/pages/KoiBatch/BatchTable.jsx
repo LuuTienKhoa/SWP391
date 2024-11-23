@@ -1,4 +1,7 @@
 import React from 'react';
+const formatCurrency = (amount) => {
+  return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(amount);
+};
 
 const BatchTable = ({ batches, startEditing, handleDelete }) => (
   <table className="w-full table-auto border-collapse bg-white shadow-md rounded-lg">
@@ -24,7 +27,7 @@ const BatchTable = ({ batches, startEditing, handleDelete }) => (
             <td className="p-2 border">{batch.name}</td>
             <td className="p-2 border">{batch.species}</td>
             <td className="p-2 border">{batch.remainBatch}</td>
-            <td className="p-2 border">{batch.pricePerBatch} đ</td>
+            <td className="p-2 border">{formatCurrency(batch.pricePerBatch)}</td>
             <td className="p-2 border">{batch.quantityPerBatch}</td>
             <td className="p-2 border">{batch.description}</td>
             <td className="p-2 border">
