@@ -117,6 +117,9 @@ const ManageOrder = () => {
 
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
+  const formatCurrency = (amount) => {
+    return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(amount);
+};
   if (loading) return <div>Loading...</div>;
 
   return (
@@ -208,7 +211,7 @@ const ManageOrder = () => {
                 <td className="py-2 px-4 border">{formatDate(order.createAt)}</td>
                 <td className="py-2 px-4 border">{formatDate(order.updateAt)}</td>
                 <td className="py-2 px-4 border">{order.promotionID}</td>
-                <td className="py-2 px-4 border">{order.totalAmount}</td>
+                <td className="py-2 px-4 border">{formatCurrency(order.totalAmount)}</td>
                 <td className="py-2 px-4 border">{getTypeLabel(order.type)}</td>
                 <td className="py-2 px-4 border">{getStatusLabel(order.status)}</td>
 
