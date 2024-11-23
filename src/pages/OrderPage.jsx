@@ -151,7 +151,9 @@ const OrderPage = ({ token }) => {
   const currentOrders = filteredOrders.slice(indexOfFirstOrder, indexOfLastOrder);
 
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
-
+  const formatCurrency = (amount) => {
+    return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(amount);
+};
 
 
 
@@ -224,9 +226,9 @@ const OrderPage = ({ token }) => {
                         <strong>Total Amount:</strong>
                       </TableCell>
                       <TableCell>
-                        {order.type === 1 && order.status === 0
+                        {formatCurrency(order.type === 1 && order.status === 0
                           ? `${order.totalAmount / 2}  / ${order.totalAmount}` 
-                          : order.totalAmount}
+                          : order.totalAmount)}
                       </TableCell>
                     </TableRow>
                     <TableRow>

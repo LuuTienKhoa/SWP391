@@ -32,7 +32,7 @@ const ManageOrder = () => {
 
   const deleteOrder = async (id) => {
     const orderToDelete = orders.find((order) => order.orderID === id);
-    if (orderToDelete && getStatusLabel(orderToDelete.status) !== "Cancelled") {
+    if (orderToDelete && orderToDelete.status !== 2) {
       alert("Chỉ có thể xóa đơn hàng có trạng thái 'Cancelled'.");
       return;
     }
