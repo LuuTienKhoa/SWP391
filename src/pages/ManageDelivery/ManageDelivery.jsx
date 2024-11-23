@@ -82,7 +82,6 @@ const ManageDelivery = () => {
         <button onClick={() => setSelectedStatus('All')} className="bg-gray-500 text-white px-4 py-1 rounded mr-2">All</button>
         <button onClick={() => setSelectedStatus('Delivering')} className="bg-yellow-500 text-white px-4 py-1 rounded mr-2">Delivering</button>
         <button onClick={() => setSelectedStatus('Delivered')} className="bg-green-500 text-white px-4 py-1 rounded mr-2">Delivered</button>
-        <button onClick={() => setSelectedStatus('Failed')} className="bg-gray-950 text-white px-4 py-1 rounded mr-2">Failed</button>
         <button onClick={() => setSelectedStatus('Cancelled')} className="bg-red-500 text-white px-4 py-1 rounded mr-2">Cancelled</button>
 
       </div>

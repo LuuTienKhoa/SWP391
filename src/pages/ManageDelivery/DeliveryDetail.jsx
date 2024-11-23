@@ -24,7 +24,7 @@ const DeliveryDetail = () => {
   const [showReasonModal, setShowReasonModal] = useState(false);
   const [newStatus, setNewStatus] = useState(null);
 
-  const steps = ["Delivering", "Delivered",  "Failed","Cancelled"];
+  const steps = ["Delivering", "Delivered", "Cancelled"];
 
   useEffect(() => {
     const fetchDeliveryDetails = async () => {
@@ -123,12 +123,7 @@ const DeliveryDetail = () => {
             >
               Cancel
             </button>
-            <button
-              onClick={() => handleStatusChange(2)} // Failed
-              className="bg-yellow-500 text-white px-4 py-2 rounded"
-            >
-              Mark as Failed
-            </button>
+           
           </>
         )}
       </div>
