@@ -67,7 +67,9 @@ const ManageDelivery = () => {
   const filteredDeliveries = selectedStatus === 'All' 
   ? deliveries 
   : deliveries.filter(order => getStatusLabel(order.status) === selectedStatus);
-
+  const formatCurrency = (amount) => {
+    return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(amount);
+};
   if (loading) return <div>Loading...</div>;
   if (error) return <div>Error: {error}</div>;
 
@@ -121,7 +123,7 @@ const ManageDelivery = () => {
             
               <td className="p-2 border">{delivery.endDeliDay ? new Date(delivery.endDeliDay).toLocaleString() : ""}</td>
               <td className="p-2 border">{delivery.address}</td>
-              <td className="p-2 border">{delivery.order.totalAmount} VND</td>
+              <td className="p-2 border">{formatCurrency(delivery.order.totalAmount)} VND</td>
               <td className="p-2 border">{getStatusLabel(delivery.status)}</td>
               <td className="p-2 border">
                   {(getStatusLabel(delivery.status) === "Cancelled" || getStatusLabel(delivery.status) === "Failed") && (
