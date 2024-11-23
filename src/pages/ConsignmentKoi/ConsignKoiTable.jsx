@@ -9,6 +9,9 @@
       setOpenRow((prev) => (prev === rowId ? null : rowId));
     };
     const hasDesiredPrice = consignKois.some((koi) => koi.price > 0);
+    const formatCurrency = (amount) => {
+      return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(amount);
+  };
     return (
 <TableContainer component={Paper} sx={{ maxWidth: '100%', overflowX: 'auto' }}>
       <Table>
@@ -42,7 +45,7 @@
                 <TableCell>{consignKoi.color}</TableCell>
                 {hasDesiredPrice && (
                   <TableCell>
-                    {consignKoi.price > 0 ? consignKoi.price : ''}
+                    {formatCurrency(consignKoi.price > 0 ? consignKoi.price : '')}
                   </TableCell>
                 )}
                 <TableCell>
@@ -84,7 +87,7 @@
                       </Typography>
                       {consignKoi.price > 0 && (
                         <Typography variant="body2">
-                          <strong>Desired Price:</strong> {consignKoi.price}
+                          <strong>Desired Price:</strong> {formatCurrency(consignKoi.price)}
                         </Typography>
                       )}
                       <Typography variant="body2">
